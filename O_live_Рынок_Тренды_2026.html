@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O_live · Рынок & Тренды · Казахстан 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  :root {
+    --green: #2E7D32;
+    --green-mid: #43A047;
+    --green-light: #66BB6A;
+    --green-pale: #E8F5E9;
+    --navy: #0D1B2A;
+    --blue: #1565C0;
+    --gold: #F9A825;
+    --red: #C62828;
+    --mid: #546E7A;
+    --light-bg: #F5F7FA;
+    --white: #FFFFFF;
+    --radius: 16px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.07);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--light-bg); color: var(--navy); line-height: 1.65; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #0D1B2A 0%, #1B2E3C 40%, #0F3A2A 100%);
+    padding: 72px 40px 56px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 20% 60%, rgba(46,125,50,0.2) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 20%, rgba(21,101,192,0.1) 0%, transparent 55%);
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(46,125,50,0.25);
+    border: 1px solid rgba(102,187,106,0.35);
+    color: #81C784;
+    padding: 6px 18px; border-radius: 100px;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    margin-bottom: 22px;
+  }
+  .hero h1 { font-size: clamp(32px,5vw,58px); font-weight: 900; color: #fff; margin-bottom: 10px; letter-spacing: -1px; line-height: 1.1; }
+  .hero h1 em { color: #81C784; font-style: normal; }
+  .hero-sub { font-size: 17px; color: rgba(255,255,255,0.5); margin-bottom: 52px; }
+  .hero-kpi { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; position: relative; }
+  .kpi { text-align: center; }
+  .kpi-num { font-size: 38px; font-weight: 900; color: #fff; line-height: 1; }
+  .kpi-num b { color: #81C784; }
+  .kpi-label { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 5px; text-transform: uppercase; letter-spacing: 0.9px; }
+
+  /* LAYOUT */
+  .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  .section { padding: 56px 0 16px; }
+  .sec-title { font-size: 26px; font-weight: 800; display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .sec-desc { color: var(--mid); font-size: 14px; margin-bottom: 36px; }
+  .divider { height: 1px; background: #E0E7F0; margin: 8px 0 36px; }
+
+  /* NEWS CARDS */
+  .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .news-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    border-left: 4px solid transparent;
+    transition: transform .18s, box-shadow .18s;
+  }
+  .news-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .news-card.green { border-left-color: var(--green); }
+  .news-card.blue { border-left-color: var(--blue); }
+  .news-card.gold { border-left-color: var(--gold); }
+  .news-card.red { border-left-color: var(--red); }
+  .news-date { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .news-date.green { color: var(--green); }
+  .news-date.blue { color: var(--blue); }
+  .news-date.gold { color: #E65100; }
+  .news-date.red { color: var(--red); }
+  .news-title { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 8px; line-height: 1.4; }
+  .news-body { font-size: 13px; color: var(--mid); line-height: 1.6; }
+  .news-source { font-size: 11px; color: #9AA8B5; margin-top: 12px; }
+
+  /* MARKET STATS */
+  .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+  @media(max-width:768px){ .stats-grid { grid-template-columns: repeat(2,1fr); } }
+  .stat-card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 24px 20px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+  }
+  .stat-card.c1::after { background: linear-gradient(90deg, #2E7D32, #66BB6A); }
+  .stat-card.c2::after { background: linear-gradient(90deg, #1565C0, #42A5F5); }
+  .stat-card.c3::after { background: linear-gradient(90deg, #E65100, #FFA726); }
+  .stat-card.c4::after { background: linear-gradient(90deg, #6A1B9A, #AB47BC); }
+  .stat-num { font-size: 32px; font-weight: 900; line-height: 1; margin-bottom: 6px; }
+  .stat-num.g { color: var(--green); }
+  .stat-num.b { color: var(--blue); }
+  .stat-num.o { color: #E65100; }
+  .stat-num.p { color: #6A1B9A; }
+  .stat-label { font-size: 12px; color: var(--mid); line-height: 1.4; }
+
+  /* TREND CARDS */
+  .trends-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; }
+  .trend-card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 22px 20px;
+    box-shadow: var(--shadow);
+  }
+  .trend-icon { font-size: 32px; margin-bottom: 12px; }
+  .trend-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--navy); }
+  .trend-body { font-size: 13px; color: var(--mid); line-height: 1.6; }
+  .trend-tag {
+    display: inline-block; margin-top: 10px;
+    font-size: 11px; font-weight: 700; padding: 3px 10px;
+    border-radius: 100px; background: var(--green-pale); color: var(--green);
+  }
+
+  /* FINANCIAL SECTION */
+  .finance-block {
+    background: linear-gradient(135deg, #0D1B2A, #1B3A2A);
+    border-radius: 20px;
+    padding: 40px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+  .finance-block::before {
+    content: '💰';
+    position: absolute; right: 40px; top: 30px;
+    font-size: 80px; opacity: 0.08;
+  }
+  .finance-title { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+  .finance-sub { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 32px; }
+  .finance-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media(max-width:700px){ .finance-grid { grid-template-columns: 1fr; } }
+  .fin-box {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .fin-label { font-size: 11px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .fin-val { font-size: 26px; font-weight: 800; color: #81C784; }
+  .fin-note { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 4px; }
+
+  /* TIMELINE (SUMMARY) */
+  .timeline { position: relative; }
+  .tl-item { display: flex; gap: 20px; margin-bottom: 28px; align-items: flex-start; }
+  .tl-dot {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0; margin-top: 2px;
+  }
+  .tl-dot.green { background: var(--green-pale); }
+  .tl-dot.blue { background: #E3F2FD; }
+  .tl-dot.gold { background: #FFF8E1; }
+  .tl-dot.red { background: #FFEBEE; }
+  .tl-content { flex: 1; }
+  .tl-meta { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .tl-meta.green { color: var(--green); }
+  .tl-meta.blue { color: var(--blue); }
+  .tl-meta.gold { color: #E65100; }
+  .tl-meta.red { color: var(--red); }
+  .tl-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: var(--navy); }
+  .tl-body { font-size: 13px; color: var(--mid); line-height: 1.6; }
+
+  /* GROWTH CHART */
+  .growth-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+  }
+  .chart-title { font-size: 16px; font-weight: 700; margin-bottom: 24px; }
+  .chart-row { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .chart-label { font-size: 13px; font-weight: 600; width: 60px; text-align: right; flex-shrink: 0; color: var(--mid); }
+  .chart-bar-wrap { flex: 1; background: #F0F5F1; border-radius: 6px; height: 32px; overflow: hidden; }
+  .chart-bar { height: 100%; border-radius: 6px; display: flex; align-items: center; padding-left: 12px; font-size: 12px; font-weight: 700; color: #fff; }
+  .chart-note { font-size: 11px; color: var(--mid); width: 80px; flex-shrink: 0; }
+
+  /* CONCLUSION */
+  .conclusion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media(max-width:700px){ .conclusion-grid { grid-template-columns: 1fr; } }
+  .concl-card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+  }
+  .concl-card.olive { background: linear-gradient(135deg, #1B5E20, #2E7D32); color: #fff; }
+  .concl-icon { font-size: 28px; margin-bottom: 12px; }
+  .concl-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .concl-body { font-size: 13px; line-height: 1.65; }
+  .concl-body.dark { color: var(--mid); }
+  .concl-body.light { color: rgba(255,255,255,0.8); }
+  .verdict-box {
+    background: var(--green-pale);
+    border: 2px solid var(--green);
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin: 32px 0 64px;
+  }
+  .verdict-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; color: var(--green); margin-bottom: 10px; }
+  .verdict-text { font-size: 16px; font-weight: 600; color: var(--navy); line-height: 1.7; }
+
+  /* FOOTER */
+  footer { background: var(--navy); color: rgba(255,255,255,0.35); text-align: center; padding: 24px; font-size: 12px; }
+  footer strong { color: rgba(255,255,255,0.6); }
+  
+  .highlight { font-weight: 700; color: var(--green); }
+  .badge-new { background: #FFF3E0; color: #E65100; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 100px; margin-left: 6px; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">📈 Рыночное исследование · Казахстан · Июнь 2026</div>
+  <h1>Рынок правильного питания<br><em>растёт. Быстро.</em></h1>
+  <p class="hero-sub">Данные, тренды, прогнозы и финансовый потенциал для O_live</p>
+  <div class="hero-kpi">
+    <div class="kpi">
+      <div class="kpi-num"><b>169,5</b> млрд ₸</div>
+      <div class="kpi-label">Рынок онлайн-доставки еды 2025</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-num"><b>×3</b></div>
+      <div class="kpi-label">Рост за 2 года</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-num"><b>+35%</b></div>
+      <div class="kpi-label">Ежегодный рост рынка</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-num"><b>2,86</b> млрд $</div>
+      <div class="kpi-label">Рынок готовой еды КЗ 2025</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ПОСЛЕДНИЙ МЕСЯЦ: НОВОСТИ -->
+  <div class="section">
+    <div class="sec-title">📰 Резюме последнего месяца <span class="badge-new">МАЙ–ИЮНЬ 2026</span></div>
+    <p class="sec-desc">Что произошло за последние 4 недели — ключевые события для рынка правильного питания</p>
+
+    <div class="news-grid">
+      <div class="news-card green">
+        <div class="news-date green">5 июня 2026 · Bizmedia.kz</div>
+        <div class="news-title">Рынок онлайн-доставки еды в Казахстане бьёт рекорды</div>
+        <div class="news-body">В 2025 году через интернет-доставку прошло <strong>169,5 млрд тенге</strong> — почти в 3 раза больше, чем два года назад. Реальный масштаб рынка, по оценкам экспертов, достигает <strong>240–360 млрд тенге</strong> в год. В 2026 году рынок оценивается в 180 млрд тенге и продолжает расти на 35% ежегодно.</div>
+        <div class="news-source">Источник: Bizmedia.kz, Energyprom.kz</div>
+      </div>
+      <div class="news-card blue">
+        <div class="news-date blue">8 июня 2026 · Retail.ru</div>
+        <div class="news-title">Готовая еда — главный драйвер роста продуктовой розницы</div>
+        <div class="news-body">АКОРТ подтвердил: готовая еда (ready-to-eat) остаётся <strong>главным драйвером</strong> роста продуктового ритейла. Сегмент растёт на 12–20% в год, опережая классический общепит. Доля повторных заказов — <strong>60–70%</strong>.</div>
+        <div class="news-source">Источник: Retail.ru, 8 июня 2026</div>
+      </div>
+      <div class="news-card gold">
+        <div class="news-date gold">Май 2026 · Zakon.kz</div>
+        <div class="news-title">Продукты из России подорожают — влияние на себестоимость ПП</div>
+        <div class="news-body">С начала мая 2026 года ряд продуктов из России дорожает из-за изменения налоговой политики. Мясо, молочка, овощи — основные статьи роста себестоимости для ПП-сервисов. <strong>Риск для конкурентов — рост цен и снижение маржи.</strong> Возможность для O_live — выгодное позиционирование.</div>
+        <div class="news-source">Источник: Zakon.kz, апрель–май 2026</div>
+      </div>
+      <div class="news-card green">
+        <div class="news-date green">Апрель–май 2026 · Zakon.kz</div>
+        <div class="news-title">Рост цен на продукты питания приостановился</div>
+        <div class="news-body">В Казахстане в апреле-мае 2026 года замедлился рост цен на базовые продукты. Это означает, что <strong>покупательная способность клиентов ПП стабилизировалась</strong> — благоприятный сигнал для роста новых подписчиков.</div>
+        <div class="news-source">Источник: Zakon.kz, апрель 2026</div>
+      </div>
+      <div class="news-card blue">
+        <div class="news-date blue">Февраль–март 2026 · Informburo.kz</div>
+        <div class="news-title">Рынок готовой еды растёт быстрее классического общепита</div>
+        <div class="news-body">Глубокое исследование informburo.kz: доля готовой еды в общепите уже <strong>20–30%</strong> по всей стране, а в кафе городов — <strong>25–45% оборота</strong>. Ready-to-eat «воспринимается как инфраструктурный сервис современного города».</div>
+        <div class="news-source">Источник: Informburo.kz, 11 февраля 2026</div>
+      </div>
+      <div class="news-card gold">
+        <div class="news-date gold">2026 · Sports.kz / MK.ru</div>
+        <div class="news-title">Тренд года: осознанность > диета</div>
+        <div class="news-body">В 2026 году глобальный тренд питания меняется: <strong>фокус с «похудеть» смещается на удовольствие, баланс и заботу о себе</strong>. Жёсткие диеты уходят, осознанное питание приходит. Это прямо совпадает с позиционированием O_live.</div>
+        <div class="news-source">Источник: Sports.kz, MK.ru, 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- РЫНОЧНАЯ СТАТИСТИКА -->
+  <div class="section">
+    <div class="sec-title">📊 Рынок в цифрах</div>
+    <p class="sec-desc">Ключевые показатели рынка доставки еды и готовой еды в Казахстане</p>
+
+    <div class="stats-grid">
+      <div class="stat-card c1">
+        <div class="stat-num g">169,5<br><small style="font-size:16px">млрд ₸</small></div>
+        <div class="stat-label">Онлайн-доставка еды 2025<br>— в 3 раза больше чем 2 года назад</div>
+      </div>
+      <div class="stat-card c2">
+        <div class="stat-num b">1,6<br><small style="font-size:16px">трлн ₸</small></div>
+        <div class="stat-label">Общий оборот общепита КЗ 2025<br>— рост +16–18%</div>
+      </div>
+      <div class="stat-card c3">
+        <div class="stat-num o">2,86<br><small style="font-size:16px">млрд $</small></div>
+        <div class="stat-label">Рынок готовой еды РКК 2025<br>по данным Statista</div>
+      </div>
+      <div class="stat-card c4">
+        <div class="stat-num p">+35%</div>
+        <div class="stat-label">Ежегодный рост рынка доставки<br>— прогноз на 2026</div>
+      </div>
+    </div>
+
+    <!-- GROWTH BARS -->
+    <div class="growth-card">
+      <div class="chart-title">📈 Динамика роста рынка доставки еды в Казахстане</div>
+      <div class="chart-row">
+        <div class="chart-label">2022</div>
+        <div class="chart-bar-wrap">
+          <div class="chart-bar" style="width:20%; background:linear-gradient(90deg,#4CAF50,#81C784)">~22 млрд ₸</div>
+        </div>
+        <div class="chart-note" style="color:#9AA8B5">базовый</div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-label">2023</div>
+        <div class="chart-bar-wrap">
+          <div class="chart-bar" style="width:38%; background:linear-gradient(90deg,#43A047,#66BB6A)">~56 млрд ₸</div>
+        </div>
+        <div class="chart-note" style="color:#43A047">+155%</div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-label">2024</div>
+        <div class="chart-bar-wrap">
+          <div class="chart-bar" style="width:60%; background:linear-gradient(90deg,#388E3C,#4CAF50)">~88 млрд ₸</div>
+        </div>
+        <div class="chart-note" style="color:#388E3C">+57%</div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-label">2025</div>
+        <div class="chart-bar-wrap">
+          <div class="chart-bar" style="width:86%; background:linear-gradient(90deg,#2E7D32,#388E3C)">169,5 млрд ₸</div>
+        </div>
+        <div class="chart-note" style="color:#2E7D32">+92%</div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-label" style="color:#1B5E20; font-weight:800">2026 ▶</div>
+        <div class="chart-bar-wrap">
+          <div class="chart-bar" style="width:100%; background:linear-gradient(90deg,#1B5E20,#2E7D32); opacity:0.85">~229 млрд ₸ (прогноз)</div>
+        </div>
+        <div class="chart-note" style="color:#1B5E20; font-weight:700">+35% ▲</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ТРЕНДЫ ПИТАНИЯ 2026 -->
+  <div class="section">
+    <div class="sec-title">🌿 Тренды здорового питания 2026</div>
+    <p class="sec-desc">Что меняется в поведении потребителей — и почему O_live в нужном месте в нужное время</p>
+
+    <div class="trends-grid">
+      <div class="trend-card">
+        <div class="trend-icon">🧘</div>
+        <div class="trend-title">Осознанность вместо диеты</div>
+        <div class="trend-body">В 2026 году потребитель отказывается от жёстких диет. Фокус смещается на <strong>удовольствие, баланс и заботу о себе</strong>. «Правильное питание» больше не про ограничения — оно про радость от еды.</div>
+        <span class="trend-tag">✅ Точно в позиционирование O_live</span>
+      </div>
+      <div class="trend-card">
+        <div class="trend-icon">🧬</div>
+        <div class="trend-title">Персонализация рациона</div>
+        <div class="trend-body">Растёт спрос на индивидуальные программы питания, основанные на данных о здоровье, образе жизни и целях. Один рацион для всех — уже устарел.</div>
+        <span class="trend-tag">💡 Возможность для O_live</span>
+      </div>
+      <div class="trend-card">
+        <div class="trend-icon">🦠</div>
+        <div class="trend-title">Микробиом и кишечник</div>
+        <div class="trend-body">Забота о микробиоме переходит из ниши в мейнстрим. Растёт интерес к ферментированным продуктам, пробиотикам, клетчатке. Пищеварение = основа здоровья 2026.</div>
+        <span class="trend-tag">📌 Контент-тема для O_live</span>
+      </div>
+      <div class="trend-card">
+        <div class="trend-icon">⚡</div>
+        <div class="trend-title">Функциональная еда</div>
+        <div class="trend-body">Еда как инструмент: для энергии, иммунитета, мозга, сна. Потребитель хочет не просто «вкусно» — он хочет знать, <strong>что именно эта еда даёт его телу</strong>.</div>
+        <span class="trend-tag">📌 Контент-тема для O_live</span>
+      </div>
+      <div class="trend-card">
+        <div class="trend-icon">🌾</div>
+        <div class="trend-title">Клетчатка — новый белок</div>
+        <div class="trend-body">После нескольких лет «белковой гонки» фокус смещается на клетчатку. Производители обогащают ею привычные продукты. Это открывает нишу для нового меню.</div>
+        <span class="trend-tag">📌 Идея для продукта</span>
+      </div>
+      <div class="trend-card">
+        <div class="trend-icon">🏡</div>
+        <div class="trend-title">Возврат к традиционным продуктам</div>
+        <div class="trend-body">Казахстанский потребитель интересуется местными продуктами — курт, талкан, ары, кисломолочные. Это возможность для бренда с казахстанскими корнями.</div>
+        <span class="trend-tag">✅ Возможность для O_live</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ФИНАНСОВЫЙ ПОТЕНЦИАЛ -->
+  <div class="section">
+    <div class="sec-title">💰 Финансовый потенциал O_live</div>
+    <p class="sec-desc">Сколько может принести этот рынок — расчёт на основе данных конкурентов и рынка</p>
+    <div class="finance-block">
+      <div class="finance-title">Потенциал дохода: реалистичный сценарий</div>
+      <div class="finance-sub">Расчёт на основе реальных данных рынка (DietLab = 3 000 клиентов/день, рынок растёт +35%/год)</div>
+      <div class="finance-grid">
+        <div class="fin-box">
+          <div class="fin-label">🌱 Старт (50 клиентов/день)</div>
+          <div class="fin-val">~87,5 млн ₸</div>
+          <div class="fin-note">в год при 7 000 ₸/день · 250 дней</div>
+        </div>
+        <div class="fin-box">
+          <div class="fin-label">📈 Рост (300 клиентов/день)</div>
+          <div class="fin-val">~525 млн ₸</div>
+          <div class="fin-note">в год — уровень среднего игрока</div>
+        </div>
+        <div class="fin-box">
+          <div class="fin-label">🚀 Цель (1 000 клиентов/день)</div>
+          <div class="fin-val">~1,75 млрд ₸</div>
+          <div class="fin-note">в год — топ-игрок рынка Алматы</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- БУДЕТ ЛИ РАСТИ СПРОС -->
+  <div class="section">
+    <div class="sec-title">🔮 Будет ли расти спрос?</div>
+    <p class="sec-desc">Три фактора, которые гарантируют рост рынка ПП в Казахстане</div>
+
+    <div class="conclusion-grid">
+      <div class="concl-card">
+        <div class="concl-icon">🏙️</div>
+        <div class="concl-title">Урбанизация ускоряется</div>
+        <div class="concl-body dark">В Казахстане активно растут Алматы, Астана и Шымкент. Городские жители всё меньше готовят дома — нехватка времени, рост женской занятости, изменение структуры семьи. К 2025 году потребление готовой еды достигло 22–23 кг на человека в год — и продолжает расти.</div>
+      </div>
+      <div class="concl-card">
+        <div class="concl-icon">📱</div>
+        <div class="concl-title">Цифровизация доставки</div>
+        <div class="concl-body dark">Wolt, Glovo, Яндекс — агрегаторы обучили казахстанца заказывать еду онлайн. Проникновение интернет-заказов растёт. Доставка готовой еды перестаёт быть luxury — она становится нормой. <strong>60–70% клиентов возвращаются за повторными заказами.</strong></div>
+      </div>
+      <div class="concl-card">
+        <div class="concl-icon">💚</div>
+        <div class="concl-title">ЗОЖ-культура набирает силу</div>
+        <div class="concl-body dark">Рынок фитнес-услуг в Казахстане вырос на 21% за год. Спрос на органические и функциональные продукты в ритейле растёт на 15%+. Аудитория, которая следит за здоровьем через еду, расширяется каждый год.</div>
+      </div>
+      <div class="concl-card olive">
+        <div class="concl-icon">🌿</div>
+        <div class="concl-title">Почему O_live выиграет</div>
+        <div class="concl-body light">Рынок растёт — это факт. Но аудитория меняется: она устала от языка диет и ограничений. Тренд 2026 — <strong>осознанность, удовольствие, баланс</strong>. Именно это говорит O_live. Пока конкуренты продают «похудение», O_live продаёт <strong>новый стиль жизни</strong>. Это и есть конкурентное преимущество следующих 3 лет.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ИТОГОВОЕ РЕЗЮМЕ -->
+  <div class="section">
+    <div class="sec-title">📋 Итоговое резюме</div>
+    <p class="sec-desc">Хронология событий и выводы для O_live</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot green">📊</div>
+        <div class="tl-content">
+          <div class="tl-meta green">Цифры · 2025–2026</div>
+          <div class="tl-title">Рынок онлайн-доставки вырос в 3 раза за 2 года</div>
+          <div class="tl-body">169,5 млрд тенге в 2025 году. Прогноз 2026 — 229 млрд тенге (+35%). Реальный рынок готовой еды в КЗ — 2,86 млрд $. Это не ниша — это массовый рынок, который только начинается.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot green">🍱</div>
+        <div class="tl-content">
+          <div class="tl-meta green">Структурный сдвиг · 2026</div>
+          <div class="tl-title">Ready-to-eat растёт быстрее классического общепита</div>
+          <div class="tl-body">+12–20% в год. Доля готовой еды в городском общепите — уже 20–30%. Каждый пятый тенге в ресторане приходится на готовую еду. Среднее увеличение чека — до 7 500–10 500 тенге.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot blue">🌍</div>
+        <div class="tl-content">
+          <div class="tl-meta blue">Глобальный тренд · 2026</div>
+          <div class="tl-title">Мир уходит от диет к осознанному питанию</div>
+          <div class="tl-body">Крупнейшие нутрициологи, Tatler Asia, Sports.kz и MK.ru зафиксировали: потребитель 2026 ищет не «похудеть», а «жить вкусно и осознанно». Функциональная еда, персонализация, микробиом — всё это запрос аудитории O_live.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot gold">⚠️</div>
+        <div class="tl-content">
+          <div class="tl-meta gold">Риск · Май 2026</div>
+          <div class="tl-title">Рост себестоимости из-за подорожания российских продуктов</div>
+          <div class="tl-body">С мая 2026 года ряд продуктов из России дорожает. Конкуренты будут вынуждены либо повышать цены, либо жертвовать маржой. Для O_live — возможность позиционировать себя через казахстанские и местные продукты.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot green">✅</div>
+        <div class="tl-content">
+          <div class="tl-meta green">Вывод · Июнь 2026</div>
+          <div class="tl-title">Спрос будет расти. Точно. Вопрос — кто его возьмёт</div>
+          <div class="tl-body">Урбанизация, цифровизация, рост ЗОЖ-культуры — три мощных двигателя. Рынок ещё не консолидирован. DietLab, Health Food и Fitness Food занимают «диетную» нишу. Ниша осознанного питания для тех, кто хочет жить, а не худеть — почти свободна.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="verdict-box">
+      <div class="verdict-label">🌿 Вердикт для O_live</div>
+      <div class="verdict-text">
+        Рынок правильного питания в Казахстане <span class="highlight">растёт на 35% ежегодно</span> и к 2026 году превысит <span class="highlight">229 млрд тенге</span> только по онлайн-доставке. При 300 клиентах в день O_live может зарабатывать <span class="highlight">500+ млн тенге в год</span>. Глобальный тренд 2026 — осознанное питание без диет — <span class="highlight">совпадает с ДНК бренда O_live на 100%.</span> Это лучший момент для роста.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>Источники: <strong>Bizmedia.kz (05.06.2026) · Energyprom.kz · Informburo.kz (11.02.2026) · Retail.ru (08.06.2026) · Zakon.kz · Sports.kz · Tatler Asia KZ · Statista Market Insights · INFOLine</strong></p>
+  <p style="margin-top:6px">O_live · Исследование рынка · Алматы · Июнь 2026</p>
+</footer>
+
+</body>
+</html>

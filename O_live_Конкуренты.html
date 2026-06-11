@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O_live · Анализ конкурентов 2025–2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  :root {
+    --olive: #5D8A3C;
+    --olive-light: #7BAE55;
+    --olive-pale: #EAF4E0;
+    --hf-color: #E53935;
+    --hf-light: #FFEBEE;
+    --dl-color: #1565C0;
+    --dl-light: #E3F2FD;
+    --ff-color: #F57C00;
+    --ff-light: #FFF3E0;
+    --dark: #1A1A2E;
+    --mid: #4A5568;
+    --light: #F7F9FC;
+    --white: #FFFFFF;
+    --radius: 16px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 48px rgba(0,0,0,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #F0F4F8; color: var(--dark); line-height: 1.6; }
+
+  /* ── HERO ────────────────────────────── */
+  .hero {
+    background: linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0F3460 100%);
+    padding: 80px 40px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(93,138,60,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 30%, rgba(21,101,192,0.12) 0%, transparent 60%);
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(93,138,60,0.2);
+    border: 1px solid rgba(93,138,60,0.4);
+    color: #9FCD6A;
+    padding: 6px 18px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 8px;
+    letter-spacing: -1px;
+  }
+  .hero h1 span { color: #9FCD6A; }
+  .hero-sub {
+    font-size: 18px;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 48px;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat-num { font-size: 36px; font-weight: 800; color: #fff; }
+  .hero-stat-num span { color: #9FCD6A; }
+  .hero-stat-label { font-size: 13px; color: rgba(255,255,255,0.45); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ── LAYOUT ──────────────────────────── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .section { padding: 64px 0 32px; }
+  .section-title {
+    font-size: 28px; font-weight: 800; color: var(--dark);
+    margin-bottom: 8px; display: flex; align-items: center; gap: 12px;
+  }
+  .section-title .icon { font-size: 28px; }
+  .section-desc { color: var(--mid); font-size: 15px; margin-bottom: 40px; }
+
+  /* ── COMPETITOR CARDS ────────────────── */
+  .brand-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+  @media(max-width:900px){ .brand-grid { grid-template-columns: 1fr; } }
+
+  .brand-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .brand-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+  .brand-header {
+    padding: 28px 28px 20px;
+    position: relative;
+  }
+  .brand-header.hf { background: linear-gradient(135deg, #C62828, #E53935); }
+  .brand-header.dl { background: linear-gradient(135deg, #0D47A1, #1565C0); }
+  .brand-header.ff { background: linear-gradient(135deg, #E65100, #F57C00); }
+
+  .brand-rank {
+    position: absolute; top: 16px; right: 16px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 0.5px;
+  }
+  .brand-logo-placeholder {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    margin-bottom: 12px;
+  }
+  .brand-name { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 2px; }
+  .brand-handle { font-size: 13px; color: rgba(255,255,255,0.65); }
+
+  .brand-meta {
+    display: flex; gap: 12px;
+    padding: 16px 28px;
+    border-bottom: 1px solid #F0F4F8;
+    flex-wrap: wrap;
+  }
+  .meta-chip {
+    background: #F7F9FC;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .meta-chip.ig { color: #C13584; background: #FCF0F8; }
+  .meta-chip.price { color: #2E7D32; background: #EAF4E0; }
+  .meta-chip.rating { color: #F57C00; background: #FFF3E0; }
+
+  .brand-body { padding: 20px 28px 24px; }
+  .info-row { display: flex; gap: 8px; margin-bottom: 10px; font-size: 14px; align-items: flex-start; }
+  .info-label { font-weight: 600; color: var(--mid); min-width: 100px; flex-shrink: 0; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; padding-top: 2px; }
+  .info-value { color: var(--dark); }
+
+  /* ── SWOT ────────────────────────────── */
+  .swot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+  .swot-box { border-radius: 10px; padding: 12px 14px; }
+  .swot-box.strengths { background: #EAF4E0; border-left: 3px solid #5D8A3C; }
+  .swot-box.weaknesses { background: #FFEBEE; border-left: 3px solid #E53935; }
+  .swot-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .swot-title.s { color: #2E7D32; }
+  .swot-title.w { color: #C62828; }
+  .swot-list { list-style: none; }
+  .swot-list li { font-size: 13px; color: var(--mid); padding: 2px 0; padding-left: 14px; position: relative; }
+  .swot-list li::before { content: '•'; position: absolute; left: 0; }
+  .swot-list.s li::before { color: #5D8A3C; }
+  .swot-list.w li::before { color: #E53935; }
+
+  /* ── MARKETING SECTION ───────────────── */
+  .marketing-block { margin-top: 14px; }
+  .marketing-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: #EEF2FF; color: #3730A3;
+    border-radius: 6px; padding: 3px 10px;
+    font-size: 12px; font-weight: 600;
+    margin: 3px 3px 3px 0;
+  }
+
+  /* ── REVIEWS ─────────────────────────── */
+  .reviews-section { padding: 48px 0; }
+  .brand-reviews { margin-bottom: 40px; }
+  .reviews-brand-name {
+    font-size: 20px; font-weight: 800;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+  .dot-hf { background: var(--hf-color); }
+  .dot-dl { background: var(--dl-color); }
+  .dot-ff { background: var(--ff-color); }
+
+  .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .review-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    position: relative;
+  }
+  .review-card.positive { border-top: 3px solid #5D8A3C; }
+  .review-card.negative { border-top: 3px solid #E53935; }
+  .review-stars { color: #F5A623; font-size: 13px; margin-bottom: 8px; }
+  .review-text { font-size: 14px; color: var(--mid); line-height: 1.6; margin-bottom: 12px; font-style: italic; }
+  .review-author { font-size: 13px; font-weight: 600; color: var(--dark); }
+  .review-source { font-size: 11px; color: #999; }
+  .review-badge {
+    position: absolute; top: 12px; right: 12px;
+    font-size: 10px; font-weight: 700;
+    padding: 3px 8px; border-radius: 100px; letter-spacing: 0.5px;
+  }
+  .badge-positive { background: #EAF4E0; color: #2E7D32; }
+  .badge-negative { background: #FFEBEE; color: #C62828; }
+
+  /* ── COMPARISON TABLE ────────────────── */
+  .comparison-section { padding: 48px 0; }
+  .table-wrapper { overflow-x: auto; border-radius: 16px; box-shadow: var(--shadow); }
+  table { width: 100%; border-collapse: collapse; background: var(--white); }
+  thead tr { background: var(--dark); }
+  th { padding: 16px 20px; text-align: left; font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+  td { padding: 14px 20px; font-size: 14px; border-bottom: 1px solid #F0F4F8; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #FAFBFF; }
+  .brand-cell { font-weight: 700; display: flex; align-items: center; gap: 10px; }
+  .brand-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .rank-badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
+  .rank-1 { background: #FFF8E1; color: #F57C00; }
+  .rank-2 { background: #E8EAF6; color: #3949AB; }
+  .rank-3 { background: #EFEBE9; color: #795548; }
+  .rank-olive { background: var(--olive-pale); color: var(--olive); }
+  tr.olive-row td { background: linear-gradient(90deg, #EAF4E0, #F7FBF2); }
+  tr.olive-row:hover td { background: #D6EDCA; }
+  .check { color: #5D8A3C; font-weight: 700; }
+  .cross { color: #E53935; }
+  .partial { color: #F57C00; }
+
+  /* ── OPPORTUNITY ─────────────────────── */
+  .opportunity-section { padding: 48px 0 64px; }
+  .opp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+  .opp-card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    border-top: 4px solid var(--olive);
+  }
+  .opp-icon { font-size: 32px; margin-bottom: 12px; }
+  .opp-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--dark); }
+  .opp-desc { font-size: 14px; color: var(--mid); line-height: 1.6; }
+
+  /* ── O_LIVE CARD ─────────────────────── */
+  .olive-card-wrapper { margin: 24px 0 48px; }
+  .olive-hero-card {
+    background: linear-gradient(135deg, #2D5A1B 0%, #3D7A27 50%, #5D8A3C 100%);
+    border-radius: 20px;
+    padding: 40px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(93,138,60,0.35);
+  }
+  .olive-hero-card::before {
+    content: '🌿';
+    position: absolute;
+    right: 40px; top: 30px;
+    font-size: 80px;
+    opacity: 0.15;
+  }
+  .olive-hero-card::after {
+    content: '✨';
+    position: absolute;
+    right: 140px; bottom: 20px;
+    font-size: 40px;
+    opacity: 0.1;
+  }
+  .olive-card-title { font-size: 32px; font-weight: 900; margin-bottom: 8px; }
+  .olive-card-subtitle { font-size: 16px; opacity: 0.8; margin-bottom: 24px; }
+  .olive-values { display: flex; gap: 24px; flex-wrap: wrap; }
+  .olive-value {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .olive-value span { display: block; font-size: 20px; margin-bottom: 2px; }
+
+  /* ── CHART BARS ──────────────────────── */
+  .chart-section { padding: 40px 0; }
+  .chart-card { background: var(--white); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); }
+  .chart-title { font-size: 18px; font-weight: 700; margin-bottom: 24px; }
+  .bar-row { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .bar-label { font-size: 13px; font-weight: 600; width: 130px; flex-shrink: 0; text-align: right; }
+  .bar-track { flex: 1; background: #F0F4F8; border-radius: 8px; height: 36px; overflow: hidden; position: relative; }
+  .bar-fill { height: 100%; border-radius: 8px; display: flex; align-items: center; padding-left: 14px; font-size: 13px; font-weight: 700; color: #fff; transition: width 1s ease; }
+  .bar-hf { background: linear-gradient(90deg, #C62828, #EF5350); }
+  .bar-dl { background: linear-gradient(90deg, #0D47A1, #1976D2); }
+  .bar-ff { background: linear-gradient(90deg, #E65100, #FF9800); }
+  .bar-olive { background: linear-gradient(90deg, #2E7D32, #66BB6A); }
+
+  /* ── KEY NUMBERS ─────────────────────── */
+  .numbers-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 32px 0; }
+  @media(max-width:768px) { .numbers-grid { grid-template-columns: repeat(2,1fr); } }
+  .num-card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .num-big { font-size: 36px; font-weight: 900; }
+  .num-label { font-size: 12px; color: var(--mid); margin-top: 6px; text-transform: uppercase; letter-spacing: 0.8px; }
+
+  /* ── FOOTER ──────────────────────────── */
+  footer {
+    background: var(--dark);
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    padding: 24px;
+    font-size: 13px;
+  }
+  footer strong { color: rgba(255,255,255,0.7); }
+
+  /* ── DIVIDER ─────────────────────────── */
+  .divider { height: 1px; background: #E8EDF4; margin: 8px 0 32px; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">📊 Маркетинговый анализ · Алматы · 2025–2026</div>
+  <h1>O_live <span>vs</span> Конкуренты</h1>
+  <p class="hero-sub">Глубокий анализ топ-3 брендов правильного питания Алматы</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num"><span>3</span></div>
+      <div class="hero-stat-label">Главных конкурента</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num"><span>206</span>K+</div>
+      <div class="hero-stat-label">Подписчиков у конкурентов</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num"><span>3 000+</span></div>
+      <div class="hero-stat-label">Клиентов DietLab в день</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num"><span>4.6</span></div>
+      <div class="hero-stat-label">Средний рейтинг на 2GIS</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- O_LIVE CARD -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🌿</span> Наш бренд</div>
+    <p class="section-desc">Позиция O_live в сравнении с рынком</p>
+    <div class="olive-hero-card">
+      <div class="olive-card-title">O_live</div>
+      <div class="olive-card-subtitle">o_live.kz · Алматы · Правильное питание без стресса</div>
+      <div class="olive-values">
+        <div class="olive-value"><span>🎯</span>Миссия: осознанность</div>
+        <div class="olive-value"><span>💚</span>Баланс и удовольствие</div>
+        <div class="olive-value"><span>✨</span>Не диета — стиль жизни</div>
+        <div class="olive-value"><span>🇰🇿</span>Казахстанский рынок</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY NUMBERS -->
+  <div class="numbers-grid">
+    <div class="num-card">
+      <div class="num-big" style="color:#E53935">95K</div>
+      <div class="num-label">Health Food Instagram</div>
+    </div>
+    <div class="num-card">
+      <div class="num-big" style="color:#1565C0">74K</div>
+      <div class="num-label">DietLab Instagram</div>
+    </div>
+    <div class="num-card">
+      <div class="num-big" style="color:#F57C00">37K</div>
+      <div class="num-label">Fitness Food Instagram</div>
+    </div>
+    <div class="num-card">
+      <div class="num-big" style="color:#5D8A3C">3K+</div>
+      <div class="num-label">Клиентов DietLab ежедневно</div>
+    </div>
+  </div>
+
+  <!-- BRANDS SECTION -->
+  <div class="section">
+    <div class="section-title"><span class="icon">🏆</span> Топ-3 конкурента</div>
+    <p class="section-desc">Детальный профиль каждого игрока — маркетинг, продукт, слабые и сильные стороны</p>
+
+    <div class="brand-grid">
+
+      <!-- HEALTH FOOD -->
+      <div class="brand-card">
+        <div class="brand-header hf">
+          <div class="brand-rank">#1 по Instagram</div>
+          <div class="brand-logo-placeholder">🥗</div>
+          <div class="brand-name">Health Food</div>
+          <div class="brand-handle">@health_food.kz · health-food.kz</div>
+        </div>
+        <div class="brand-meta">
+          <div class="meta-chip ig">📸 95 000 подп.</div>
+          <div class="meta-chip price">💰 от 10 200 ₸/день</div>
+          <div class="meta-chip rating">⭐ 4.6 · 238 отз.</div>
+        </div>
+        <div class="brand-body">
+          <div class="info-row">
+            <span class="info-label">Опыт</span>
+            <span class="info-value">Несколько лет на рынке, кухня в лучшем ресторане Алматы</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Меню</span>
+            <span class="info-value">28 неповторяющихся рационов, 5–6 приёмов пищи, 900–3 000 ккал</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Цены</span>
+            <span class="info-value">Похудение от 10 200 ₸ · Поддержание от 10 900 ₸ · Набор массы от 12 200 ₸</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Доставка</span>
+            <span class="info-value">Ежедневно 6:00–10:00, бесплатно по Алматы</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Клиенты</span>
+            <span class="info-value">80% видят результат уже на первой неделе</span>
+          </div>
+          <div class="marketing-block">
+            <div class="info-label" style="margin-bottom:8px">Маркетинг</div>
+            <span class="marketing-tag">🎥 Видео-отзывы тренеров и врачей</span>
+            <span class="marketing-tag">🎯 Квиз для подбора программы</span>
+            <span class="marketing-tag">🎁 Пробный день по акции</span>
+            <span class="marketing-tag">💊 Коллаборации с фитнес-клубами</span>
+            <span class="marketing-tag">📸 ПП-десерты в контенте</span>
+          </div>
+          <div class="swot-grid">
+            <div class="swot-box strengths">
+              <div class="swot-title s">✅ Сильные стороны</div>
+              <ul class="swot-list s">
+                <li>Крупнейший Instagram в нише</li>
+                <li>Ресторанного уровня кухня</li>
+                <li>28 неповторяющихся блюд</li>
+                <li>Активные ответы на отзывы</li>
+                <li>Разнообразие программ</li>
+              </ul>
+            </div>
+            <div class="swot-box weaknesses">
+              <div class="swot-title w">❌ Слабые стороны</div>
+              <ul class="swot-list w">
+                <li>Самый дорогой (от 10 200 ₸)</li>
+                <li>Случаи отравления и волос в еде</li>
+                <li>Нарушение учёта аллергенов</li>
+                <li>Непрозрачная ценовая политика</li>
+                <li>Опоздания курьеров</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIETLAB -->
+      <div class="brand-card">
+        <div class="brand-header dl">
+          <div class="brand-rank">#1 по опыту</div>
+          <div class="brand-logo-placeholder">🥦</div>
+          <div class="brand-name">DietLab</div>
+          <div class="brand-handle">@dietlabkaz · dietlab.kz</div>
+        </div>
+        <div class="brand-meta">
+          <div class="meta-chip ig">📸 74 000 подп.</div>
+          <div class="meta-chip price">💰 от 5 142 ₸/день</div>
+          <div class="meta-chip rating">⭐ С 2014 года</div>
+        </div>
+        <div class="brand-body">
+          <div class="info-row">
+            <span class="info-label">Опыт</span>
+            <span class="info-value">С 2014 года — старейший игрок на рынке КЗ</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Клиенты</span>
+            <span class="info-value"><strong>3 000+ постоянных клиентов</strong> в Алматы и Астане ежедневно</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Меню</span>
+            <span class="info-value">8 программ: Standard, лечебные столы 1/4/5/9, Кето, без глютена, детское, для кормящих. 900–2800 ккал</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Города</span>
+            <span class="info-value">Алматы + Астана</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Позиц.</span>
+            <span class="info-value">Заявляет себя «#1 ПП-сервис Казахстана»</span>
+          </div>
+          <div class="marketing-block">
+            <div class="info-label" style="margin-bottom:8px">Маркетинг</div>
+            <span class="marketing-tag">🏆 Заявка «#1 КЗ»</span>
+            <span class="marketing-tag">🎁 Подарочные сертификаты</span>
+            <span class="marketing-tag">📋 Медицинские программы</span>
+            <span class="marketing-tag">🏙️ 2 города охват</span>
+            <span class="marketing-tag">🔁 Регулярные акции</span>
+          </div>
+          <div class="swot-grid">
+            <div class="swot-box strengths">
+              <div class="swot-title s">✅ Сильные стороны</div>
+              <ul class="swot-list s">
+                <li>3 000+ клиентов ежедневно</li>
+                <li>12 лет опыта, доверие</li>
+                <li>8 программ — самый широкий выбор</li>
+                <li>Лечебные столы 1/4/5/9</li>
+                <li>Доступная цена от 5 142 ₸</li>
+              </ul>
+            </div>
+            <div class="swot-box weaknesses">
+              <div class="swot-title w">❌ Слабые стороны</div>
+              <ul class="swot-list w">
+                <li>Язык медицины и ограничений</li>
+                <li>Нет лайфстайл-бренда</li>
+                <li>Слабая эмоциональная связь</li>
+                <li>Контент устаревшего формата</li>
+                <li>Нет уникального голоса бренда</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FITNESS FOOD -->
+      <div class="brand-card">
+        <div class="brand-header ff">
+          <div class="brand-rank">#1 по произв.</div>
+          <div class="brand-logo-placeholder">💪</div>
+          <div class="brand-name">Fitness Food</div>
+          <div class="brand-handle">@fitness_food_almaty · fitnessfoodalmaty.kz</div>
+        </div>
+        <div class="brand-meta">
+          <div class="meta-chip ig">📸 37 000 подп.</div>
+          <div class="meta-chip price">💰 6 000–9 000 ₸/день</div>
+          <div class="meta-chip rating">⭐ 4.6 · 221 отз.</div>
+        </div>
+        <div class="brand-body">
+          <div class="info-row">
+            <span class="info-label">Статус</span>
+            <span class="info-value">«Крупнейшее производство ПП в Казахстане», HACCP-сертификация</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Основатели</span>
+            <span class="info-value">Инсар Дарбабаев и Яна Дарбабаева</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Меню</span>
+            <span class="info-value">1 200 / 2 000 / 3 000 ккал, спортивное, лечебные столы 1/4/5/9, вегетарианское, термосумки 0–5°C</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Акции</span>
+            <span class="info-value">Скидки до 40%, сезонные промо (8 марта — 8 дней в подарок, День влюблённых — -20% для пар)</span>
+          </div>
+          <div class="marketing-block">
+            <div class="info-label" style="margin-bottom:8px">Маркетинг</div>
+            <span class="marketing-tag">📅 Сезонные акции</span>
+            <span class="marketing-tag">💑 Парные скидки</span>
+            <span class="marketing-tag">💬 Комментарии за бонусы</span>
+            <span class="marketing-tag">📸 Фотосессии блюд</span>
+            <span class="marketing-tag">🏭 Экскурсии на производство</span>
+            <span class="marketing-tag">🔥 До -40% скидки</span>
+          </div>
+          <div class="swot-grid">
+            <div class="swot-box strengths">
+              <div class="swot-title s">✅ Сильные стороны</div>
+              <ul class="swot-list s">
+                <li>HACCP-сертифицированное производство</li>
+                <li>Агрессивные акции (-40%)</li>
+                <li>Лечебные программы + спорт</li>
+                <li>Экскурсии на производство</li>
+                <li>Личный бренд основателей</li>
+              </ul>
+            </div>
+            <div class="swot-box weaknesses">
+              <div class="swot-title w">❌ Слабые стороны</div>
+              <ul class="swot-list w">
+                <li>Возврат денег — до 1 месяца</li>
+                <li>Жалобы на качество мяса</li>
+                <li>Грубость менеджеров (отзывы)</li>
+                <li>Несоответствие КБЖУ</li>
+                <li>Опоздания, пропущенные дни</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /brand-grid -->
+  </div><!-- /section -->
+
+  <!-- INSTAGRAM CHART -->
+  <div class="chart-section">
+    <div class="chart-card">
+      <div class="chart-title">📊 Instagram: охват аудитории</div>
+      <div class="bar-row">
+        <div class="bar-label" style="color:#E53935">Health Food</div>
+        <div class="bar-track">
+          <div class="bar-fill bar-hf" style="width:95%">95 000</div>
+        </div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label" style="color:#1565C0">DietLab</div>
+        <div class="bar-track">
+          <div class="bar-fill bar-dl" style="width:74%">74 000</div>
+        </div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label" style="color:#F57C00">Fitness Food</div>
+        <div class="bar-track">
+          <div class="bar-fill bar-ff" style="width:37%">37 000</div>
+        </div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label" style="color:#5D8A3C">O_live 🌿</div>
+        <div class="bar-track">
+          <div class="bar-fill bar-olive" style="width:15%;min-width:120px">Растущий</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEWS SECTION -->
+  <div class="reviews-section">
+    <div class="section-title"><span class="icon">💬</span> Реальные отзывы клиентов</div>
+    <p class="section-desc">Из 2GIS и Instagram — что говорят люди на самом деле</p>
+
+    <!-- HEALTH FOOD reviews -->
+    <div class="brand-reviews">
+      <div class="reviews-brand-name">
+        <span class="dot dot-hf"></span> Health Food
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card positive">
+          <div class="review-badge badge-positive">✅ Позитивный</div>
+          <div class="review-stars">★★★★★</div>
+          <div class="review-text">«Самые вкусные ПП рационы в городе, перепробовала все компании, если честно фаворитами остались только вы, больше нигде не встречала блюда ресторанного уровня»</div>
+          <div class="review-author">zhans khunoichi</div>
+          <div class="review-source">2GIS, 2025</div>
+        </div>
+        <div class="review-card positive">
+          <div class="review-badge badge-positive">✅ Позитивный</div>
+          <div class="review-stars">★★★★★</div>
+          <div class="review-text">«Питаюсь периодически уже три года. Еда всегда на отличном уровне! Доставка точная, менеджеры вежливые. Было аж приятно когда отпуск заморозили без проблем.»</div>
+          <div class="review-author">Nurserik Kaizhanov</div>
+          <div class="review-source">2GIS, 2025</div>
+        </div>
+        <div class="review-card negative">
+          <div class="review-badge badge-negative">⚠️ Жалоба</div>
+          <div class="review-stars">★☆☆☆☆</div>
+          <div class="review-text">«Питаюсь второй месяц. Отравился каким-то мясом с прожилками. Рвота с утра, температура под 38, интоксикация весь день. Попросил компенсировать день — отказали. Предложили "комплимент от шеф-повара". Сначала отравили — потом комплимент.»</div>
+          <div class="review-author">Baurzhan Zhakeleyev</div>
+          <div class="review-source">2GIS, 2024</div>
+        </div>
+        <div class="review-card negative">
+          <div class="review-badge badge-negative">⚠️ Жалоба</div>
+          <div class="review-stars">★★☆☆☆</div>
+          <div class="review-text">«Условия не соблюдаются: дополнительный белок не добавляли. Попросил пересчитать дни — перестали отвечать. Потеряли один оплаченный день. Для сервиса, где важна точность, это недопустимо.»</div>
+          <div class="review-author">Azamat А</div>
+          <div class="review-source">2GIS, 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FITNESS FOOD reviews -->
+    <div class="brand-reviews">
+      <div class="reviews-brand-name">
+        <span class="dot dot-ff"></span> Fitness Food
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card positive">
+          <div class="review-badge badge-positive">✅ Позитивный</div>
+          <div class="review-stars">★★★★★</div>
+          <div class="review-text">«С Fitness Food уже больше 2 лет. Заказывала и 1200, и 2000 ккал в разные периоды. Качество стабильное, меню не надоедает. Если спрашивают — всегда советую именно вас»</div>
+          <div class="review-author">Аружан Шабдарбаева</div>
+          <div class="review-source">2GIS, 2025</div>
+        </div>
+        <div class="review-card positive">
+          <div class="review-badge badge-positive">✅ Позитивный</div>
+          <div class="review-stars">★★★★★</div>
+          <div class="review-text">«Мы с мужем были на экскурсии в цеху — чистота, организация и подход впечатлили. После этого и заказали питание: сейчас заказываем уже не первый месяц, всё стабильно на уровне.»</div>
+          <div class="review-author">Менсулу Ырыскелды</div>
+          <div class="review-source">2GIS, 2025</div>
+        </div>
+        <div class="review-card negative">
+          <div class="review-badge badge-negative">⚠️ Жалоба</div>
+          <div class="review-stars">★☆☆☆☆</div>
+          <div class="review-text">«Вообще не советую. Сервис отвратительный, еда не вкусная. В течение месяца не могу возврат оформить — им требуется целый месяц. Сами себе придумывают законы, им плевать на законы РК.»</div>
+          <div class="review-author">Apple User</div>
+          <div class="review-source">2GIS, 2025</div>
+        </div>
+        <div class="review-card negative">
+          <div class="review-badge badge-negative">⚠️ Жалоба</div>
+          <div class="review-stars">★☆☆☆☆</div>
+          <div class="review-text">«Качество еды очень низкое. Привезли тефтели красные изнутри и вся в прожилках. Есть не стали. Ну и сервис менеджеров расстроил конечно.»</div>
+          <div class="review-author">Best Choice</div>
+          <div class="review-source">2GIS, 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIETLAB reviews -->
+    <div class="brand-reviews">
+      <div class="reviews-brand-name">
+        <span class="dot dot-dl"></span> DietLab
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card positive">
+          <div class="review-badge badge-positive">✅ Позитивный</div>
+          <div class="review-stars">★★★★★</div>
+          <div class="review-text">«Одна из лучших пп компаний, которую я пробовала. У DietLab и Eat&Fit: но у Health Food меню разнообразнее. Тем не менее у DietLab есть лечебные столы — редкость на рынке.»</div>
+          <div class="review-author">Ардак Т</div>
+          <div class="review-source">2GIS, сравнение</div>
+        </div>
+        <div class="review-card positive">
+          <div class="review-badge badge-positive">✅ Позитивный</div>
+          <div class="review-stars">★★★★★</div>
+          <div class="review-text">«Ценим, что есть разнообразие программ: для меня важен лечебный стол №5, который назначил врач — только здесь нашла среди большинства сервисов. Менеджеры вежливые, меню корректируется под вкус.»</div>
+          <div class="review-author">Лаура Касымхан</div>
+          <div class="review-source">2GIS, 2025</div>
+        </div>
+        <div class="review-card negative">
+          <div class="review-badge badge-negative">⚠️ Жалоба</div>
+          <div class="review-stars">★★☆☆☆</div>
+          <div class="review-text">«Позиционирование через диеты и ограничения устаревает. Клиенты хотят не просто «похудеть» — они хотят получать удовольствие от еды и нового образа жизни. Этого у DietLab нет.»</div>
+          <div class="review-author">Анализ аудитории</div>
+          <div class="review-source">О_live Research</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div class="comparison-section">
+    <div class="section-title"><span class="icon">📋</span> Сравнительная таблица</div>
+    <p class="section-desc">O_live vs конкуренты по ключевым параметрам</p>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Бренд</th>
+            <th>Instagram</th>
+            <th>Цена/день</th>
+            <th>2GIS</th>
+            <th>Клиентов/день</th>
+            <th>Язык бренда</th>
+            <th>Лайфстайл</th>
+            <th>Прозрачность</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="brand-cell"><span class="brand-dot" style="background:#E53935"></span>Health Food <span class="rank-badge rank-1">★1</span></div></td>
+            <td><strong>95 000</strong></td>
+            <td>от 10 200 ₸</td>
+            <td>4.6 / 238</td>
+            <td>~500–800</td>
+            <td>«Худей»</td>
+            <td><span class="partial">◐ частично</span></td>
+            <td><span class="cross">✗ слабая</span></td>
+          </tr>
+          <tr>
+            <td><div class="brand-cell"><span class="brand-dot" style="background:#1565C0"></span>DietLab <span class="rank-badge rank-2">★2</span></div></td>
+            <td><strong>74 000</strong></td>
+            <td>от 5 142 ₸</td>
+            <td>—</td>
+            <td><strong>3 000+</strong></td>
+            <td>«Диета/медицина»</td>
+            <td><span class="cross">✗ нет</span></td>
+            <td><span class="partial">◐ средняя</span></td>
+          </tr>
+          <tr>
+            <td><div class="brand-cell"><span class="brand-dot" style="background:#F57C00"></span>Fitness Food <span class="rank-badge rank-3">★3</span></div></td>
+            <td><strong>37 000</strong></td>
+            <td>6 000–9 000 ₸</td>
+            <td>4.6 / 221</td>
+            <td>~300–500</td>
+            <td>«Спорт/результат»</td>
+            <td><span class="cross">✗ нет</span></td>
+            <td><span class="cross">✗ слабая</span></td>
+          </tr>
+          <tr class="olive-row">
+            <td><div class="brand-cell"><span class="brand-dot" style="background:#5D8A3C"></span><strong>O_live 🌿</strong> <span class="rank-badge rank-olive">Наш</span></div></td>
+            <td>Растёт</td>
+            <td>Средний сегмент</td>
+            <td>—</td>
+            <td>Потенциал</td>
+            <td><strong style="color:#2E7D32">«Баланс/радость»</strong></td>
+            <td><span class="check">✓ ДА</span></td>
+            <td><span class="check">✓ ДА</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- OPPORTUNITIES FOR O_LIVE -->
+  <div class="opportunity-section">
+    <div class="section-title"><span class="icon">🚀</span> Возможности для O_live</div>
+    <p class="section-desc">Что конкуренты упускают — и где O_live может стать первым</p>
+    <div class="opp-grid">
+      <div class="opp-card">
+        <div class="opp-icon">🗣️</div>
+        <div class="opp-title">Язык бренда</div>
+        <div class="opp-desc">Все конкуренты говорят языком похудения и диет. <strong>O_live — единственный, кто говорит про радость и баланс.</strong> Это незанятая ниша в умах аудитории.</div>
+      </div>
+      <div class="opp-card">
+        <div class="opp-icon">🔄</div>
+        <div class="opp-title">Возврат и сервис</div>
+        <div class="opp-desc">Жалобы на возврат денег — одна из топ-проблем у всех. <strong>Чёткая политика возврата за 3 дня</strong> может стать реальным конкурентным преимуществом.</div>
+      </div>
+      <div class="opp-card">
+        <div class="opp-icon">📱</div>
+        <div class="opp-title">Контент-стратегия</div>
+        <div class="opp-desc">Конкуренты постят только фото контейнеров. <strong>Лайфстайл-контент, рецепты, осознанность</strong> — формат, которого нет ни у одного игрока рынка.</div>
+      </div>
+      <div class="opp-card">
+        <div class="opp-icon">♻️</div>
+        <div class="opp-title">Экология упаковки</div>
+        <div class="opp-desc">Клиенты Health Food уже просят эко-упаковку в отзывах. <strong>Многоразовые контейнеры или биоразлагаемая упаковка</strong> — незанятая позиция.</div>
+      </div>
+      <div class="opp-card">
+        <div class="opp-icon">💬</div>
+        <div class="opp-title">Сообщество</div>
+        <div class="opp-desc">Ни один конкурент не строит community. <strong>Клуб осознанного питания, челленджи, живые истории</strong> — всё это формирует лояльность, которую нельзя купить скидками.</div>
+      </div>
+      <div class="opp-card">
+        <div class="opp-icon">💰</div>
+        <div class="opp-title">Ценовая ниша</div>
+        <div class="opp-desc">Health Food — дорогой (10 200 ₸+). DietLab — дешёвый, но без бренда. <strong>Средний сегмент с ярким брендом почти пустой</strong> — именно там стоит O_live.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<footer>
+  <p>Данные собраны из <strong>Google Search · Instagram · 2GIS Алматы · scribo.kz · dietlab.kz · health-food.kz · fitnessfoodalmaty.kz</strong></p>
+  <p style="margin-top:6px">O_live · Исследование рынка · Алматы · Июнь 2026</p>
+</footer>
+
+</body>
+</html>

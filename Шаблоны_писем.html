@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Шаблоны писем — O-Live</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f8;color:#1a1a1a;padding:32px 24px}
+.wrap{max-width:900px;margin:0 auto}
+h1{font-size:24px;font-weight:700;margin-bottom:4px}
+.subtitle{font-size:13px;color:#888;margin-bottom:32px}
+
+.letter-block{background:#fff;border-radius:16px;border:1px solid #e8edf2;margin-bottom:28px;overflow:hidden}
+.letter-header{padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.letter-left{display:flex;align-items:center;gap:14px}
+.letter-emoji{font-size:32px;line-height:1}
+.letter-type{font-size:18px;font-weight:700;margin-bottom:3px}
+.letter-desc{font-size:12px;color:#888;line-height:1.5}
+.copy-btn{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:7px 16px;font-size:12px;font-weight:600;color:#555;cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
+.copy-btn:hover{background:#e8f5e9;color:#2e7d32;border-color:#a7d7a8}
+.copy-btn.copied{background:#e8f5e9;color:#2e7d32;border-color:#a7d7a8}
+
+.h-red{border-top:3px solid #ef5350}
+.h-green{border-top:3px solid #66bb6a}
+.h-blue{border-top:3px solid #42a5f5}
+
+.letter-body{padding:0 22px 22px}
+.tags-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;padding-top:4px}
+.tag{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+.t-red{background:#feebee;color:#c62828}
+.t-green{background:#e8f5e9;color:#2e7d32}
+.t-blue{background:#e3f2fd;color:#1565c0}
+.t-gray{background:#f0f4f8;color:#555}
+
+.letter-preview{background:#fafbfc;border-radius:12px;border:1px solid #e8edf2;padding:20px 22px;margin-bottom:16px}
+.letter-preview .field{font-size:12px;color:#aaa;margin-bottom:2px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.letter-preview .value{font-size:13px;color:#333;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #f0f0f0}
+.letter-preview .value:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.letter-preview .body-text{font-size:14px;color:#222;line-height:1.8;white-space:pre-wrap}
+.var{background:#fff3e0;color:#e65100;padding:1px 5px;border-radius:4px;font-size:13px;font-weight:600}
+
+.var-table{width:100%;border-collapse:collapse;font-size:12px}
+.var-table th{text-align:left;padding:7px 10px;background:#f8fafc;color:#888;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #e8edf2}
+.var-table td{padding:7px 10px;border-bottom:1px solid #f3f4f6;vertical-align:top;color:#444;line-height:1.5}
+.var-table tr:last-child td{border-bottom:none}
+.vname{font-family:monospace;background:#fff3e0;color:#e65100;padding:1px 6px;border-radius:4px}
+
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#aaa;margin-bottom:8px}
+
+.prompt-box{background:#1a1a2e;border-radius:10px;padding:14px 18px;color:#cdd6f4;font-size:12px;line-height:1.8;white-space:pre-wrap;word-break:break-word}
+.pvar{color:#fbbf24;font-weight:700}
+
+.divider{height:1px;background:#f3f4f6;margin:16px 0}
+.footer{margin-top:48px;text-align:center;font-size:12px;color:#bbb}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>✉️ Шаблоны писем</h1>
+<div class="subtitle">3 типа писем для O-Live с промтами и переменными · 29 мая 2026</div>
+
+
+<!-- ══════════════════════════════════════ -->
+<!-- ПИСЬМО 1: ОТКАЗ -->
+<!-- ══════════════════════════════════════ -->
+<div class="letter-block h-red">
+  <div class="letter-header">
+    <div class="letter-left">
+      <div class="letter-emoji">🚫</div>
+      <div>
+        <div class="letter-type">Отказ</div>
+        <div class="letter-desc">Поставщику, кандидату, партнёру — вежливо и без лишних объяснений</div>
+      </div>
+    </div>
+    <button class="copy-btn" onclick="copyBlock(this,'letter1')">Копировать письмо</button>
+  </div>
+  <div class="letter-body">
+    <div class="tags-row">
+      <span class="tag t-red">Поставщик</span>
+      <span class="tag t-red">Кандидат</span>
+      <span class="tag t-red">Партнёрство</span>
+    </div>
+
+    <div class="letter-preview" id="letter1">
+<div class="field">Кому</div>
+<div class="value"><span class="var">[Имя получателя]</span>, <span class="var">[Компания]</span></div>
+<div class="field">Тема письма</div>
+<div class="value">Ответ на ваше предложение о сотрудничестве</div>
+<div class="field">Текст</div>
+<div class="value body-text">Здравствуйте, <span class="var">[Имя]</span>!
+
+Благодарим вас за интерес к сотрудничеству с O-Live и время, потраченное на подготовку предложения.
+
+Мы внимательно рассмотрели ваши условия по <span class="var">[тема: поставка орехов / дизайн баннеров / вакансия]</span>. К сожалению, на данный момент мы вынуждены отказаться — <span class="var">[краткая причина: условия не соответствуют нашим требованиям / позиция закрыта / бюджет не предусмотрен]</span>.
+
+Это решение не означает, что мы закрываем дверь навсегда. Если ситуация изменится — мы вернёмся к диалогу.
+
+Желаем вам успехов!
+
+С уважением,
+<span class="var">[Ваше имя]</span>
+O-Live</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-label">Переменные</div>
+    <table class="var-table">
+      <tr><th>Переменная</th><th>Что подставить</th></tr>
+      <tr><td><span class="vname">[Имя]</span></td><td>Имя человека которому пишешь</td></tr>
+      <tr><td><span class="vname">[тема]</span></td><td>поставка продуктов / дизайн / вакансия менеджера</td></tr>
+      <tr><td><span class="vname">[краткая причина]</span></td><td>условия не подходят / позиция закрыта / нет бюджета</td></tr>
+    </table>
+
+    <div class="divider"></div>
+    <div class="section-label">Промт для Claude</div>
+    <div class="prompt-box">Напиши письмо-отказ для O-Live.
+Получатель: <span class="pvar">[имя и компания]</span>
+Повод: <span class="pvar">[что предлагали]</span>
+Причина отказа: <span class="pvar">[причина]</span>
+Тон: вежливый, уважительный, без лишних извинений. 5-7 предложений.</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════ -->
+<!-- ПИСЬМО 2: БЛАГОДАРНОСТЬ -->
+<!-- ══════════════════════════════════════ -->
+<div class="letter-block h-green">
+  <div class="letter-header">
+    <div class="letter-left">
+      <div class="letter-emoji">🙏</div>
+      <div>
+        <div class="letter-type">Благодарность</div>
+        <div class="letter-desc">Клиенту, партнёру, сотруднику — тепло и конкретно</div>
+      </div>
+    </div>
+    <button class="copy-btn" onclick="copyBlock(this,'letter2')">Копировать письмо</button>
+  </div>
+  <div class="letter-body">
+    <div class="tags-row">
+      <span class="tag t-green">Клиент</span>
+      <span class="tag t-green">Партнёр</span>
+      <span class="tag t-green">Сотрудник</span>
+    </div>
+
+    <div class="letter-preview" id="letter2">
+<div class="field">Кому</div>
+<div class="value"><span class="var">[Имя клиента / партнёра]</span></div>
+<div class="field">Тема письма</div>
+<div class="value">Спасибо от команды O-Live!</div>
+<div class="field">Текст</div>
+<div class="value body-text">Здравствуйте, <span class="var">[Имя]</span>!
+
+Хотим лично поблагодарить вас за <span class="var">[за что: доверие / отзыв / рекомендацию / долгое сотрудничество]</span>.
+
+<span class="var">[Конкретная деталь: вы с нами уже N месяцев / ваш отзыв помог нам улучшить меню / благодаря вашей рекомендации к нам пришли 3 новых клиента]</span>.
+
+Для нас это очень важно — каждый такой момент напоминает, ради чего мы работаем.
+
+В знак благодарности <span class="var">[бонус: хотим предложить вам скидку 10% на следующий период / дарим 1 день рациона / пришлём вам небольшой сюрприз]</span>.
+
+Спасибо, что вы с нами!
+
+С теплом,
+<span class="var">[Ваше имя]</span>
+Команда O-Live</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-label">Переменные</div>
+    <table class="var-table">
+      <tr><th>Переменная</th><th>Что подставить</th></tr>
+      <tr><td><span class="vname">[за что]</span></td><td>долгое сотрудничество / хороший отзыв / рекомендацию друзьям</td></tr>
+      <tr><td><span class="vname">[конкретная деталь]</span></td><td>«вы с нами 6 месяцев» / «ваш отзыв мы показали команде»</td></tr>
+      <tr><td><span class="vname">[бонус]</span></td><td>скидка / бесплатный день / подарок — или убери эту строку</td></tr>
+    </table>
+
+    <div class="divider"></div>
+    <div class="section-label">Промт для Claude</div>
+    <div class="prompt-box">Напиши письмо-благодарность от O-Live.
+Получатель: <span class="pvar">[имя]</span>
+За что благодарим: <span class="pvar">[конкретная причина]</span>
+Детали: <span class="pvar">[что особенного сделал этот человек]</span>
+Бонус (если есть): <span class="pvar">[что дарим в знак благодарности]</span>
+Тон: тёплый, искренний, личный. Не корпоративный шаблон. 6-8 предложений.</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════ -->
+<!-- ПИСЬМО 3: НАПОМИНАНИЕ -->
+<!-- ══════════════════════════════════════ -->
+<div class="letter-block h-blue">
+  <div class="letter-header">
+    <div class="letter-left">
+      <div class="letter-emoji">🔔</div>
+      <div>
+        <div class="letter-type">Напоминание</div>
+        <div class="letter-desc">Оплата, продление, встреча — мягко и с конкретным действием</div>
+      </div>
+    </div>
+    <button class="copy-btn" onclick="copyBlock(this,'letter3')">Копировать письмо</button>
+  </div>
+  <div class="letter-body">
+    <div class="tags-row">
+      <span class="tag t-blue">Оплата</span>
+      <span class="tag t-blue">Продление</span>
+      <span class="tag t-blue">Встреча</span>
+      <span class="tag t-blue">Задача</span>
+    </div>
+
+    <div class="letter-preview" id="letter3">
+<div class="field">Кому</div>
+<div class="value"><span class="var">[Имя]</span></div>
+<div class="field">Тема письма</div>
+<div class="value">Напоминание: <span class="var">[тема]</span></div>
+<div class="field">Текст</div>
+<div class="value body-text">Здравствуйте, <span class="var">[Имя]</span>!
+
+Пишем, чтобы напомнить о <span class="var">[что: оплате за следующий период / продлении подписки / запланированной встрече / задаче по допсоглашению]</span>.
+
+<span class="var">[Детали: ваш текущий период заканчивается [дата] / встреча запланирована на [дата] в [время] / документ ожидает вашей подписи]</span>.
+
+Чтобы не прерывать <span class="var">[доставку / сотрудничество / процесс]</span>, просим <span class="var">[действие: оформить продление до [дата] / подтвердить участие / подписать документ]</span>.
+
+Если есть вопросы — напишите или позвоните, поможем разобраться.
+
+С уважением,
+<span class="var">[Ваше имя]</span>
+O-Live</div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="section-label">Переменные</div>
+    <table class="var-table">
+      <tr><th>Переменная</th><th>Что подставить</th></tr>
+      <tr><td><span class="vname">[тема]</span></td><td>оплата за июнь / продление рациона / подпись договора</td></tr>
+      <tr><td><span class="vname">[детали]</span></td><td>«ваш период заканчивается 31 мая» / «встреча в пятницу в 15:00»</td></tr>
+      <tr><td><span class="vname">[действие]</span></td><td>оплатить до 30 мая / подтвердить / подписать и прислать обратно</td></tr>
+    </table>
+
+    <div class="divider"></div>
+    <div class="section-label">Промт для Claude</div>
+    <div class="prompt-box">Напиши письмо-напоминание от O-Live.
+Получатель: <span class="pvar">[имя]</span>
+О чём напоминаем: <span class="pvar">[что нужно сделать]</span>
+Дедлайн или дата: <span class="pvar">[когда]</span>
+Что будет если не сделают: <span class="pvar">[доставка остановится / встреча сорвётся — или не упоминать]</span>
+Тон: дружелюбный, не давящий. Одно чёткое действие в конце. 5-6 предложений.</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════ -->
+<!-- ГЛАВНОЕ ПРАВИЛО -->
+<!-- ══════════════════════════════════════ -->
+<div style="background:#1a1a2e;border-radius:14px;padding:20px 24px;margin-top:8px">
+  <div style="font-size:13px;font-weight:700;color:#89b4fa;margin-bottom:14px;text-transform:uppercase;letter-spacing:.06em">Что делает письмо хорошим</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+    <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:12px 14px">
+      <div style="font-size:12px;font-weight:700;color:#f38ba8;margin-bottom:6px">Отказ</div>
+      <div style="font-size:12px;color:#cdd6f4;line-height:1.6">Вежливо, коротко, без долгих объяснений. Оставь дверь открытой</div>
+    </div>
+    <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:12px 14px">
+      <div style="font-size:12px;font-weight:700;color:#a6e3a1;margin-bottom:6px">Благодарность</div>
+      <div style="font-size:12px;color:#cdd6f4;line-height:1.6">Конкретная деталь — не «вы наш ценный клиент», а «вы с нами 6 месяцев»</div>
+    </div>
+    <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:12px 14px">
+      <div style="font-size:12px;font-weight:700;color:#89b4fa;margin-bottom:6px">Напоминание</div>
+      <div style="font-size:12px;color:#cdd6f4;line-height:1.6">Одно чёткое действие + дедлайн. Без нескольких просьб в одном письме</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">O-Live · Шаблоны писем · 2026</div>
+</div>
+
+<script>
+function copyBlock(btn, id) {
+  const el = document.getElementById(id);
+  const lines = [];
+  el.querySelectorAll('.field, .value').forEach(node => {
+    if(node.classList.contains('field')) {
+      lines.push('\n' + node.innerText.toUpperCase() + ':');
+    } else {
+      lines.push(node.innerText);
+    }
+  });
+  navigator.clipboard.writeText(lines.join('\n').trim()).then(() => {
+    btn.textContent = '✓ Скопировано';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Копировать письмо'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>

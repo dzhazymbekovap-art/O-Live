@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Сравнительная таблица отзывов — O-Live</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f8;color:#1a1a1a;padding:32px 24px}
+.wrap{max-width:1100px;margin:0 auto}
+h1{font-size:22px;font-weight:700;margin-bottom:6px}
+.subtitle{font-size:13px;color:#888;margin-bottom:8px}
+
+.prompt-box{background:#1e1e2e;border-radius:12px;padding:20px 24px;margin:20px 0 28px;color:#cdd6f4;font-size:13px;line-height:1.8}
+.prompt-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#89b4fa;margin-bottom:8px}
+.prompt-text{white-space:pre-wrap;word-break:break-word}
+
+.table-wrap{overflow-x:auto;border-radius:14px;border:1px solid #e8edf2;background:#fff;margin-bottom:28px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{background:#f8fafc}
+th{padding:12px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#888;border-bottom:1px solid #e8edf2;white-space:nowrap}
+td{padding:11px 14px;vertical-align:top;border-bottom:1px solid #f3f4f6;line-height:1.5;color:#333}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafbfc}
+
+.num{font-weight:700;color:#aaa;text-align:center}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.tone-pos{background:#e8f5e9;color:#2e7d32}
+.tone-neg{background:#feebee;color:#b71c1c}
+.tone-mix{background:#fff8e1;color:#e65100}
+.tone-hot{background:#fce4ec;color:#880e4f}
+.intent-stay{background:#e8f5e9;color:#2e7d32}
+.intent-pause{background:#e3f2fd;color:#1565c0}
+.intent-leave{background:#feebee;color:#b71c1c}
+.intent-esc{background:#fce4ec;color:#880e4f}
+.action-urgent{background:#fce4ec;color:#880e4f;font-weight:700}
+.action-normal{background:#fff8e1;color:#e65100}
+.action-ok{background:#e8f5e9;color:#2e7d32}
+
+.lesson{background:#fff;border-radius:14px;border:1px solid #e8edf2;padding:1.25rem 1.4rem;margin-top:20px}
+.lesson h2{font-size:14px;font-weight:700;margin-bottom:12px}
+.lesson-row{font-size:13px;color:#555;padding:6px 0;border-bottom:1px solid #f3f4f6;line-height:1.5}
+.lesson-row:last-child{border-bottom:none}
+.lesson-row strong{color:#1a1a1a}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Сравнительная таблица из неструктурированного текста</h1>
+  <div class="subtitle">Пример задачи по обучению Claude · 28 мая 2026</div>
+
+  <div class="prompt-box">
+    <div class="prompt-label">📋 Промт, который дали Claude</div>
+    <div class="prompt-text">У меня есть 5 отзывов клиентов в свободном тексте. Составь сравнительную таблицу по следующим параметрам:
+— Тональность (позитив / смешанная / негатив / жёсткий негатив)
+— Основная проблема клиента
+— Упомянутые темы (качество, доставка, маркировка и т.д.)
+— Намерение клиента (остаться / пауза / уйти / эскалация)
+— Какое действие нужно от компании
+
+[Далее шли тексты 5 отзывов]</div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>№</th>
+          <th>Тональность</th>
+          <th>Основная проблема</th>
+          <th>Темы жалобы</th>
+          <th>Намерение клиента</th>
+          <th>Действие компании</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="num">1</td>
+          <td><span class="badge tone-mix">Смешанная</span></td>
+          <td>Несоответствие ккал на этикетке. Повторные нарушения — клиент предупреждает об угрозе репутации</td>
+          <td>Маркировка / ккал<br>Качество продукта<br>Репутационный риск</td>
+          <td><span class="badge intent-stay">Остаться</span></td>
+          <td><span class="badge action-normal">Взять на особый контроль. Проверить ккал. Ответить лично</span></td>
+        </tr>
+        <tr>
+          <td class="num">2</td>
+          <td><span class="badge tone-hot">Жёсткий негатив</span></td>
+          <td>Блюда повторяются 3–4 раза, продукты несвежие, смузи выбрасывает. Считает рекламу ложью</td>
+          <td>Ложная реклама<br>Свежесть продуктов<br>Повтор меню<br>Качество блюд</td>
+          <td><span class="badge intent-leave">Уйти + антиреклама</span></td>
+          <td><span class="badge action-urgent">⚡ Срочно! Звонок руководителя. Компенсация. Проверка меню</span></td>
+        </tr>
+        <tr>
+          <td class="num">3</td>
+          <td><span class="badge tone-neg">Негатив</span></td>
+          <td>Неприятный запах, пересоленность, ризотто выбросила с 1-й ложки. Рацион 1200 ккал — дополнительно покупает еду</td>
+          <td>Вкус / запах<br>Качество блюд<br>Калорийность (1200 ккал)<br>Медицинские цели<br>Тренировки не получены</td>
+          <td><span class="badge intent-pause">Под вопросом</span></td>
+          <td><span class="badge action-urgent">⚡ Срочно! Связаться сегодня. Заменить блюда. Отправить тренировки</span></td>
+        </tr>
+        <tr>
+          <td class="num">4</td>
+          <td><span class="badge tone-pos">Позитив</span></td>
+          <td>Всё понравилось, похудела на 4,5 кг, рекомендует друзьям. Берёт временную паузу</td>
+          <td>Результат (−4,5 кг)<br>Рекомендации друзьям<br>Временная пауза</td>
+          <td><span class="badge intent-pause">Пауза (вернётся)</span></td>
+          <td><span class="badge action-ok">Поблагодарить. Предложить дату возобновления. Реферальный бонус</span></td>
+        </tr>
+        <tr>
+          <td class="num">5</td>
+          <td><span class="badge tone-neg">Негатив</span></td>
+          <td>Не привезли продукт, обещали за час — прошло 2 часа, никто не перезвонил. Требует телефон руководителя</td>
+          <td>Логистика / задержка<br>Качество коммуникации<br>Условия оплаты (14 дней)<br>Эскалация к руководству</td>
+          <td><span class="badge intent-esc">Эскалация</span></td>
+          <td><span class="badge action-urgent">⚡ Срочно! Позвонить прямо сейчас. Компенсировать день. Объяснить условия</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="lesson">
+    <h2>💡 Что важно понять из этой задачи</h2>
+    <div class="lesson-row"><strong>Неструктурированный текст</strong> — это любой текст без таблиц: отзывы, переписка, описания, договоры, прайсы конкурентов</div>
+    <div class="lesson-row"><strong>Claude сам извлекает данные</strong> — ты не должна руками переносить информацию. Достаточно сказать «выдели такие-то параметры»</div>
+    <div class="lesson-row"><strong>Чем точнее параметры в промте</strong> — тем точнее таблица. «Тональность», «намерение», «действие» — это ты задала, Claude заполнил</div>
+    <div class="lesson-row"><strong>Применять можно везде:</strong> прайсы поставщиков, условия договоров, жалобы клиентов, описания рационов, вакансии конкурентов</div>
+  </div>
+</div>
+</body>
+</html>

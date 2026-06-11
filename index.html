@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Обучение Claude — O-Live</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f8;color:#1a1a1a;min-height:100vh;padding:32px 24px}
+.wrap{max-width:900px;margin:0 auto}
+.hdr{margin-bottom:2rem}
+.hdr h1{font-size:26px;font-weight:700;color:#1a1a1a}
+.hdr p{font-size:14px;color:#888;margin-top:6px}
+.date-badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;margin-top:8px}
+.badge-today{background:#e8f5e9;color:#2e7d32}
+.badge-prev{background:#e3f2fd;color:#1565c0;margin-left:6px}
+.section-title{font-size:12px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;margin-top:32px;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:#e0e0e0}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.card{background:#fff;border-radius:14px;padding:1.25rem 1.4rem;border:1px solid #e8edf2;text-decoration:none;color:inherit;display:block;transition:box-shadow .15s,transform .15s}
+.card:hover{box-shadow:0 6px 24px rgba(0,0,0,.09);transform:translateY(-2px)}
+.card-static{cursor:default}
+.card-static:hover{box-shadow:none;transform:none}
+.card-icon{font-size:26px;margin-bottom:10px}
+.card-title{font-size:14px;font-weight:600;margin-bottom:4px;color:#1a1a1a}
+.card-desc{font-size:12px;color:#777;line-height:1.5}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px;font-weight:600;margin-top:8px}
+.tag-html{background:#fff3e0;color:#e65100}
+.tag-xlsx{background:#e8f5e9;color:#2e7d32}
+.tag-docx{background:#e3f2fd;color:#1565c0}
+.tag-prompt{background:#f3e5f5;color:#7b1fa2}
+.tag-info{background:#e3f2fd;color:#1565c0}
+.tag-new{background:#fff9c4;color:#f57f17;margin-left:4px}
+.footer{margin-top:48px;text-align:center;font-size:12px;color:#bbb}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <h1>📚 Обучение Claude</h1>
+    <p>Все задачи и результаты, созданные в рамках обучения · O-Live</p>
+    <span class="date-badge badge-today">28 мая 2026</span>
+    <span class="date-badge badge-prev">27 мая 2026</span>
+  </div>
+
+  <!-- ═══ 29 МАЯ ═══ -->
+  <div class="section-title">29 мая 2026 — сегодня</div>
+  <div class="cards">
+
+    <a class="card" href="Мои_промты.html">
+      <div class="card-icon">📋</div>
+      <div class="card-title">Мои промты</div>
+      <div class="card-desc">Все шаблоны в одном месте: отчёты, клиенты, договоры, анализ. Кнопка «Копировать» у каждого промта</div>
+      <span class="tag tag-prompt">Промты</span>
+      <span class="tag tag-new">новое</span>
+    </a>
+
+    <a class="card" href="Шаблоны_писем.html">
+      <div class="card-icon">✉️</div>
+      <div class="card-title">Шаблоны писем</div>
+      <div class="card-desc">3 готовых шаблона: отказ, благодарность, напоминание. С таблицей переменных, промтом для Claude и кнопкой «Копировать»</div>
+      <span class="tag tag-prompt">Промты</span>
+      <span class="tag tag-new">новое</span>
+    </a>
+
+  </div>
+
+  <!-- ═══ 28 МАЯ ═══ -->
+  <div class="section-title">28 мая 2026</div>
+  <div class="cards">
+
+    <a class="card" href="Отчёт_колл-центр_27мая.html">
+      <div class="card-icon">📞</div>
+      <div class="card-title">Отчёт колл-центра — 27 мая</div>
+      <div class="card-desc">Живой пример выполненного шаблона: 33 новых чата, 3 подписки, 358 000 ₸ продаж, 0 жалоб. Данные из Bitrix24 API</div>
+      <span class="tag tag-html">HTML</span>
+      <span class="tag tag-new">новое</span>
+    </a>
+
+    <a class="card" href="Шаблон_промта_еженедельный_отчёт.html">
+      <div class="card-icon">🔁</div>
+      <div class="card-title">Шаблон промта с переменными</div>
+      <div class="card-desc">Еженедельный отчёт по отделам O-Live. Шаблон с [отдел], [период], [метрики] — 3 готовых примера: доставка, продажи, качество</div>
+      <span class="tag tag-prompt">Промт</span>
+      <span class="tag tag-new">новое</span>
+    </a>
+
+    <a class="card" href="Таблицы_из_текста_3_примера.html">
+      <div class="card-icon">📋</div>
+      <div class="card-title">Таблицы из текста — 3 примера</div>
+      <div class="card-desc">Прайс конкурентов, меню рациона и условия поставщика → структурированные таблицы с промтами</div>
+      <span class="tag tag-html">HTML</span>
+      <span class="tag tag-new">новое</span>
+    </a>
+
+    <a class="card" href="Сравнительная_таблица_отзывов.html">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Сравнительная таблица из текста</div>
+      <div class="card-desc">Задача по обучению: 5 отзывов → таблица по тональности, проблеме, намерению клиента и нужному действию</div>
+      <span class="tag tag-html">HTML</span>
+      <span class="tag tag-new">новое</span>
+    </a>
+
+    <a class="card" href="Классификация_отзывов.html">
+      <div class="card-icon">⭐</div>
+      <div class="card-title">Классификация отзывов клиентов</div>
+      <div class="card-desc">5 отзывов по тональности (позитив / смешанная / негатив / жёсткий негатив) и темам. Срочно: №2, №5</div>
+      <span class="tag tag-html">HTML</span>
+      <span class="tag tag-new">новое</span>
+    </a>
+
+    <a class="card" href="Анализ_март_апрель_май.html">
+      <div class="card-icon">📈</div>
+      <div class="card-title">Анализ март–апрель–май</div>
+      <div class="card-desc">Сравнение 3 месяцев по финмодели. Аномалии, тренды, выводы. Рекорд продаж 2,3 млн ₸ в мае</div>
+      <span class="tag tag-html">HTML</span>
+      <span class="tag tag-new">новое</span>
+    </a>
+
+  </div>
+
+  <!-- ═══ 27 МАЯ — ОТЧЁТЫ ═══ -->
+  <div class="section-title">27 мая 2026 — отчёты и аналитика</div>
+  <div class="cards">
+
+    <a class="card" href="Отчет_отгрузок_19мая.html">
+      <div class="card-icon">📦</div>
+      <div class="card-title">Отчёт по отгрузкам — 19 мая</div>
+      <div class="card-desc">40 клиентов, рацион №20. Фильтрация по имени, рациону, времени доставки. Итого 455 640 ₸</div>
+      <span class="tag tag-html">HTML</span>
+    </a>
+
+    <a class="card" href="Заявочный лист 19.05.2026.xlsx">
+      <div class="card-icon">📋</div>
+      <div class="card-title">Заявочный лист 19.05.2026</div>
+      <div class="card-desc">Excel с прайсом, заявочным листом и маршрутным листом (вечер / утро). Данные из Bitrix24</div>
+      <span class="tag tag-xlsx">XLSX</span>
+    </a>
+
+    <a class="card" href="Отчет по отгрузкам + 19мая.xlsx">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Отчёт по отгрузкам + 19 мая</div>
+      <div class="card-desc">История отгрузок по клиентам + колонка 19 мая из данных Bitrix24</div>
+      <span class="tag tag-xlsx">XLSX</span>
+    </a>
+
+    <a class="card" href="Повтор_Актив_сделки.xlsx">
+      <div class="card-icon">💼</div>
+      <div class="card-title">Повтор / Актив — сделки</div>
+      <div class="card-desc">51 активная сделка из воронки «Повтор», стадия «Актив». Итого 278 000 ₸</div>
+      <span class="tag tag-xlsx">XLSX</span>
+    </a>
+
+  </div>
+
+  <!-- ═══ 27 МАЯ — ДОП СОГЛАШЕНИЕ ═══ -->
+  <div class="section-title">27 мая 2026 — доп. соглашение O-Live × Фуд завод</div>
+  <div class="cards">
+
+    <a class="card" href="Промт_ДопСоглашение.html">
+      <div class="card-icon">✏️</div>
+      <div class="card-title">Промт: разбор и улучшение</div>
+      <div class="card-desc">До/после — 6 слабых мест исходного промта и улучшенная версия по структуре РОЛЬ → КОНТЕКСТ → ЗАДАЧА → ФОРМАТ</div>
+      <span class="tag tag-prompt">Промт</span>
+    </a>
+
+    <a class="card" href="ДопСоглашение_OLive_ФудЗавод_v2.html">
+      <div class="card-icon">📄</div>
+      <div class="card-title">Доп. соглашение v2 — просмотр</div>
+      <div class="card-desc">Финальная версия: штрафы за качество, маркировку, компенсации клиентам, порядок претензий. 10 разделов по законодательству РК</div>
+      <span class="tag tag-html">HTML</span>
+    </a>
+
+    <a class="card" href="ДопСоглашение_OLive_ФудЗавод_v2.docx">
+      <div class="card-icon">📝</div>
+      <div class="card-title">Доп. соглашение v2 — Word</div>
+      <div class="card-desc">Файл .docx готов к подписанию. Times New Roman, A4, официальный стиль</div>
+      <span class="tag tag-docx">DOCX</span>
+    </a>
+
+    <a class="card" href="ДопСоглашение_OLive_ФудЗавод.docx">
+      <div class="card-icon">📝</div>
+      <div class="card-title">Доп. соглашение v1 — Word</div>
+      <div class="card-desc">Первая версия соглашения по исходному промту. Для сравнения с v2</div>
+      <span class="tag tag-docx">DOCX</span>
+    </a>
+
+  </div>
+
+  <!-- ═══ ЧЕМУ НАУЧИЛИ ═══ -->
+  <div class="section-title">Чему научили Claude за 2 дня</div>
+  <div class="cards">
+
+    <div class="card card-static">
+      <div class="card-icon">🤖</div>
+      <div class="card-title">Работа с Bitrix24 API</div>
+      <div class="card-desc">Поиск воронок и стадий, выгрузка сделок, агрегация через bitrix_deals_summary</div>
+      <span class="tag tag-info">API</span>
+    </div>
+
+    <div class="card card-static">
+      <div class="card-icon">💬</div>
+      <div class="card-title">Анализ переписки WhatsApp</div>
+      <div class="card-desc">Claude открыл WhatsApp Web, нашёл чат с Тимуром и составил ответ отдела качества на возражения по ккал</div>
+      <span class="tag tag-info">Chrome</span>
+    </div>
+
+    <div class="card card-static">
+      <div class="card-icon">✍️</div>
+      <div class="card-title">Промт-инжиниринг</div>
+      <div class="card-desc">Структура РОЛЬ→КОНТЕКСТ→ЗАДАЧА→ФОРМАТ, разбор слабого промта и его улучшение на реальном примере</div>
+      <span class="tag tag-prompt">Промт</span>
+    </div>
+
+    <div class="card card-static">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Анализ Google Sheets через Chrome</div>
+      <div class="card-desc">Claude прочитал финансовую модель за март–май, нашёл аномалии (скачок маркетинга, рост постоянных затрат) и тренды</div>
+      <span class="tag tag-info">Chrome</span>
+    </div>
+
+    <div class="card card-static">
+      <div class="card-icon">⭐</div>
+      <div class="card-title">Классификация отзывов</div>
+      <div class="card-desc">Анализ 5 отзывов по тональности и темам. Определение срочных случаев для обработки</div>
+      <span class="tag tag-info">Анализ</span>
+    </div>
+
+  </div>
+
+  <div class="footer">O-Live · Обучение Claude · 2026</div>
+</div>
+</body>
+</html>

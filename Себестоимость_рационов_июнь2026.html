@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Себестоимость отгруженных рационов — июнь 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f8;color:#1a1a1a;padding:24px}
+.wrap{max-width:1100px;margin:0 auto}
+
+/* Header */
+.hdr{margin-bottom:20px}
+.hdr h1{font-size:20px;font-weight:700;color:#1a1a1a}
+.hdr p{font-size:13px;color:#888;margin-top:4px}
+
+/* Summary cards */
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.card{background:#fff;border-radius:12px;padding:16px 18px;border:1px solid #e8ecf0}
+.card .lbl{font-size:11px;color:#999;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;font-weight:600}
+.card .val{font-size:26px;font-weight:700}
+.card .sub{font-size:12px;color:#aaa;margin-top:3px}
+.card.green .val{color:#1a9e6e}
+.card.blue .val{color:#2563eb}
+.card.orange .val{color:#d97706}
+.card.purple .val{color:#7c3aed}
+
+/* Legend */
+.legend{display:flex;gap:16px;margin-bottom:16px;font-size:12px;color:#666}
+.legend span{display:flex;align-items:center;gap:6px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dot.r1{background:#e0f2fe}.dot.r22{background:#fef3c7}
+
+/* Table */
+.tbl-wrap{background:#fff;border-radius:12px;border:1px solid #e8ecf0;overflow:hidden;margin-bottom:24px}
+.tbl-title{padding:14px 20px;background:#2c3e50;color:#fff;font-weight:700;font-size:14px;display:flex;justify-content:space-between;align-items:center}
+.tbl-title span{font-size:12px;font-weight:400;opacity:.7}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{background:#f8fafc}
+th{padding:10px 16px;text-align:left;font-weight:600;color:#555;font-size:11px;text-transform:uppercase;letter-spacing:.04em;border-bottom:2px solid #eef2f7}
+th.right{text-align:right}
+td{padding:11px 16px;border-bottom:1px solid #f0f4f8;vertical-align:middle}
+td.right{text-align:right;font-weight:600}
+td.muted{color:#888;font-size:12px}
+tr:last-child td{border-bottom:none}
+tr.phase1{background:#f0f9ff}
+tr.phase2{background:#fffbeb}
+tr.phase1:hover{background:#e0f2fe}
+tr.phase2:hover{background:#fef3c7}
+
+.badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:20px;border-radius:5px;font-size:10px;font-weight:700}
+.b12{background:#dcfce7;color:#166534}
+.b15{background:#dbeafe;color:#1e40af}
+.b18{background:#fce7f3;color:#9d174d}
+.b25{background:#f3e8ff;color:#6b21a8}
+
+.kcal-row{display:flex;gap:6px;flex-wrap:wrap}
+.kcal-chip{font-size:11px;padding:3px 8px;border-radius:6px;font-weight:600}
+
+/* Phase tag */
+.phase-tag{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:700}
+.ptag1{background:#e0f2fe;color:#0369a1}
+.ptag2{background:#fef3c7;color:#92400e}
+
+/* Totals row */
+tr.totals td{background:#f0f9f4;font-weight:700;border-top:2px solid #d1fae5;border-bottom:none}
+tr.totals td.right{color:#1a9e6e;font-size:14px}
+
+/* Cost breakdown per kcal */
+.breakdown{display:flex;flex-direction:column;gap:3px}
+.brow{display:flex;justify-content:space-between;gap:8px;font-size:12px}
+.brow .bkcal{color:#888;font-weight:600;min-width:60px}
+.brow .bcalc{color:#555}
+.brow .btot{font-weight:700;color:#1a1a1a}
+
+/* Chart section */
+.chart-wrap{background:#fff;border-radius:12px;border:1px solid #e8ecf0;padding:20px;margin-bottom:24px}
+.chart-title{font-size:14px;font-weight:700;margin-bottom:16px;color:#2c3e50}
+.bars{display:flex;flex-direction:column;gap:10px}
+.bar-row{display:flex;align-items:center;gap:10px}
+.bar-date{font-size:12px;color:#666;width:44px;flex-shrink:0;text-align:right}
+.bar-track{flex:1;background:#f0f4f8;border-radius:4px;height:24px;position:relative;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 8px;transition:width .3s}
+.bar-fill span{font-size:11px;font-weight:700;color:#fff;white-space:nowrap}
+.bar-val{font-size:12px;font-weight:700;width:90px;flex-shrink:0;color:#1a1a1a}
+
+/* Cost info box */
+.costbox{background:#fff;border-radius:12px;border:1px solid #e8ecf0;padding:16px 20px;margin-bottom:24px}
+.costbox h3{font-size:13px;font-weight:700;margin-bottom:10px;color:#2c3e50}
+.costtbl{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.costblock{background:#f8fafc;border-radius:8px;padding:12px 14px}
+.costblock h4{font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+.costitem{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;border-bottom:1px solid #eef2f7}
+.costitem:last-child{border-bottom:none}
+.costitem .ci-k{color:#555}
+.costitem .ci-v{font-weight:700;color:#1a1a1a}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hdr">
+    <h1>📦 Себестоимость отгруженных рационов — июнь 2026</h1>
+    <p>Учёт себестоимости по заявочным листам · Рационы №1–28</p>
+  </div>
+
+  <div class="summary">
+    <div class="card green">
+      <div class="lbl">Итого себестоимость</div>
+      <div class="val" id="totalCost">—</div>
+      <div class="sub">за все дни</div>
+    </div>
+    <div class="card blue">
+      <div class="lbl">Всего клиентов</div>
+      <div class="val" id="totalClients">—</div>
+      <div class="sub">отгруженных рационов</div>
+    </div>
+    <div class="card orange">
+      <div class="lbl">Средняя себест./день</div>
+      <div class="val" id="avgDay">—</div>
+      <div class="sub">₸ в день</div>
+    </div>
+    <div class="card purple">
+      <div class="lbl">Ср. себест./клиент</div>
+      <div class="val" id="avgClient">—</div>
+      <div class="sub">₸ на одного</div>
+    </div>
+  </div>
+
+  <!-- Справка по тарифам -->
+  <div class="costbox">
+    <h3>Тарифная сетка себестоимости</h3>
+    <div class="costtbl">
+      <div class="costblock">
+        <h4>Рационы №1–21</h4>
+        <div class="costitem"><span class="ci-k">1200 ккал</span><span class="ci-v">4 800 ₸</span></div>
+        <div class="costitem"><span class="ci-k">1500 ккал</span><span class="ci-v">5 500 ₸</span></div>
+        <div class="costitem"><span class="ci-k">1800 ккал</span><span class="ci-v">6 000 ₸</span></div>
+        <div class="costitem"><span class="ci-k">2500 ккал</span><span class="ci-v">7 100 ₸</span></div>
+      </div>
+      <div class="costblock">
+        <h4>Рационы №22–28</h4>
+        <div class="costitem"><span class="ci-k">1200 ккал</span><span class="ci-v">6 000 ₸</span></div>
+        <div class="costitem"><span class="ci-k">1500 ккал</span><span class="ci-v">6 500 ₸</span></div>
+        <div class="costitem"><span class="ci-k">1800 ккал</span><span class="ci-v">7 200 ₸</span></div>
+        <div class="costitem"><span class="ci-k">2500 ккал</span><span class="ci-v">8 500 ₸</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- График -->
+  <div class="chart-wrap">
+    <div class="chart-title">Себестоимость по дням, ₸</div>
+    <div class="bars" id="chartBars"></div>
+  </div>
+
+  <!-- Таблица -->
+  <div class="tbl-wrap">
+    <div class="tbl-title">
+      Детализация по дням
+      <span>Фаза I: Р1–21 · Фаза II: Р22–28</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Дата</th>
+          <th>Рацион</th>
+          <th>Фаза</th>
+          <th>Клиентов</th>
+          <th>Разбивка по ккал</th>
+          <th class="right">Себестоимость</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+const data = [
+  {
+    date: '01.06', rnum: 1,
+    detail: [
+      {kcal:1200, count:12, cost:4800},
+      {kcal:1500, count:12, cost:5500},
+      {kcal:1800, count:7,  cost:6000}
+    ]
+  },
+  {
+    date: '02.06', rnum: 2,
+    detail: [
+      {kcal:1200, count:11, cost:4800},
+      {kcal:1500, count:10, cost:5500},
+      {kcal:1800, count:5,  cost:6000},
+      {kcal:2500, count:1,  cost:7100}
+    ]
+  },
+  {
+    date: '03.06', rnum: 5,
+    detail: [
+      {kcal:1200, count:9, cost:4800},
+      {kcal:1500, count:6, cost:5500},
+      {kcal:1800, count:4, cost:6000}
+    ]
+  },
+  {
+    date: '04.06', rnum: 4,
+    detail: [
+      {kcal:1200, count:8, cost:4800},
+      {kcal:1500, count:8, cost:5500},
+      {kcal:1800, count:3, cost:6000},
+      {kcal:2500, count:1, cost:7100}
+    ]
+  },
+  {
+    date: '05.06', rnum: 11,
+    detail: [
+      {kcal:1200, count:9, cost:4800},
+      {kcal:1500, count:9, cost:5500},
+      {kcal:1800, count:4, cost:6000},
+      {kcal:2500, count:2, cost:7100}
+    ]
+  },
+  {
+    date: '06.06', rnum: 12,
+    detail: [
+      {kcal:1200, count:4, cost:4800},
+      {kcal:1500, count:7, cost:5500},
+      {kcal:1800, count:2, cost:6000}
+    ]
+  },
+  {
+    date: '07.06', rnum: 13,
+    detail: [
+      {kcal:1200, count:6, cost:4800},
+      {kcal:1500, count:6, cost:5500},
+      {kcal:1800, count:1, cost:6000},
+      {kcal:2500, count:2, cost:7100}
+    ]
+  },
+  {
+    date: '08.06', rnum: 14,
+    detail: [
+      {kcal:1200, count:10, cost:4800},
+      {kcal:1500, count:10, cost:5500},
+      {kcal:1800, count:7,  cost:6000},
+      {kcal:2500, count:2,  cost:7100}
+    ]
+  },
+  {
+    date: '09.06', rnum: 15,
+    detail: [
+      {kcal:1200, count:9, cost:4800},
+      {kcal:1500, count:8, cost:5500},
+      {kcal:1800, count:7, cost:6000},
+      {kcal:2500, count:4, cost:7100}
+    ]
+  },
+  {
+    date: '10.06', rnum: 17,
+    detail: [
+      {kcal:1200, count:12, cost:4800},
+      {kcal:1500, count:9,  cost:5500},
+      {kcal:1800, count:6,  cost:6000},
+      {kcal:2500, count:3,  cost:7100}
+    ]
+  },
+  {
+    date: '11.06', rnum: 18,
+    detail: [
+      {kcal:1200, count:11, cost:4800},
+      {kcal:1500, count:11, cost:5500},
+      {kcal:1800, count:5,  cost:6000},
+      {kcal:2500, count:2,  cost:7100}
+    ]
+  }
+];
+
+const KCAL_BADGE = {1200:'b12',1500:'b15',1800:'b18',2500:'b25'};
+function fmt(n){return n.toLocaleString('ru-RU');}
+
+// Compute totals
+data.forEach(d => {
+  d.clients = d.detail.reduce((s,x)=>s+x.count,0);
+  d.cost = d.detail.reduce((s,x)=>s+x.count*x.cost,0);
+  d.phase = d.rnum <= 21 ? 1 : 2;
+});
+
+const totalCost = data.reduce((s,d)=>s+d.cost,0);
+const totalClients = data.reduce((s,d)=>s+d.clients,0);
+
+document.getElementById('totalCost').textContent = fmt(totalCost)+' ₸';
+document.getElementById('totalClients').textContent = totalClients+' чел';
+document.getElementById('avgDay').textContent = fmt(Math.round(totalCost/data.length))+' ₸';
+document.getElementById('avgClient').textContent = fmt(Math.round(totalCost/totalClients))+' ₸';
+
+// Chart
+const maxCost = Math.max(...data.map(d=>d.cost));
+const chartEl = document.getElementById('chartBars');
+data.forEach(d => {
+  const pct = (d.cost/maxCost*100).toFixed(1);
+  const color = d.phase === 1 ? '#3b82f6' : '#f59e0b';
+  chartEl.innerHTML += `
+    <div class="bar-row">
+      <div class="bar-date">${d.date}</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${pct}%;background:${color}">
+          <span>Р${d.rnum}</span>
+        </div>
+      </div>
+      <div class="bar-val">${fmt(d.cost)} ₸</div>
+    </div>`;
+});
+
+// Table
+const tbody = document.getElementById('tbody');
+let rows = '';
+data.forEach(d => {
+  const cls = d.phase === 1 ? 'phase1' : 'phase2';
+  const ptag = d.phase === 1
+    ? '<span class="phase-tag ptag1">Фаза I</span>'
+    : '<span class="phase-tag ptag2">Фаза II</span>';
+
+  const breakdownHtml = d.detail.map(x => {
+    const total = x.count * x.cost;
+    return `<div class="brow">
+      <span class="bkcal">${x.kcal} ккал</span>
+      <span class="bcalc">${x.count} × ${fmt(x.cost)}</span>
+      <span class="btot">= ${fmt(total)} ₸</span>
+    </div>`;
+  }).join('');
+
+  rows += `<tr class="${cls}">
+    <td><strong>${d.date}</strong></td>
+    <td><strong>№${d.rnum}</strong></td>
+    <td>${ptag}</td>
+    <td>${d.clients} чел</td>
+    <td><div class="breakdown">${breakdownHtml}</div></td>
+    <td class="right">${fmt(d.cost)} ₸</td>
+  </tr>`;
+});
+
+// Totals row
+rows += `<tr class="totals">
+  <td colspan="3"><strong>ИТОГО</strong></td>
+  <td><strong>${totalClients} чел</strong></td>
+  <td class="muted">${data.length} дней</td>
+  <td class="right">${fmt(totalCost)} ₸</td>
+</tr>`;
+
+tbody.innerHTML = rows;
+</script>
+</body>
+</html>

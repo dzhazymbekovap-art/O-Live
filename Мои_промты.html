@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мои промты — O-Live</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f8;color:#1a1a1a;padding:32px 24px}
+.wrap{max-width:900px;margin:0 auto}
+h1{font-size:24px;font-weight:700;margin-bottom:4px}
+.subtitle{font-size:13px;color:#888;margin-bottom:32px}
+
+.toc{background:#fff;border-radius:14px;border:1px solid #e8edf2;padding:1.25rem 1.5rem;margin-bottom:32px}
+.toc-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#aaa;margin-bottom:12px}
+.toc-list{display:flex;flex-wrap:wrap;gap:8px}
+.toc-item{font-size:12px;padding:4px 12px;border-radius:20px;text-decoration:none;font-weight:600;transition:opacity .15s}
+.toc-item:hover{opacity:.75}
+.c1{background:#fff3e0;color:#e65100}
+.c2{background:#e8f5e9;color:#2e7d32}
+.c3{background:#e3f2fd;color:#1565c0}
+.c4{background:#f3e5f5;color:#7b1fa2}
+
+.section-title{font-size:12px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px;margin-top:36px;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:#e0e0e0}
+
+.prompt-card{background:#fff;border-radius:14px;border:1px solid #e8edf2;margin-bottom:20px;overflow:hidden}
+.prompt-header{padding:14px 18px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;border-bottom:1px solid #f3f4f6}
+.prompt-meta{}
+.prompt-name{font-size:15px;font-weight:700;margin-bottom:4px}
+.prompt-desc{font-size:12px;color:#888;line-height:1.5}
+.prompt-tags{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px}
+.tag-ops{background:#fff3e0;color:#e65100}
+.tag-client{background:#e8f5e9;color:#2e7d32}
+.tag-legal{background:#e3f2fd;color:#1565c0}
+.tag-data{background:#f3e5f5;color:#7b1fa2}
+.copy-btn{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:600;color:#555;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s}
+.copy-btn:hover{background:#e8f5e9;color:#2e7d32;border-color:#a7d7a8}
+.copy-btn.copied{background:#e8f5e9;color:#2e7d32;border-color:#a7d7a8}
+
+.prompt-body{padding:18px}
+.prompt-box{background:#1a1a2e;border-radius:10px;padding:18px 20px;color:#e2e8f0;font-size:13px;line-height:1.85;white-space:pre-wrap;word-break:break-word;margin-bottom:14px}
+.var{color:#fbbf24;font-weight:700}
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.sl-blue{color:#1565c0}
+.sl-green{color:#2e7d32}
+
+.example-box{background:#f8fafc;border-radius:10px;border:1px solid #e8edf2;padding:14px 16px;font-size:13px;color:#555;line-height:1.7}
+.example-box strong{color:#1a1a1a}
+
+.var-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
+.var-table th{text-align:left;padding:6px 10px;background:#f8fafc;color:#888;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #e8edf2}
+.var-table td{padding:7px 10px;border-bottom:1px solid #f3f4f6;vertical-align:top}
+.var-table tr:last-child td{border-bottom:none}
+.var-name{font-family:monospace;background:#fff3e0;color:#e65100;padding:1px 6px;border-radius:4px;font-size:12px}
+
+.rule-box{background:#fffde7;border-radius:10px;border:1px solid #fff176;padding:12px 16px;font-size:12px;color:#795548;line-height:1.6;margin-top:12px}
+.rule-box strong{color:#5d4037}
+
+.footer{margin-top:48px;text-align:center;font-size:12px;color:#bbb}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>📋 Мои промты</h1>
+<div class="subtitle">Все шаблоны промтов O-Live · собрано из обучения 27–29 мая 2026</div>
+
+<div class="toc">
+  <div class="toc-title">Быстрая навигация</div>
+  <div class="toc-list">
+    <a class="toc-item c1" href="#ops">Операционные отчёты</a>
+    <a class="toc-item c2" href="#clients">Работа с клиентами</a>
+    <a class="toc-item c3" href="#legal">Юридические документы</a>
+    <a class="toc-item c4" href="#data">Анализ данных</a>
+  </div>
+</div>
+
+
+<!-- ═══════ БЛОК 1: ОПЕРАЦИОННЫЕ ═══════ -->
+<div id="ops"></div>
+<div class="section-title">1. Операционные отчёты</div>
+
+<!-- ПРОМТ 1.1 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div class="prompt-meta">
+      <div class="prompt-name">Еженедельный отчёт по отделу</div>
+      <div class="prompt-desc">Универсальный шаблон — подставляй отдел, период и метрики</div>
+      <div class="prompt-tags"><span class="tag tag-ops">Отчёт</span><span class="tag tag-ops">Еженедельный</span></div>
+    </div>
+    <button class="copy-btn" onclick="copyPrompt(this, 'p1')">Копировать</button>
+  </div>
+  <div class="prompt-body">
+    <div class="section-label sl-blue">Шаблон промта</div>
+    <div class="prompt-box" id="p1">Ты — аналитик компании O-Live, сервиса доставки правильного питания.
+
+Составь еженедельный отчёт для отдела <span class="var">[отдел]</span> за период <span class="var">[период]</span>.
+
+Используй следующие метрики: <span class="var">[метрики]</span>.
+
+Структура отчёта:
+1. Краткое резюме — 2-3 предложения
+2. Ключевые показатели в таблице
+3. Что шло хорошо
+4. Что требует внимания
+5. Рекомендации на следующую неделю
+
+Стиль: деловой, конкретный, без воды.
+Данные бери из контекста, который я дам ниже.
+
+<span class="var">[вставь данные: цифры, таблицы, выгрузки]</span></div>
+
+    <table class="var-table">
+      <tr><th>Переменная</th><th>Примеры значений</th></tr>
+      <tr><td><span class="var-name">[отдел]</span></td><td>Доставка / Продажи / Качество / Колл-центр</td></tr>
+      <tr><td><span class="var-name">[период]</span></td><td>27 мая 2026 / 20–26 мая / 2-я неделя мая</td></tr>
+      <tr><td><span class="var-name">[метрики]</span></td><td>Доставки: число доставок, опоздания, Яндекс-расходы<br>Продажи: новые клиенты, выручка, средний чек, отток<br>Качество: жалобы по типам, штрафы, повторные случаи<br>Колл-центр: новые чаты, подписки, жалобы</td></tr>
+      <tr><td><span class="var-name">[данные]</span></td><td>Вставь выгрузку из Bitrix24, Excel или просто цифры</td></tr>
+    </table>
+
+    <div class="rule-box" style="margin-top:12px">
+      <strong>Пример заполнения (колл-центр 27 мая):</strong><br>
+      [отдел] = Колл-центра · [период] = 27 мая · [метрики] = новые чаты, новые подписки, продажи за день, доставки, жалобы · [данные] = из Bitrix24 и файла Excel
+    </div>
+  </div>
+</div>
+
+<!-- ПРОМТ 1.2 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div class="prompt-meta">
+      <div class="prompt-name">Отчёт по доставкам из Excel</div>
+      <div class="prompt-desc">Для маршрутного листа — считает доставки, новых и продления</div>
+      <div class="prompt-tags"><span class="tag tag-ops">Доставки</span><span class="tag tag-ops">Excel</span></div>
+    </div>
+    <button class="copy-btn" onclick="copyPrompt(this, 'p2')">Копировать</button>
+  </div>
+  <div class="prompt-body">
+    <div class="section-label sl-blue">Шаблон промта</div>
+    <div class="prompt-box" id="p2">У меня есть файл Excel с маршрутным листом доставок на <span class="var">[дата]</span>.
+В файле два блока: «вечер» и «утро».
+
+Из этого файла:
+1. Посчитай общее число доставок (вечер + утро отдельно и итого)
+2. Раздели клиентов на: Новый / Продление / Прочее (по пометке в имени)
+3. Выведи итоговую таблицу
+4. Отдельно выпиши клиентов с пометкой «Новый» — это наши новые клиенты
+
+<span class="var">[прикрепи Excel файл]</span></div>
+
+    <div class="example-box" style="margin-top:12px">
+      <strong>Результат из файла 28-29 мая:</strong> Вечер 28.05: 23 доставки (новых 10, продлений 7). Утро 29.05: 19 доставок (новых 4, продлений 11). Итого: 42 доставки.
+    </div>
+  </div>
+</div>
+
+<!-- ПРОМТ 1.3 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div class="prompt-meta">
+      <div class="prompt-name">HTML-отчёт по стоимости доставки</div>
+      <div class="prompt-desc">KML-зоны + маршрутный лист → HTML с точной стоимостью для каждого адреса</div>
+      <div class="prompt-tags"><span class="tag tag-ops">Доставки</span><span class="tag tag-ops">KML</span><span class="tag tag-ops">HTML</span></div>
+    </div>
+    <button class="copy-btn" onclick="copyPrompt(this, 'p2b')">Копировать</button>
+  </div>
+  <div class="prompt-body">
+    <div class="section-label sl-blue">Шаблон промта</div>
+    <div class="prompt-box" id="p2b">РОЛЬ: Ты — логист компании O-Live, сервиса доставки правильного питания в Алматы.
+
+КОНТЕКСТ:
+Прикрепляю два файла:
+1. KML-файл — точные координаты зон доставки (O-live Delivery zone.kml)
+2. Excel-файл — маршрутный лист на [дата] (вечер + утро)
+
+Правила ценообразования:
+🔴 Красная зона («Зона бесплатной доставки» в KML-файле) — 1000 ₸
+🟠 Все адреса вне красной зоны — 1500 ₸
+
+ЗАДАЧА:
+Для каждого клиента из маршрутного листа:
+1. Геокодируй адрес (определи координаты)
+2. Проверь, попадает ли он в полигон красной зоны из KML-файла
+3. Назначь стоимость: 1000 ₸ (внутри) или 1500 ₸ (снаружи)
+4. ОБЯЗАТЕЛЬНО перепроверь каждый адрес через Яндекс Карты с зонами:
+   — Открой: https://yandex.com/maps/162/almaty/?from=mapframe&ll=76.884423%2C43.272655&mode=usermaps&source=mapframe&um=constructor%3Af276b19fa870959f9e2bb0fdf5c0af6f68cb716557c98f123547e49f419c4843&utm_source=mapframe&z=13
+   — В поиске слева вводи каждый адрес по отдельности и нажимай поиск
+   — На карте будет видно точно, в какой зоне находится адрес
+   — Зона на карте = окончательный ответ (приоритет над геокодом)
+5. Если в маршрутном листе есть два одинаковых адреса — удали одну из строк (дубликат не считается отдельной доставкой)
+
+ФОРМАТ РЕЗУЛЬТАТА:
+Создай HTML-отчёт со следующими колонками:
+№ | Имя клиента | Адрес | Зона | Стоимость доставки | Примечание
+
+— Раздели на секции: ВЕЧЕР и УТРО
+— В конце итоговая строка: сколько адресов × 1000 ₸ + сколько × 1500 ₸ = общая сумма
+— Красная зона — выделить розовым фоном (#FADBD8), внешняя — оранжевым (#FDEBD0)
+— Заголовок таблицы: тёмный (#2C3E50), шапка колонок: зелёный (#1F7A4D), секции ВЕЧЕР/УТРО: тёмно-синий (#34495E)
+
+[прикрепи KML-файл + Excel маршрутный лист]</div>
+
+    <div class="example-box" style="margin-top:12px">
+      <strong>Результат из файла 24–25 мая:</strong> Красная зона: 32 адреса × 1 000 = 32 000 ₸ · Внешняя: 12 адресов × 1 500 = 18 000 ₸ · Итого: 50 000 ₸
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ БЛОК 2: КЛИЕНТЫ ═══════ -->
+<div id="clients"></div>
+<div class="section-title">2. Работа с клиентами</div>
+
+<!-- ПРОМТ 2.1 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div class="prompt-meta">
+      <div class="prompt-name">Классификация отзывов клиентов</div>
+      <div class="prompt-desc">Любое количество отзывов → тональность, тема, действие</div>
+      <div class="prompt-tags"><span class="tag tag-client">Отзывы</span><span class="tag tag-client">Классификация</span></div>
+    </div>
+    <button class="copy-btn" onclick="copyPrompt(this, 'p3')">Копировать</button>
+  </div>
+  <div class="prompt-body">
+    <div class="section-label sl-blue">Шаблон промта</div>
+    <div class="prompt-box" id="p3">У меня есть <span class="var">[N]</span> отзывов клиентов в свободном тексте.
+
+Для каждого отзыва определи:
+1. Тональность: позитив / смешанная / негатив / жёсткий негатив
+2. Основная проблема клиента (1 предложение)
+3. Темы жалобы (качество, доставка, маркировка, коммуникация и т.д.)
+4. Намерение клиента: остаться / пауза / уйти / эскалация
+5. Какое действие нужно от компании — срочно или нет
+
+Сделай сводную таблицу и в конце выдели, какие отзывы требуют срочной обработки сегодня.
+
+<span class="var">[вставь тексты отзывов]</span></div>
+
+    <div class="example-box" style="margin-top:12px">
+      <strong>Когда использовать:</strong> получила жалобы в WhatsApp, собрала отзывы из Google форм, нужно понять кому ответить первым делом.
+    </div>
+  </div>
+</div>
+
+<!-- ПРОМТ 2.2 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div class="prompt-meta">
+      <div class="prompt-name">Ответ клиенту от отдела качества</div>
+      <div class="prompt-desc">Профессиональный ответ на жалобу — с реальными решениями, не отписка</div>
+      <div class="prompt-tags"><span class="tag tag-client">Жалоба</span><span class="tag tag-client">Качество</span></div>
+    </div>
+    <button class="copy-btn" onclick="copyPrompt(this, 'p4')">Копировать</button>
+  </div>
+  <div class="prompt-body">
+    <div class="section-label sl-blue">Шаблон промта</div>
+    <div class="prompt-box" id="p4">Ты — специалист отдела качества компании O-Live.
+
+Клиент <span class="var">[имя клиента]</span> жалуется на: <span class="var">[суть жалобы]</span>.
+Это <span class="var">[номер]</span> жалоба от этого клиента за последние <span class="var">[период]</span>.
+
+Напиши ответ:
+— Тон: забота, не отписка. Клиент должен почувствовать что его услышали
+— Признай проблему конкретно, не общими словами
+— Предложи реальное решение: <span class="var">[компенсация / замена / личный контроль]</span>
+— Укажи срок ответа или действия
+— Длина: 5-8 предложений, без воды
+
+<span class="var">[опционально: вставь историю переписки с клиентом]</span></div>
+
+    <div class="example-box" style="margin-top:12px">
+      <strong>Пример (Тимур, жалоба на ккал):</strong> [имя] = Тимур · [жалоба] = несоответствие калорийности на рационе 1800 ккал · [номер] = 4-я жалоба · [решение] = 2 бесплатных дня + личный контроль технолога
+    </div>
+  </div>
+</div>
+
+<!-- ПРОМТ 2.3 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div class="prompt-meta">
+      <div class="prompt-name">Сравнительная таблица из неструктурированного текста</div>
+      <div class="prompt-desc">Прайс конкурентов, условия поставщика, описания → таблица</div>
+      <div class="prompt-tags"><span class="tag tag-client">Таблица</span><span class="tag tag-data">Анализ</span></div>
+    </div>
+    <button class="copy-btn" onclick="copyPrompt(this, 'p5')">Копировать</button>
+  </div>
+  <div class="prompt-body">
+    <div class="section-label sl-blue">Шаблон промта</div>
+    <div class="prompt-box" id="p5">У меня есть текст/скриншот с информацией о <span class="var">[что анализируем]</span>.
+
+Составь сравнительную таблицу по параметрам:
+— <span class="var">[параметр 1]</span>
+— <span class="var">[параметр 2]</span>
+— <span class="var">[параметр 3]</span>
+— <span class="var">[параметр 4]</span>
+
+<span class="var">[опционально]</span>: Отсортируй по <span class="var">[критерий]</span>.
+В конце напиши 2-3 вывода — что бросается в глаза.
+
+<span class="var">[вставь текст / прикрепи скриншот]</span></div>
+
+    <table class="var-table" style="margin-top:12px">
+      <tr><th>Что анализировать</th><th>Параметры для таблицы</th></tr>
+      <tr><td>Прайс конкурентов</td><td>Название рациона · Цель · Цена · Для кого</td></tr>
+      <tr><td>Условия поставщика</td><td>Блок · Параметр · Требование · Важность</td></tr>
+      <tr><td>Отзывы клиентов</td><td>Тональность · Проблема · Намерение · Действие</td></tr>
+      <tr><td>Описания рационов</td><td>Название · Ккал · Цель · Цена · Особенности</td></tr>
+    </table>
+  </div>
+</div>
+
+
+<!-- ═══════ БЛОК 3: ЮРИДИЧЕСКИЕ ═══════ -->
+<div id="legal"></div>
+<div class="section-title">3. Юридические документы</div>
+
+<!-- ПРОМТ 3.1 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div class="prompt-meta">
+      <div class="prompt-name">Дополнительное соглашение</div>
+      <div class="prompt-desc">Шаблон по структуре РОЛЬ → КОНТЕКСТ → ЗАДАЧА → ФОРМАТ</div>
+      <div class="prompt-tags"><span class="tag tag-legal">Договор</span><span class="tag tag-legal">РК</span></div>
+    </div>
+    <button class="copy-btn" onclick="copyPrompt(this, 'p6')">Копировать</button>
+  </div>
+  <div class="prompt-body">
+    <div class="section-label sl-blue">Шаблон промта</div>
+    <div class="prompt-box" id="p6">РОЛЬ: Ты — уполномоченный представитель ТОО «O-Live», ответственный за формирование договорной базы и защиту интересов компании перед поставщиками.
+
+КОНТЕКСТ:
+<span class="var">[Опиши проблему: что происходит, почему нужен документ, кто стороны]</span>
+
+ЗАДАЧА:
+Составь Дополнительное соглашение к договору между <span class="var">[Заказчик]</span> и <span class="var">[Исполнитель]</span> со следующими условиями:
+
+1. <span class="var">[Условие 1 + штраф/ответственность]</span>
+2. <span class="var">[Условие 2 + штраф/ответственность]</span>
+3. <span class="var">[Условие 3 + штраф/ответственность]</span>
+
+ФОРМАТ:
+— Официально-деловой стиль, структура по законодательству РК
+— Документ на русском языке, Times New Roman 12pt, формат A4
+— Обязательно: преамбула, пронумерованные разделы, таблицы штрафов, порядок претензий (срок ответа — 3 рабочих дня), раздел разрешения споров, блок подписей
+— Сохрани в формате .docx</div>
+
+    <div class="rule-box" style="margin-top:12px">
+      <strong>Главное правило:</strong> Чем подробнее опишешь условия в ЗАДАЧЕ (конкретные суммы штрафов, сроки, основания) — тем точнее будет документ. Не оставляй Claude додумывать цифры.
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ БЛОК 4: АНАЛИЗ ДАННЫХ ═══════ -->
+<div id="data"></div>
+<div class="section-title">4. Анализ данных</div>
+
+<!-- ПРОМТ 4.1 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div class="prompt-meta">
+      <div class="prompt-name">Финансовый анализ по периодам</div>
+      <div class="prompt-desc">Аномалии, тренды и выводы из финансовой модели</div>
+      <div class="prompt-tags"><span class="tag tag-data">Финансы</span><span class="tag tag-data">Анализ</span></div>
+    </div>
+    <button class="copy-btn" onclick="copyPrompt(this, 'p7')">Копировать</button>
+  </div>
+  <div class="prompt-body">
+    <div class="section-label sl-blue">Шаблон промта</div>
+    <div class="prompt-box" id="p7">Ты — финансовый аналитик компании O-Live.
+
+Проанализируй данные финансовой модели за <span class="var">[период / месяцы]</span>.
+
+Найди и опиши:
+1. Аномалии — резкие скачки или провалы по любой метрике. Для каждой аномалии: что произошло, в какую неделю, насколько отклонение от нормы
+2. Тренды — что устойчиво растёт или падает на протяжении нескольких недель
+3. Выводы — 3-5 конкретных вывода для руководства
+4. Вопросы — что требует объяснения от команды (почему так произошло)
+
+Метрики для анализа: продажи, доставки, постоянные затраты, маркетинг, маржа.
+
+<span class="var">[вставь данные или дай ссылку на Google Sheets]</span></div>
+
+    <div class="example-box" style="margin-top:12px">
+      <strong>Что нашли в анализе март–май 2026:</strong> Аномалия — маркетинг 1,79 млн ₸ за неделю 20-26 апреля при продажах всего 313 тыс. ₸. Постоянные затраты выросли с 18 750 до 1 170 000 ₸ в мае. Рекорд продаж 2,3 млн ₸ — 4-10 мая.
+    </div>
+  </div>
+</div>
+
+<!-- ПРОМТ 4.2 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div class="prompt-meta">
+      <div class="prompt-name">Выгрузка WhatsApp переписок из Bitrix24</div>
+      <div class="prompt-desc">Скрипт для получения всех чатов за любой день</div>
+      <div class="prompt-tags"><span class="tag tag-data">Bitrix24</span><span class="tag tag-data">WhatsApp</span></div>
+    </div>
+    <button class="copy-btn" onclick="copyPrompt(this, 'p8')">Копировать</button>
+  </div>
+  <div class="prompt-body">
+    <div class="section-label sl-blue">Шаблон промта</div>
+    <div class="prompt-box" id="p8">У меня есть скрипт export_whatsapp.py для выгрузки переписок из Bitrix24.
+
+Адаптируй скрипт для выгрузки за <span class="var">[дата, например: 2026-05-27]</span>.
+
+Параметры которые нужно поменять:
+— DATE_FROM и DATE_TO = <span class="var">[дата]</span>
+— OUTPUT_FILE = whatsapp_<span class="var">[дата]</span>.xlsx
+— PROGRESS_FILE = progress_<span class="var">[дата]</span>.json
+
+После выгрузки проанализируй переписки и найди:
+1. Жалобы клиентов (негатив, претензии)
+2. Вопросы без ответа
+3. Запросы на возврат или отмену
+4. Сколько всего чатов, сколько с жалобами
+
+<span class="var">[прикрепи файл export_whatsapp.py]</span></div>
+
+    <div class="rule-box" style="margin-top:12px">
+      <strong>Важно:</strong> Скрипт запускается на твоём компьютере — не через Claude. Открой Терминал → перейди в папку O-Live → запусти <code>python3 export_whatsapp_27may.py</code> → скинь результат Claude.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ ГЛАВНОЕ ПРАВИЛО ═══════ -->
+<div style="background:#1a1a2e;border-radius:14px;padding:20px 24px;margin-top:32px">
+  <div style="font-size:13px;font-weight:700;color:#89b4fa;text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px">Золотое правило хорошего промта</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:12px 14px">
+      <div style="font-size:12px;font-weight:700;color:#a6e3a1;margin-bottom:6px">РОЛЬ</div>
+      <div style="font-size:12px;color:#cdd6f4;line-height:1.6">Кто ты? Аналитик, юрист, специалист отдела качества?</div>
+    </div>
+    <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:12px 14px">
+      <div style="font-size:12px;font-weight:700;color:#89b4fa;margin-bottom:6px">КОНТЕКСТ</div>
+      <div style="font-size:12px;color:#cdd6f4;line-height:1.6">В чём проблема? Кто участники? Что уже произошло?</div>
+    </div>
+    <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:12px 14px">
+      <div style="font-size:12px;font-weight:700;color:#fab387;margin-bottom:6px">ЗАДАЧА</div>
+      <div style="font-size:12px;color:#cdd6f4;line-height:1.6">Что конкретно сделать? Цифры, условия, параметры.</div>
+    </div>
+    <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:12px 14px">
+      <div style="font-size:12px;font-weight:700;color:#f9e2af;margin-bottom:6px">ФОРМАТ</div>
+      <div style="font-size:12px;color:#cdd6f4;line-height:1.6">Какой файл? Какой стиль? Куда сохранить?</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">O-Live · Мои промты · 2026 · Собрано из обучения Claude 27–29 мая</div>
+</div>
+
+<script>
+function copyPrompt(btn, id) {
+  const el = document.getElementById(id);
+  const text = el.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Скопировано';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Копировать'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>

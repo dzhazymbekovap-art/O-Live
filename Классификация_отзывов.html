@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Классификация отзывов клиентов O-Live</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f8;color:#1a1a1a;padding:32px 24px}
+.wrap{max-width:860px;margin:0 auto}
+h1{font-size:22px;font-weight:700;margin-bottom:6px}
+.subtitle{font-size:13px;color:#888;margin-bottom:24px}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#555}
+.legend-dot{width:10px;height:10px;border-radius:50%}
+.rev-card{background:#fff;border-radius:14px;border:1px solid #e8edf2;padding:1.25rem 1.4rem;margin-bottom:12px;display:grid;grid-template-columns:32px 1fr auto;gap:0 14px;align-items:start}
+.rev-num{font-size:13px;font-weight:600;color:#aaa;padding-top:3px}
+.rev-title{font-size:15px;font-weight:600;margin-bottom:8px;color:#1a1a1a}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.tag{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+.tone-pos{background:#e8f5e9;color:#2e7d32}
+.tone-neg{background:#feebee;color:#b71c1c}
+.tone-mix{background:#fff8e1;color:#e65100}
+.tone-hot{background:#fce4ec;color:#880e4f}
+.topic{background:#f0f4f8;color:#555;border:1px solid #e2e8f0}
+.quote{font-size:12px;color:#777;font-style:italic;border-left:3px solid #e2e8f0;padding-left:10px;line-height:1.6}
+.tone-badge{text-align:center;padding-top:4px}
+.tone-icon{font-size:24px}
+.tone-label{font-size:10px;font-weight:700;margin-top:3px}
+.pos-c{color:#2e7d32}.neg-c{color:#b71c1c}.mix-c{color:#e65100}.hot-c{color:#880e4f}
+.summary{background:#fff;border-radius:14px;border:1px solid #e8edf2;padding:1.25rem 1.4rem;margin-top:20px}
+.summary h2{font-size:14px;font-weight:700;margin-bottom:12px}
+.sum-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:6px 0;border-bottom:1px solid #f0f0f0}
+.sum-row:last-child{border-bottom:none}
+.sum-key{color:#555}
+.sum-val{font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Классификация отзывов клиентов</h1>
+  <div class="subtitle">5 отзывов · Анализ тональности и тем · 28 мая 2026</div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#2e7d32"></div>Позитив</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e65100"></div>Смешанная</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#b71c1c"></div>Негатив</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#880e4f"></div>Жёсткий негатив</div>
+  </div>
+
+  <div class="rev-card">
+    <div class="rev-num">№1</div>
+    <div>
+      <div class="rev-title">Конструктивная критика с доверием к бренду</div>
+      <div class="tags">
+        <span class="tag tone-mix">Смешанная</span>
+        <span class="tag topic">Качество продукта</span>
+        <span class="tag topic">Маркировка / ккал</span>
+        <span class="tag topic">Репутационный риск</span>
+      </div>
+      <div class="quote">«Еда нравится, вкусно и отлично — но несоответствие ккал очень серьёзно. Возьмите клиента на особый контроль»</div>
+    </div>
+    <div class="tone-badge">
+      <div class="tone-icon">⚠️</div>
+      <div class="tone-label mix-c">Смешанная</div>
+    </div>
+  </div>
+
+  <div class="rev-card">
+    <div class="rev-num">№2</div>
+    <div>
+      <div class="rev-title">Полное разочарование, обвинение в обмане</div>
+      <div class="tags">
+        <span class="tag tone-hot">Жёсткий негатив</span>
+        <span class="tag topic">Ложная реклама</span>
+        <span class="tag topic">Качество блюд</span>
+        <span class="tag topic">Повторяющееся меню</span>
+        <span class="tag topic">Отток (не рекомендует)</span>
+      </div>
+      <div class="quote">«Обманываете людей. Блюда повторялись по 3–4 раза. Вы людей кормите, а не животных»</div>
+    </div>
+    <div class="tone-badge">
+      <div class="tone-icon">🔥</div>
+      <div class="tone-label hot-c">Жёсткий негатив</div>
+    </div>
+  </div>
+
+  <div class="rev-card">
+    <div class="rev-num">№3</div>
+    <div>
+      <div class="rev-title">Разочарование, растерянность, медицинский контекст</div>
+      <div class="tags">
+        <span class="tag tone-neg">Негатив</span>
+        <span class="tag topic">Вкус / запах</span>
+        <span class="tag topic">Медицинские цели</span>
+        <span class="tag topic">Калорийность (1200 ккал)</span>
+        <span class="tag topic">Тренировки не получены</span>
+      </div>
+      <div class="quote">«На 3-й день выбрасываю ризотто и брокколи. Пришла лечить желудок, а теперь не знаю, что делать»</div>
+    </div>
+    <div class="tone-badge">
+      <div class="tone-icon">😔</div>
+      <div class="tone-label neg-c">Негатив</div>
+    </div>
+  </div>
+
+  <div class="rev-card">
+    <div class="rev-num">№4</div>
+    <div>
+      <div class="rev-title">Лояльный клиент, рекомендует, уходит на паузу</div>
+      <div class="tags">
+        <span class="tag tone-pos">Позитив</span>
+        <span class="tag topic">Результат −4,5 кг</span>
+        <span class="tag topic">Рекомендует друзьям</span>
+        <span class="tag topic">Пауза (не отказ)</span>
+      </div>
+      <div class="quote">«Мне всё очень понравилось! Всем рекомендую. Возьму перерыв — возможно вернусь»</div>
+    </div>
+    <div class="tone-badge">
+      <div class="tone-icon">😊</div>
+      <div class="tone-label pos-c">Позитив</div>
+    </div>
+  </div>
+
+  <div class="rev-card">
+    <div class="rev-num">№5</div>
+    <div>
+      <div class="rev-title">Сбой доставки, требует руководство, агрессивный тон</div>
+      <div class="tags">
+        <span class="tag tone-neg">Негатив</span>
+        <span class="tag topic">Логистика / не привезли</span>
+        <span class="tag topic">Коммуникация (нет звонков)</span>
+        <span class="tag topic">Условия оплаты (14 дней)</span>
+        <span class="tag topic">Эскалация к руководству</span>
+      </div>
+      <div class="quote">«Прошло 2 часа — ничего. Дайте телефон руководителя. Именно поэтому берёте деньги за 14 дней сразу»</div>
+    </div>
+    <div class="tone-badge">
+      <div class="tone-icon">😠</div>
+      <div class="tone-label neg-c">Негатив</div>
+    </div>
+  </div>
+
+  <div class="summary">
+    <h2>Итог по 5 отзывам</h2>
+    <div class="sum-row"><span class="sum-key">Позитив</span><span class="sum-val" style="color:#2e7d32">1 из 5</span></div>
+    <div class="sum-row"><span class="sum-key">Смешанная (конструктивная)</span><span class="sum-val" style="color:#e65100">1 из 5</span></div>
+    <div class="sum-row"><span class="sum-key">Негатив</span><span class="sum-val" style="color:#b71c1c">2 из 5</span></div>
+    <div class="sum-row"><span class="sum-key">Жёсткий негатив</span><span class="sum-val" style="color:#880e4f">1 из 5</span></div>
+    <div class="sum-row"><span class="sum-key">⚡ Срочно обработать</span><span class="sum-val" style="color:#b71c1c">№2, №5</span></div>
+    <div class="sum-row"><span class="sum-key">🔁 Риск возврата (пауза)</span><span class="sum-val">№4</span></div>
+  </div>
+</div>
+</body>
+</html>

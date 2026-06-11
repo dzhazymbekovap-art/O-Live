@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Отчёт колл-центра — 27 мая 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f8;color:#1a1a1a;padding:32px 24px}
+.wrap{max-width:860px;margin:0 auto}
+.report-header{background:#fff;border-radius:14px;border:1px solid #e8edf2;padding:1.5rem;margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px}
+.report-title h1{font-size:20px;font-weight:700;margin-bottom:4px}
+.report-title p{font-size:13px;color:#888}
+.report-badge{background:#e8f5e9;color:#2e7d32;font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;align-self:center}
+
+.resume{background:#fff;border-radius:14px;border-left:4px solid #1565c0;border-top:1px solid #e8edf2;border-right:1px solid #e8edf2;border-bottom:1px solid #e8edf2;padding:1.25rem 1.5rem;margin-bottom:20px}
+.resume h2{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#1565c0;margin-bottom:10px}
+.resume p{font-size:14px;color:#333;line-height:1.7}
+
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+.metric{background:#fff;border-radius:12px;border:1px solid #e8edf2;padding:1rem 1.1rem}
+.metric-label{font-size:11px;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.metric-value{font-size:26px;font-weight:700;line-height:1}
+.metric-sub{font-size:11px;color:#aaa;margin-top:4px}
+.mv-blue{color:#1565c0}
+.mv-green{color:#2e7d32}
+.mv-orange{color:#e65100}
+.mv-red{color:#b71c1c}
+.mv-gray{color:#888}
+
+.section{background:#fff;border-radius:14px;border:1px solid #e8edf2;padding:1.25rem 1.5rem;margin-bottom:16px}
+.section h2{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px}
+.h-good{color:#2e7d32}
+.h-warn{color:#e65100}
+.h-rec{color:#7b1fa2}
+.h-table{color:#1565c0}
+
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{padding:9px 12px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#888;border-bottom:1px solid #e8edf2;background:#f8fafc}
+td{padding:9px 12px;border-bottom:1px solid #f3f4f6;vertical-align:middle;color:#333}
+tr:last-child td{border-bottom:none}
+
+.item{display:flex;gap:10px;margin-bottom:10px;font-size:13px;color:#333;line-height:1.5;align-items:flex-start}
+.item:last-child{margin-bottom:0}
+.item-icon{flex-shrink:0;font-size:16px;margin-top:1px}
+
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px}
+.b-green{background:#e8f5e9;color:#2e7d32}
+.b-blue{background:#e3f2fd;color:#1565c0}
+.b-orange{background:#fff8e1;color:#e65100}
+.b-red{background:#feebee;color:#b71c1c}
+.b-gray{background:#f0f4f8;color:#555}
+
+.no-data{color:#aaa;font-style:italic;font-size:12px}
+.source-note{font-size:11px;color:#bbb;margin-top:16px;padding-top:12px;border-top:1px solid #f3f4f6}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="report-header">
+    <div class="report-title">
+      <h1>Отчёт — Колл-центр</h1>
+      <p>O-Live · Еженедельный / Дневной отчёт · 27 мая 2026 (среда)</p>
+    </div>
+    <div class="report-badge">Источник: Bitrix24 API</div>
+  </div>
+
+  <!-- 1. РЕЗЮМЕ -->
+  <div class="resume">
+    <h2>1. Краткое резюме</h2>
+    <p>27 мая колл-центр обработал <strong>33 новых обращения</strong> (новые чаты в воронке C9), из которых 14 переведены в работу. Подтверждено <strong>3 новые подписки</strong> на сумму <strong>358 000 ₸</strong> через Bitrix и 1 заявка с сайта на 38 500 ₸ ожидает оплаты. Жалоб через официальные каналы (client_questions) за день не зафиксировано.</p>
+  </div>
+
+  <!-- 2. МЕТРИКИ -->
+  <div class="metrics-grid">
+    <div class="metric">
+      <div class="metric-label">Новые чаты</div>
+      <div class="metric-value mv-blue">33</div>
+      <div class="metric-sub">Новых обращений в C9</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">В работе</div>
+      <div class="metric-value mv-orange">14</div>
+      <div class="metric-sub">Переведено в обработку</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Новые подписки</div>
+      <div class="metric-value mv-green">3</div>
+      <div class="metric-sub">Подтверждено в Bitrix</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Всего продаж</div>
+      <div class="metric-value mv-green" style="font-size:18px">358 000 ₸</div>
+      <div class="metric-sub">+ 38 500 ₸ ожидает оплаты</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Жалобы</div>
+      <div class="metric-value mv-green">0</div>
+      <div class="metric-sub">Через client_questions</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Доставки (28-29 мая)</div>
+      <div class="metric-value mv-blue">42</div>
+      <div class="metric-sub">Вечер 28.05: 23 · Утро 29.05: 19</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Новых клиентов</div>
+      <div class="metric-value mv-green">14</div>
+      <div class="metric-sub">Из 42 доставок</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">Продлений</div>
+      <div class="metric-value mv-orange">18</div>
+      <div class="metric-sub">Из 42 доставок</div>
+    </div>
+  </div>
+
+  <!-- 3. ТАБЛИЦА -->
+  <div class="section">
+    <h2 class="h-table">2. Ключевые показатели</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Метрика</th>
+            <th>Значение</th>
+            <th>Детали</th>
+            <th>Статус</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Новые чаты / обращения</td>
+            <td><strong>33</strong></td>
+            <td>Воронка C9, стадия NEW</td>
+            <td><span class="badge b-blue">Норма</span></td>
+          </tr>
+          <tr>
+            <td>Обращения в обработке</td>
+            <td><strong>14</strong></td>
+            <td>Воронка C9, стадия UC_73O0GQ</td>
+            <td><span class="badge b-orange">В работе</span></td>
+          </tr>
+          <tr>
+            <td>Новые подписки (Bitrix)</td>
+            <td><strong>3</strong></td>
+            <td>C13:UC_Z17HT7 (Актив), 358 000 ₸</td>
+            <td><span class="badge b-green">Подтверждено</span></td>
+          </tr>
+          <tr>
+            <td>Новая заявка с сайта</td>
+            <td><strong>1</strong></td>
+            <td>1 500 Ккал, 5 дней, 38 500 ₸. Доставка с 31 мая</td>
+            <td><span class="badge b-orange">Ожидает оплаты</span></td>
+          </tr>
+          <tr>
+            <td>Всего продаж за день</td>
+            <td><strong>358 000 ₸</strong></td>
+            <td>По подтверждённым сделкам Bitrix</td>
+            <td><span class="badge b-green">Зафиксировано</span></td>
+          </tr>
+          <tr>
+            <td>Жалобы (официальные)</td>
+            <td><strong>0</strong></td>
+            <td>client_questions — пусто за 27 мая</td>
+            <td><span class="badge b-green">Нет жалоб</span></td>
+          </tr>
+          <tr>
+            <td>Доставки вечер 28.05</td>
+            <td><strong>23</strong></td>
+            <td>Из них новых: 10 · Продлений: 7 · Прочее: 6</td>
+            <td><span class="badge b-green">Выполнено</span></td>
+          </tr>
+          <tr>
+            <td>Доставки утро 29.05</td>
+            <td><strong>19</strong></td>
+            <td>Из них новых: 4 · Продлений: 11 · Прочее: 4</td>
+            <td><span class="badge b-green">Выполнено</span></td>
+          </tr>
+          <tr>
+            <td>Итого доставок (28-29 мая)</td>
+            <td><strong>42</strong></td>
+            <td>Новых: 14 · Продлений: 18 · Прочее: 10</td>
+            <td><span class="badge b-blue">Из файла Excel</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 4. ЧТО ХОРОШО -->
+  <div class="section">
+    <h2 class="h-good">3. Что шло хорошо</h2>
+    <div class="item"><span class="item-icon">✅</span><span>Жалоб через официальные каналы не поступало — день прошёл без эскалаций в колл-центре</span></div>
+    <div class="item"><span class="item-icon">✅</span><span>3 новые подписки подтверждены и активированы на сумму 358 000 ₸ — хороший результат для среды</span></div>
+    <div class="item"><span class="item-icon">✅</span><span>42% обращений (14 из 33) переведены в обработку — конверсия из чата в работу</span></div>
+  </div>
+
+  <!-- 5. ЧТО ТРЕБУЕТ ВНИМАНИЯ -->
+  <div class="section">
+    <h2 class="h-warn">4. Что требует внимания</h2>
+    <div class="item"><span class="item-icon">⚠️</span><span>1 заявка с сайта (38 500 ₸) ожидает оплаты с 27 мая — нужно напомнить клиенту. Доставка назначена на 31 мая, времени мало</span></div>
+    <div class="item"><span class="item-icon">⚠️</span><span>19 обращений из 33 остались в стадии NEW — не переведены в работу. Нужно проверить, не потерялись ли клиенты</span></div>
+    <div class="item"><span class="item-icon">⚠️</span><span>14 из 42 доставок — новые клиенты. Важно отслеживать их опыт в первые дни — именно они чаще всего пишут жалобы</span></div>
+  </div>
+
+  <!-- 6. РЕКОМЕНДАЦИИ -->
+  <div class="section">
+    <h2 class="h-rec">5. Рекомендации на следующую неделю</h2>
+    <div class="item"><span class="item-icon">→</span><span>Позвонить / написать клиенту с заявкой №127 (1 500 Ккал, 38 500 ₸) — подтвердить оплату до выходных, иначе доставка 31 мая сорвётся</span></div>
+    <div class="item"><span class="item-icon">→</span><span>Разобрать 19 необработанных обращений из C9:NEW — часть из них может быть потенциальными клиентами</span></div>
+    <div class="item"><span class="item-icon">→</span><span>Добавить в Bitrix метку для жалоб из WhatsApp/открытых чатов, чтобы они попадали в API и отчёт — сейчас они не видны в системе</span></div>
+    <div class="item"><span class="item-icon">→</span><span>Связаться с 14 новыми клиентами после первой доставки — уточнить впечатления, предупредить о жалобах заранее</span></div>
+    <div class="item"><span class="item-icon">→</span><span>Жалобы из открытых линий Bitrix пока не попадают в API — нужно открыть доступ к разделу «Открытые линии» для полного отчёта</span></div>
+
+    <div class="source-note">Данные: Bitrix24 API (bitrix_deals_summary, orders, client_questions) + файл «Доставка на вечер 28.05 и утро 29.05.xlsx» · Отчёт сформирован: 29 мая 2026</div>
+  </div>
+
+</div>
+</body>
+</html>

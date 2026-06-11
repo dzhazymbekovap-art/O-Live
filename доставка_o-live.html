@@ -1,0 +1,2341 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Доставка рационов O-live</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f5f7fa; color: #333; }
+  .header { background: linear-gradient(135deg, #2d6a4f, #52b788); color: white; padding: 20px 24px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+  .header h1 { font-size: 22px; font-weight: 700; }
+  .header .subtitle { font-size: 13px; opacity: 0.85; margin-top: 2px; }
+  .stats-bar { display: flex; gap: 12px; padding: 12px 24px; background: white; border-bottom: 1px solid #e0e0e0; flex-wrap: wrap; align-items: center; }
+  .stat { background: #f0faf4; border: 1px solid #c3e6cb; border-radius: 8px; padding: 6px 14px; font-size: 13px; font-weight: 600; color: #2d6a4f; }
+  .filter-bar { display: flex; gap: 8px; padding: 10px 24px; background: #fff; border-bottom: 1px solid #e0e0e0; flex-wrap: wrap; }
+  .filter-btn { padding: 6px 14px; border-radius: 20px; border: 2px solid #52b788; background: white; color: #2d6a4f; font-size: 13px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+  .filter-btn:hover, .filter-btn.active { background: #52b788; color: white; }
+  .content { padding: 16px 24px; max-width: 1400px; margin: 0 auto; }
+  .date-section { margin-bottom: 24px; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .date-header { background: #1b4332; color: white; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; }
+  .date-title { font-size: 18px; font-weight: 700; }
+  .date-count { background: rgba(255,255,255,0.2); padding: 3px 12px; border-radius: 12px; font-size: 13px; }
+  .shift-block { background: white; }
+  .shift-header { padding: 10px 20px; font-size: 15px; font-weight: 600; }
+  .shift-header.утро { background: #fff9e6; color: #7c5c00; border-left: 4px solid #f0a500; }
+  .shift-header.вечер { background: #f0f4ff; color: #2c3e7a; border-left: 4px solid #4a6cf7; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { background: #f8f9fa; padding: 8px 10px; text-align: left; border-bottom: 2px solid #dee2e6; font-weight: 600; color: #555; white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid #f0f0f0; }
+  tbody tr:hover { background: #f8fff9; }
+  td { padding: 8px 10px; vertical-align: top; }
+  td.num { font-weight: 700; color: #888; width: 36px; }
+  td.client { font-weight: 600; color: #1b4332; min-width: 150px; }
+  td.phone { color: #555; white-space: nowrap; }
+  td.address { color: #333; min-width: 200px; }
+  td.time { white-space: nowrap; color: #666; }
+  td.comment { color: #e67e22; font-size: 12px; max-width: 150px; }
+  td.cost { text-align: center; }
+  .cost-btn { border: none; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-size: 12px; font-weight: 700; background: #eee; color: #555; transition: all 0.2s; }
+  .cost-btn.red { background: #d4edda; color: #155724; }
+  .cost-btn.yellow { background: #fff3cd; color: #856404; }
+  .status-badge { padding: 3px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; background: #e9ecef; color: #666; }
+  .status-badge.done { background: #d4edda; color: #155724; }
+  .legend { display: flex; gap: 16px; padding: 10px 24px; background: #fffef0; border-bottom: 1px solid #ffe; font-size: 12px; color: #666; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.red { background: #d4edda; border: 1px solid #aaa; }
+  .dot.yellow { background: #fff3cd; border: 1px solid #aaa; }
+  
+  td.client-cost { text-align: center; }
+  .cc-free    { color:#155724;background:#d4edda;border-radius:6px;padding:3px 8px;font-weight:700;font-size:12px; }
+  .cc-zone500 { color:#7c5c00;background:#fff3cd;border-radius:6px;padding:3px 8px;font-weight:700;font-size:12px; }
+  .cc-zone1000{ color:#0c5460;background:#d1ecf1;border-radius:6px;padding:3px 8px;font-weight:700;font-size:12px; }
+  .cc-zone1500{ color:#155724;background:#c3e6cb;border-radius:6px;padding:3px 8px;font-weight:700;font-size:12px; }
+  .cc-zone2000{ color:#1a4a7a;background:#cce5ff;border-radius:6px;padding:3px 8px;font-weight:700;font-size:12px; }
+  .cc-unclear { color:#856404;background:#fff3cd;border-radius:6px;padding:3px 8px;font-size:11px; }
+  .cc-noaddr  { color:#c00;background:#fee;border-radius:6px;padding:3px 8px;font-size:11px; }
+
+  @media print {
+    .filter-bar, .stats-bar, .legend { display: none; }
+    .date-section { page-break-inside: avoid; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🥗 Доставка рационов O-live</h1>
+  <div class="subtitle">Учёт доставок • 289 записей • Алматы</div>
+</div>
+<div class="stats-bar">
+  <span class="stat" onclick="filterDate('05.06.26')" style="cursor:pointer">05.06.26: 13</span><span class="stat" onclick="filterDate('06.06.26')" style="cursor:pointer">06.06.26: 30</span><span class="stat" onclick="filterDate('07.06.26')" style="cursor:pointer">07.06.26: 34</span><span class="stat" onclick="filterDate('08.06.26')" style="cursor:pointer">08.06.26: 55</span><span class="stat" onclick="filterDate('09.06.26')" style="cursor:pointer">09.06.26: 55</span><span class="stat" onclick="filterDate('10.06.26')" style="cursor:pointer">10.06.26: 63</span><span class="stat" onclick="filterDate('11.06.26')" style="cursor:pointer">11.06.26: 39</span>
+  <span class="stat">Всего: 289</span>
+</div>
+<div class="legend">
+  <span><strong>Стоимость доставки:</strong></span>
+  <span class="legend-item"><span class="dot red"></span>1 000 тг — красная зона</span>
+  <span class="legend-item"><span class="dot yellow"></span>1 500 тг — за пределами зоны</span>
+  <span style="color:#999">Нажмите на кнопку «—» для выбора стоимости</span>
+</div>
+<div class="filter-bar" id="filterBar">
+  <button class="filter-btn active" onclick="filterDate('all')">Все даты</button>
+  <button class="filter-btn" onclick="filterDate('05.06.26')">05.06.26</button><button class="filter-btn" onclick="filterDate('06.06.26')">06.06.26</button><button class="filter-btn" onclick="filterDate('07.06.26')">07.06.26</button><button class="filter-btn" onclick="filterDate('08.06.26')">08.06.26</button><button class="filter-btn" onclick="filterDate('09.06.26')">09.06.26</button><button class="filter-btn" onclick="filterDate('10.06.26')">10.06.26</button><button class="filter-btn" onclick="filterDate('11.06.26')">11.06.26</button>
+</div>
+<div class="content" id="content"><div class="date-section" id="date-05.06.26">
+    <div class="date-header">
+      <span class="date-title">📅 05.06.26</span>
+      <span class="date-count">13 доставок</span>
+    </div>
+    
+    <div class="shift-block">
+    <div class="shift-header вечер">🌆 Вечер (20:00–22:00) — 13 доставок</div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>ФИО клиента</th>
+          <th>Телефон</th>
+          <th>Адрес</th>
+          <th>Стоимость</th>
+          <th>Оплата клиента</th>
+        </tr>
+      </thead>
+      <tbody><tr>
+      <td class="num">1</td>
+      <td class="client">Анна 6147</td>
+      <td class="phone">77011706147</td>
+      <td class="address">Айтеке би, 123/1, жк Кайра, 7 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">2</td>
+      <td class="client">Денис 3003</td>
+      <td class="phone">77777433003</td>
+      <td class="address">Латифа Хамиди, 28а 2 этаж, 4 квартира (чёрная дверь)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">3</td>
+      <td class="client">Анастасия 7676</td>
+      <td class="phone">77772107676</td>
+      <td class="address">Жилой комплекс Ботанический сад дом 6 квартира 5,</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">4</td>
+      <td class="client">Елена 3418</td>
+      <td class="phone">77753413418</td>
+      <td class="address">Санаторная 38/28 блок 9 домофон 9 дом 9</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">5</td>
+      <td class="client">Оксана 0031</td>
+      <td class="phone">77772680031</td>
+      <td class="address">ул. Байганина дом 27  4-й подьезд,</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">6</td>
+      <td class="client">Дарья 2802</td>
+      <td class="phone">77760622802</td>
+      <td class="address">Толе би 189/3к6 4/1 330 кв</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">7</td>
+      <td class="client">Михаил 5622</td>
+      <td class="phone">77770715622</td>
+      <td class="address">Желтоксан, 166, кв. 20, домофон: 20к</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">8</td>
+      <td class="client">Рауан 7860</td>
+      <td class="phone">77057077860</td>
+      <td class="address">Радостовца, 323А, кв. 69, домофон: 69</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">9</td>
+      <td class="client">Айгерим 4911</td>
+      <td class="phone">77078884911</td>
+      <td class="address">Аль-Фараби, 41/3, кв. 124</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">10</td>
+      <td class="client">Жанат 8191</td>
+      <td class="phone">77478458191</td>
+      <td class="address">Байтурсынова, 161, кв. 19, домофон: 19</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">11</td>
+      <td class="client">Ирина 3434</td>
+      <td class="phone">77017113434</td>
+      <td class="address">Айманова, 70, кв. 120, домофон: 120</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">12</td>
+      <td class="client">Аяжан 0718</td>
+      <td class="phone">77473490718</td>
+      <td class="address">Сатпаева 80, под 1, кв 16, этаж 5</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">13</td>
+      <td class="client">Оксана 3986</td>
+      <td class="phone">7022059398</td>
+      <td class="address">Жандарбекова 241А, 2 этаж, 2 подъезд, 21 квартира</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr></tbody></table></div>
+  </div><div class="date-section" id="date-06.06.26">
+    <div class="date-header">
+      <span class="date-title">📅 06.06.26</span>
+      <span class="date-count">30 доставок</span>
+    </div>
+    <div class="shift-block">
+    <div class="shift-header утро">🌅 Утро (6:00–9:00) — 15 доставок</div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>ФИО клиента</th>
+          <th>Телефон</th>
+          <th>Адрес</th>
+          <th>Стоимость</th>
+          <th>Оплата клиента</th>
+        </tr>
+      </thead>
+      <tbody><tr>
+      <td class="num">1</td>
+      <td class="client">Сабира 8975</td>
+      <td class="phone">77085848975</td>
+      <td class="address">ул Ауэзова 8, кв 72, 7 подъезд, 3 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">2</td>
+      <td class="client">Айгерим 7748</td>
+      <td class="phone">77059997748</td>
+      <td class="address">Кабанбай батыра 122а, кв 24, 2 подъезд ( 3 дверь), 6 этаж.</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">3</td>
+      <td class="client">Зарема 5454</td>
+      <td class="phone">77012775454</td>
+      <td class="address">Жк Ботанический Сад д.9</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">4</td>
+      <td class="client">Екатерина 2228</td>
+      <td class="phone">77770782228</td>
+      <td class="address">Ул Котельникова 95 , 2 этаж , все здание наше</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">5</td>
+      <td class="client">Карина</td>
+      <td class="phone">77089661720</td>
+      <td class="address">Жарокова 39, кв 88 5 подьезд, 5 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">6</td>
+      <td class="client">Айша 7573</td>
+      <td class="phone">77770387573</td>
+      <td class="address">Наурызбай Батыра, 50, кв. 380, домофон: 380</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">7</td>
+      <td class="client">Айша 7573</td>
+      <td class="phone">77770387573</td>
+      <td class="address">Наурызбай Батыра, 50, кв. 380, домофон: 380</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">8</td>
+      <td class="client">Дана 0997</td>
+      <td class="phone">87070186826</td>
+      <td class="address">Карасай батыра 178 кв 94 сменила адрес</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">9</td>
+      <td class="client">Сванкулова Елена 9929</td>
+      <td class="phone">77053339929</td>
+      <td class="address">Ул. Зеленая, 3а, кв. Баганашыл</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">10</td>
+      <td class="client">Арайлым 7915</td>
+      <td class="phone">7747509-79-15</td>
+      <td class="address">Сарыарка, 4, кв. 4, домофон: 2</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">11</td>
+      <td class="client">Амина 4044</td>
+      <td class="phone">77012774044</td>
+      <td class="address">Пр.Достык, 109, кв. 19, домофон: 19</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">12</td>
+      <td class="client">Ольга 9595</td>
+      <td class="phone">77053889595</td>
+      <td class="address">Каирбекова, 37, кв. 8</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">13</td>
+      <td class="client">Гульнура 2524</td>
+      <td class="phone">77017292524</td>
+      <td class="address">Казыбек би, 172, кв. 25, домофон: 25;</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">14</td>
+      <td class="client">Алтынай 0714</td>
+      <td class="phone">77022350714</td>
+      <td class="address">Орбита-1, 21, кв. 26, домофон: 26;</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">15</td>
+      <td class="client">Светлана 5585</td>
+      <td class="phone">77017575585</td>
+      <td class="address">Ул Луганского 1 кВ 158 5 подъезд , 10 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr></tbody></table></div>
+    <div class="shift-block">
+    <div class="shift-header вечер">🌆 Вечер (20:00–22:00) — 15 доставок</div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>ФИО клиента</th>
+          <th>Телефон</th>
+          <th>Адрес</th>
+          <th>Стоимость</th>
+          <th>Оплата клиента</th>
+        </tr>
+      </thead>
+      <tbody><tr>
+      <td class="num">1</td>
+      <td class="client">Анна 6147</td>
+      <td class="phone">77011706147</td>
+      <td class="address">Айтеке би, 123/1, жк Кайра, 7 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">2</td>
+      <td class="client">Денис 3003</td>
+      <td class="phone">77777433003</td>
+      <td class="address">Латифа Хамиди, 28а 2 этаж, 4 квартира (чёрная дверь)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">3</td>
+      <td class="client">Анастасия 7676</td>
+      <td class="phone">77772107676</td>
+      <td class="address">Жилой комплекс Ботанический сад дом 6 квартира 5,</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">4</td>
+      <td class="client">Маржан-3507</td>
+      <td class="phone">77017773507</td>
+      <td class="address">Керей-Жанибек хандар 29, кв 18, 3 подъезд (жк кокше)</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">5</td>
+      <td class="client">Елена 3418</td>
+      <td class="phone">77753413418</td>
+      <td class="address">Санаторная 38/28 блок 9 домофон 9 дом 9</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">6</td>
+      <td class="client">Гузель 1032</td>
+      <td class="phone">77012161032</td>
+      <td class="address">Рауана 41</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">7</td>
+      <td class="client">Оксана 0031</td>
+      <td class="phone">77772680031</td>
+      <td class="address">ул. Байганина дом 27 кв 64 , 4-й подьезд, домофон 64</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">8</td>
+      <td class="client">Светлана 5585</td>
+      <td class="phone">77017575585</td>
+      <td class="address">Ул Луганского 1 кВ 158 5 подъезд , 10 этаж, домофон 158в</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">9</td>
+      <td class="client">Михаил 5622</td>
+      <td class="phone">77770715622</td>
+      <td class="address">Желтоксан, 166, кв. 20, домофон: 20к</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">10</td>
+      <td class="client">Юрий 6390</td>
+      <td class="phone">(747) 562-63-90</td>
+      <td class="address">Жамбыла, 116, кв. 78, домофон: 1#78</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">11</td>
+      <td class="client">Рауан 7860</td>
+      <td class="phone">77057077860</td>
+      <td class="address">Радостовца, 323А, кв. 69, домофон: 69</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">12</td>
+      <td class="client">Жанат 8191</td>
+      <td class="phone">77478458191</td>
+      <td class="address">Байтурсынова, 161, кв. 19, домофон: 19</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">13</td>
+      <td class="client">Гульнура 2524</td>
+      <td class="phone">77017292524</td>
+      <td class="address">Казыбек би, 172, кв. 25, домофон: 25;</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">14</td>
+      <td class="client">Аяжан 0718</td>
+      <td class="phone">77472525348</td>
+      <td class="address">Хусаинова 225, 5 подъезд, 4 этаж, квартира 190, домофон 190  (сменили адрес)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">15</td>
+      <td class="client">Ирина 3434</td>
+      <td class="phone">77017113434</td>
+      <td class="address">Айманова, 70, кв. 120, домофон: 120</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr></tbody></table></div>
+  </div><div class="date-section" id="date-07.06.26">
+    <div class="date-header">
+      <span class="date-title">📅 07.06.26</span>
+      <span class="date-count">34 доставок</span>
+    </div>
+    <div class="shift-block">
+    <div class="shift-header утро">🌅 Утро (6:00–9:00) — 12 доставок</div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>ФИО клиента</th>
+          <th>Телефон</th>
+          <th>Адрес</th>
+          <th>Стоимость</th>
+          <th>Оплата клиента</th>
+        </tr>
+      </thead>
+      <tbody><tr>
+      <td class="num">1</td>
+      <td class="client">Айгерим 7748</td>
+      <td class="phone">77059997748</td>
+      <td class="address">Кабанбай батыра 122а, кв 24, 2 подъезд ( 3 дверь), 6 этаж.</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">2</td>
+      <td class="client">Зарема 5454</td>
+      <td class="phone">77012775454</td>
+      <td class="address">Жк Ботанический Сад д.9</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">3</td>
+      <td class="client">Екатерина 2228</td>
+      <td class="phone">77770782228</td>
+      <td class="address">Ул Котельникова 95 , 2 этаж , все здание наше</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">4</td>
+      <td class="client">Дмитрий 2774</td>
+      <td class="phone">77017642774</td>
+      <td class="address">ЖК Бухар Жырау Тауэрс, ул. Бухар Жырау 27/5, 20 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">5</td>
+      <td class="client">Дмитрий 2774</td>
+      <td class="phone">77017642774</td>
+      <td class="address">ЖК Бухар Жырау Тауэрс, ул. Бухар Жырау 27/5, 20 этаж,</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">6</td>
+      <td class="client">Карина</td>
+      <td class="phone">77089661720</td>
+      <td class="address">Жарокова 39, кв 88 5 подьезд, 5 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">7</td>
+      <td class="client">Сванкулова Елена 9929</td>
+      <td class="phone">77053339929</td>
+      <td class="address">Ул. Зеленая, 3а, кв. Баганашыл</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">8</td>
+      <td class="client">Арайлым 7915</td>
+      <td class="phone">7747509-79-15</td>
+      <td class="address">3мкр 63, 3й подъезд, кв 18 домофон не работает, звонить клиенту (сменила адрес)</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">9</td>
+      <td class="client">Амина 4044</td>
+      <td class="phone">77012774044</td>
+      <td class="address">Пр.Достык, 109, кв. 19, домофон: 19</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">10</td>
+      <td class="client">Ольга 9595</td>
+      <td class="phone">77053889595</td>
+      <td class="address">Каирбекова, 37, кв. 8</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">11</td>
+      <td class="client">Нелли- 3808</td>
+      <td class="phone">7 (701) 561-30-08</td>
+      <td class="address">Айтиева, 154/1, кв. 77, домофон: Есть</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">12</td>
+      <td class="client">Алтынай 0714</td>
+      <td class="phone">77022350714</td>
+      <td class="address">Орбита-1, 21, кв. 26, домофон: 26;</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr></tbody></table></div>
+    <div class="shift-block">
+    <div class="shift-header вечер">🌆 Вечер (20:00–22:00) — 22 доставок</div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>ФИО клиента</th>
+          <th>Телефон</th>
+          <th>Адрес</th>
+          <th>Стоимость</th>
+          <th>Оплата клиента</th>
+        </tr>
+      </thead>
+      <tbody><tr>
+      <td class="num">1</td>
+      <td class="client">Анна 6147</td>
+      <td class="phone">7 701 170 6147</td>
+      <td class="address">Айтеке би, 123/1, жк Кайра, 7 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">2</td>
+      <td class="client">Тимур 0787</td>
+      <td class="phone">+77057000787</td>
+      <td class="address">Наурызбай батыра 127, блок 5, кВ 301 (ЖК “Ortau”)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">3</td>
+      <td class="client">Денис 3003</td>
+      <td class="phone">+77777433003</td>
+      <td class="address">Латифа Хамиди, 28а 2 этаж, 4 квартира (чёрная дверь)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">4</td>
+      <td class="client">Анастасия 7676</td>
+      <td class="phone">+77772107676</td>
+      <td class="address">Жилой комплекс Ботанический сад дом 6 квартира 5, Алматы, Казахстан</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">5</td>
+      <td class="client">Вера 2389</td>
+      <td class="phone">+77051962389</td>
+      <td class="address">Коктем 2 дом 16</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">6</td>
+      <td class="client">Наталья 0282</td>
+      <td class="phone">+77017500282</td>
+      <td class="address">Микрорайон 6, д.59, кв.20, 2 подъезд, домофон 20</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">7</td>
+      <td class="client">Маржан-3507</td>
+      <td class="phone">+77017773507</td>
+      <td class="address">Керей-Жанибек хандар 29, кв 18, 3 подъезд (жк кокше)</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">8</td>
+      <td class="client">Гузель 1032</td>
+      <td class="phone">+77012161032</td>
+      <td class="address">Рауана 41</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">9</td>
+      <td class="client">Рената 3765</td>
+      <td class="phone">+77770543765</td>
+      <td class="address">Сатпаева 90/52, 12 этаж, 59 квартира, 1 блок</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">10</td>
+      <td class="client">Светлана 5585</td>
+      <td class="phone">77017575585</td>
+      <td class="address">Ул Луганского 1 кВ 158 5 подъезд , 10 этаж, домофон 158в</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">11</td>
+      <td class="client">Анастасия 5363</td>
+      <td class="phone">+77017605363</td>
+      <td class="address">Микрорайон Таугуль -2, дом 14, кв.32 , 6 этаж, домофон 32</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">12</td>
+      <td class="client">Елена 3418</td>
+      <td class="phone">+77753413418</td>
+      <td class="address">Санаторная 38/28 блок 9 домофон 9 дом 9</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">13</td>
+      <td class="client">Юлия Александрова 0188</td>
+      <td class="phone">+77775150188</td>
+      <td class="address">Ади Шарипова 88, 2 этаж, , Алматы, Казахстан</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">14</td>
+      <td class="client">Искандер 0011</td>
+      <td class="phone">+77005100011</td>
+      <td class="address">ЖК Легенда, Абая 109/8, Корпус 12, Квартира 46, 8 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">15</td>
+      <td class="client">Татьяна 0243</td>
+      <td class="phone">+77077520243</td>
+      <td class="address">Байтурсынова 179/6,кв35. 7 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">16</td>
+      <td class="client">Михаил 5622</td>
+      <td class="phone">+77770715622</td>
+      <td class="address">Желтоксан, 166, кв. 20, домофон: 20к</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">17</td>
+      <td class="client">Юрий 6390</td>
+      <td class="phone">+7 (747) 562-63-90</td>
+      <td class="address">Жамбыла, 116, кв. 78, домофон: 1#78</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">18</td>
+      <td class="client">Рауан 7860</td>
+      <td class="phone">+77057077860</td>
+      <td class="address">Радостовца, 323А, кв. 69, домофон: 69</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">19</td>
+      <td class="client">Ирина  3434</td>
+      <td class="phone">+77017113434</td>
+      <td class="address">Айманова, 70, кв. 120, домофон: 120</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">20</td>
+      <td class="client">Жанат 8191</td>
+      <td class="phone">77478458191</td>
+      <td class="address">Байтурсынова, 161, кв. 19, домофон: 19</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">21</td>
+      <td class="client">Гульнура 2524</td>
+      <td class="phone">+77017292524</td>
+      <td class="address">Казыбек би, 172, кв. 25, домофон: 25</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">22</td>
+      <td class="client">Жамиля 0383</td>
+      <td class="phone">+7 (705) 210-03-83</td>
+      <td class="address">Гагарина, 245, кв. 4 (6 подъезд), домофон: 4</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr></tbody></table></div>
+  </div><div class="date-section" id="date-08.06.26">
+    <div class="date-header">
+      <span class="date-title">📅 08.06.26</span>
+      <span class="date-count">55 доставок</span>
+    </div>
+    <div class="shift-block">
+    <div class="shift-header утро">🌅 Утро (6:00–9:00) — 32 доставок</div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>ФИО клиента</th>
+          <th>Телефон</th>
+          <th>Адрес</th>
+          <th>Стоимость</th>
+          <th>Оплата клиента</th>
+        </tr>
+      </thead>
+      <tbody><tr>
+      <td class="num">1</td>
+      <td class="client">Зарема 5454(Бот. Сад) - 1500ккал Продление</td>
+      <td class="phone">+77012775454</td>
+      <td class="address">Жк Ботанический Сад д.9</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">2</td>
+      <td class="client">Омирзак Анель 2767/ 1500ккал Новый</td>
+      <td class="phone">+77027772767</td>
+      <td class="address">Альфараби 19 корпус 3Б 3 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">3</td>
+      <td class="client">Айгерим 7748 / 1200ккал Проддление</td>
+      <td class="phone">+77059997748</td>
+      <td class="address">Кабанбай батыра 122а, кв 24, 2 подъезд ( 3 дверь), 6 этаж.</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">4</td>
+      <td class="client">Олексий 2242 1800 ккал Новый</td>
+      <td class="phone">+77055982242</td>
+      <td class="address">Коктем 3 д 24, кв 142 (корп В)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">5</td>
+      <td class="client">Ляззат Мусагулова 1200 ккал Продление</td>
+      <td class="phone">+77010810348</td>
+      <td class="address">Коктем1, 15А, офис 608</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">6</td>
+      <td class="client">Екатерина 2228/1500ккал Продление</td>
+      <td class="phone">+77770782228</td>
+      <td class="address">Ул Котельникова 95 , 2 этаж , все здание наше</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">7</td>
+      <td class="client">Айнур Каримжанова 1800ккал Продление</td>
+      <td class="phone">+77756366888</td>
+      <td class="address">Шевченко 149, подъезд около Озон</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">8</td>
+      <td class="client">Аяжан 0718 1200 ккал Продление</td>
+      <td class="phone">+77473490718</td>
+      <td class="address">Клочкова 170, кв 36</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">9</td>
+      <td class="client">Катерина 2242 1200 ккал Новый</td>
+      <td class="phone">+77055982242</td>
+      <td class="address">Коктем 3 д 24, кв 142 (корп В)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">10</td>
+      <td class="client">Алия 9081/1500ккал Продление</td>
+      <td class="phone">+77773709081</td>
+      <td class="address">Наурызбай батыра 17 б, можно оставить на ресепшене</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">11</td>
+      <td class="client">Торегельды 1717/1800 Продление</td>
+      <td class="phone">+77019511717</td>
+      <td class="address">Серкебаева 101, Жк Seven Hills, 7 подъезд 7 этаж, Квартира 360, Домофон 7#360;</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">12</td>
+      <td class="client">Дмитрий 2774/ 2500ккал Новый(1 рацион)</td>
+      <td class="phone">+77017642774</td>
+      <td class="address">ЖК Бухар Жырау Тауэрс, ул. Бухар Жырау 27/5, 20 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">13</td>
+      <td class="client">Дмитрий 2774/ 2500ккал Новый(2 рацион)</td>
+      <td class="phone">+77017642774</td>
+      <td class="address">ЖК Бухар Жырау Тауэрс, ул. Бухар Жырау 27/5, 20 этаж, Алматы, Казахстан</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">14</td>
+      <td class="client">Ботагоз 7788 - 1800 ккал  Новый Студия YA</td>
+      <td class="phone">+77778557788</td>
+      <td class="address">Жамбыла 190</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">15</td>
+      <td class="client">Олеся 9458 1200 Ккал Продление</td>
+      <td class="phone">+77765469458</td>
+      <td class="address">Жансугурова, 176а/2, кв. -, домофон: -</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">16</td>
+      <td class="client">Аяжан 8382 1200 ккал Продление</td>
+      <td class="phone">+77479568382</td>
+      <td class="address">Сейфуллина, 502</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">17</td>
+      <td class="client">Лаура 8385/1200ккал Новый</td>
+      <td class="phone">+77753838385</td>
+      <td class="address">Бегалина, 11</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">18</td>
+      <td class="client">Оксана 3986/1500ккал Новый</td>
+      <td class="phone">+77773633986</td>
+      <td class="address">Аль-Фараби, 34, кв. Это офис</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">19</td>
+      <td class="client">Айша 7573 - 1500 Ккал Новый</td>
+      <td class="phone">+77770387573</td>
+      <td class="address">Наурызбай Батыра, 50, кв. 380, домофон: 380</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">20</td>
+      <td class="client">Айша 7573 - 1 800 Ккал Новый</td>
+      <td class="phone">+77770387573</td>
+      <td class="address">Наурызбай Батыра, 50, кв. 380, домофон: 380</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">21</td>
+      <td class="client">Дана 0997 Продление 1 200 Ккал</td>
+      <td class="phone">+77025000997</td>
+      <td class="address">Наурызбай батыра, 154а, кв. Ойис каспи</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">22</td>
+      <td class="client">Сванкулова Елена 9929 1200 ккал Новый</td>
+      <td class="phone">+7 (705) 333-99-29</td>
+      <td class="address">Ул. Зеленая, 3а, кв. Баганашыл</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">23</td>
+      <td class="client">Арайлым 7915 1200 ккал Новый</td>
+      <td class="phone">+7 (747) 509-79-15</td>
+      <td class="address">Сарыарка, 4, кв. 4, домофон: 2</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">24</td>
+      <td class="client">Елена 3722 1200 ккал Продление блюда</td>
+      <td class="phone">+77017333722</td>
+      <td class="address">Самал-3, 15к1, кв. 118</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">25</td>
+      <td class="client">Жанна 5976  1800 Ккал Продление2</td>
+      <td class="phone">+77017355976</td>
+      <td class="address">Нурмакова, 2, кв. нет</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">26</td>
+      <td class="client">Жанна 5976 1800 Ккал Продление</td>
+      <td class="phone">+77017355976</td>
+      <td class="address">Нурмакова, 2, кв. нет</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">27</td>
+      <td class="client">Амина 4044 - 1500ккал Продление</td>
+      <td class="phone">+77012774044</td>
+      <td class="address">Пр.Достык, 109, кв. 19, домофон: 19</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">28</td>
+      <td class="client">Ольга  9595 - 1 500 Ккал</td>
+      <td class="phone">+77053889595</td>
+      <td class="address">Каирбекова, 37, кв. 8</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">29</td>
+      <td class="client">Нелли- 3808 1 200 Ккал</td>
+      <td class="phone">+7 (701) 561-30-08</td>
+      <td class="address">Айтиева, 154/1, кв. 77, домофон: Есть 3 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">30</td>
+      <td class="client">Асель 9444 1200 Ккал Новый</td>
+      <td class="phone">+77024899444</td>
+      <td class="address">Байсеитовой, 40/1, кв. M&amp;K офис, домофон: нет</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">31</td>
+      <td class="client">Алтынай 0714 1200 ккал Продление</td>
+      <td class="phone">+77022350714</td>
+      <td class="address">Аль-Фараби, 34</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">32</td>
+      <td class="client">Жулдызай 59-71 - 1 200 Ккал</td>
+      <td class="phone">77786765971</td>
+      <td class="address">Самал-2, 49, кв. 30, домофон: 30в</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr></tbody></table></div>
+    <div class="shift-block">
+    <div class="shift-header вечер">🌆 Вечер (20:00–22:00) — 23 доставок</div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>ФИО клиента</th>
+          <th>Телефон</th>
+          <th>Адрес</th>
+          <th>Стоимость</th>
+          <th>Оплата клиента</th>
+        </tr>
+      </thead>
+      <tbody><tr>
+      <td class="num">1</td>
+      <td class="client">Анна 6147</td>
+      <td class="phone">77011706147</td>
+      <td class="address">Айтеке би, 123/1, жк Кайра, 7 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">2</td>
+      <td class="client">Тимур 0787</td>
+      <td class="phone">77057000787</td>
+      <td class="address">Наурызбай батыра 127, блок 5, кВ 301 (ЖК “Ortau”)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">3</td>
+      <td class="client">Анастасия 7676</td>
+      <td class="phone">77772107676</td>
+      <td class="address">Жилой комплекс Ботанический сад дом 6 квартира 5,</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">4</td>
+      <td class="client">Вера 2389</td>
+      <td class="phone">77051962389</td>
+      <td class="address">Коктем 2 дом 16</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">5</td>
+      <td class="client">Наталья 0282</td>
+      <td class="phone">77017500282</td>
+      <td class="address">Микрорайон 6, д.59, кв.20, 2 подъезд, домофон 20</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">6</td>
+      <td class="client">Маржан-3507</td>
+      <td class="phone">77017773507</td>
+      <td class="address">Керей-Жанибек хандар 29, кв 18, 3 подъезд (жк кокше)</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">7</td>
+      <td class="client">Гузель 1032</td>
+      <td class="phone">77012161032</td>
+      <td class="address">Рауана 41</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">8</td>
+      <td class="client">Светлана 5585</td>
+      <td class="phone">77017575585</td>
+      <td class="address">Ул Луганского 1 кВ 158 5 подъезд , 10 этаж, домофон 158в</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">9</td>
+      <td class="client">Анастасия 5363</td>
+      <td class="phone">77017605363</td>
+      <td class="address">Микрорайон Таугуль -2, дом 14, кв.32 , 6 этаж, домофон 32</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">10</td>
+      <td class="client">Искандер 0011</td>
+      <td class="phone">77005100011</td>
+      <td class="address">ЖК Легенда, Абая 109/8, Корпус 12, Квартира 46, 8 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">11</td>
+      <td class="client">Денис 3003</td>
+      <td class="phone">77777433003</td>
+      <td class="address">Латифа Хамиди, 28а 2 этаж, 4 квартира (чёрная дверь)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">12</td>
+      <td class="client">Елена 3418</td>
+      <td class="phone">77753413418</td>
+      <td class="address">Санаторная 38/28 блок 9 домофон 9 дом 9</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">13</td>
+      <td class="client">Алимова Сауле 3031</td>
+      <td class="phone">77057773031</td>
+      <td class="address">микрорайон Атамекен, дом 35 (частный сектор),</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">14</td>
+      <td class="client">Диана 6776</td>
+      <td class="phone">77017707667</td>
+      <td class="address">ул Розы Баглановой дом 94/1,</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">15</td>
+      <td class="client">Олексий 2242</td>
+      <td class="phone">+77055982242</td>
+      <td class="address">Коктем 3 д 24, кв 142 (корп В)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">16</td>
+      <td class="client">Катерина 2242</td>
+      <td class="phone">+77055982242</td>
+      <td class="address">Коктем 3 д 24, кв 142 (корп В)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">17</td>
+      <td class="client">Юрий 6390</td>
+      <td class="phone">+7 (747) 562-63-90</td>
+      <td class="address">Жамбыла, 116, кв. 78, домофон: 1#78</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">18</td>
+      <td class="client">Рауан 7860</td>
+      <td class="phone">+77057077860</td>
+      <td class="address">Радостовца, 323А, кв. 69, домофон: 69</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">19</td>
+      <td class="client">Ирина  3434</td>
+      <td class="phone">+77017113434</td>
+      <td class="address">Айманова, 70, кв. 120, домофон: 120</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">20</td>
+      <td class="client">Жанат 8191</td>
+      <td class="phone">77478458191</td>
+      <td class="address">Байтурсынова, 161, кв. 19, домофон: 19</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">21</td>
+      <td class="client">Гульнура 2524</td>
+      <td class="phone">+77017292524</td>
+      <td class="address">Казыбек би, 172, кв. 25, домофон: 25</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">22</td>
+      <td class="client">Жамиля 0383</td>
+      <td class="phone">+7 (705) 210-03-83</td>
+      <td class="address">Гагарина, 245, кв. 4 (6 подъезд), домофон: 4</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">23</td>
+      <td class="client">Михаил 5622</td>
+      <td class="phone">77770715622</td>
+      <td class="address">Желтоксан, 166, кв. 20, домофон: 20к</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr></tbody></table></div>
+  </div><div class="date-section" id="date-09.06.26">
+    <div class="date-header">
+      <span class="date-title">📅 09.06.26</span>
+      <span class="date-count">55 доставок</span>
+    </div>
+    <div class="shift-block">
+    <div class="shift-header утро">🌅 Утро (6:00–9:00) — 31 доставок</div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>ФИО клиента</th>
+          <th>Телефон</th>
+          <th>Адрес</th>
+          <th>Стоимость</th>
+          <th>Оплата клиента</th>
+        </tr>
+      </thead>
+      <tbody><tr>
+      <td class="num">1</td>
+      <td class="client">Рената 3765</td>
+      <td class="phone">+77770543765</td>
+      <td class="address">Сатпаева 90/52, 12 этаж, 59 квартира, 1 блок</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">2</td>
+      <td class="client">Айнур Каримжанова</td>
+      <td class="phone">77756366888</td>
+      <td class="address">Шевченко 149, подъезд около Озон</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">3</td>
+      <td class="client">Айгерим 7748</td>
+      <td class="phone">77059997748</td>
+      <td class="address">Кабанбай батыра 122а, кв 24, 2 подъезд ( 3 дверь), 6 этаж.</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">4</td>
+      <td class="client">Зарема 5454(Бот. Сад)</td>
+      <td class="phone">77012775454</td>
+      <td class="address">Жк Ботанический Сад д.9</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">5</td>
+      <td class="client">Омирзак Анель 2767</td>
+      <td class="phone">77027772767</td>
+      <td class="address">Альфараби 19 корпус 3Б 3 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">6</td>
+      <td class="client">Ляззат Мусагулова</td>
+      <td class="phone">77010810348</td>
+      <td class="address">Коктем1, 15А, офис 608</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">7</td>
+      <td class="client">Екатерина 2228</td>
+      <td class="phone">77770782228</td>
+      <td class="address">Ул Котельникова 95 , 2 этаж , все здание наше</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">8</td>
+      <td class="client">Аяжан 0718</td>
+      <td class="phone">77473490718</td>
+      <td class="address">Клочкова 170, кв 36</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">9</td>
+      <td class="client">Торегельды 1717</td>
+      <td class="phone">77019511717</td>
+      <td class="address">Серкебаева 101, Жк Seven Hills, 7 подъезд 7 этаж, Квартира 360, Домофон 7#360;</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">10</td>
+      <td class="client">Дмитрий 2774</td>
+      <td class="phone">77017642774</td>
+      <td class="address">ЖК Бухар Жырау Тауэрс, ул. Бухар Жырау 27/5, 20 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">11</td>
+      <td class="client">Дмитрий 2774</td>
+      <td class="phone">77017642774</td>
+      <td class="address">ЖК Бухар Жырау Тауэрс, ул. Бухар Жырау 27/5, 20 этаж,</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">12</td>
+      <td class="client">Айдана 8873</td>
+      <td class="phone">77789008873</td>
+      <td class="address">ЖК Мирас Парк, блок 6, подъезд 1, кв 258, этаж 3</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">13</td>
+      <td class="client">Олеся 9458</td>
+      <td class="phone">+77765469458</td>
+      <td class="address">Жансугурова, 176а/2, кв.САМОВЫВОЗ</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">14</td>
+      <td class="client">Оксана 3986/</td>
+      <td class="phone">+77773633986</td>
+      <td class="address">Аль-Фараби, 34, кв. Это офис</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">15</td>
+      <td class="client">Айша 7573</td>
+      <td class="phone">+77770387573</td>
+      <td class="address">Наурызбай Батыра, 50, кв. 380, домофон: 380</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">16</td>
+      <td class="client">Айша 7573</td>
+      <td class="phone">+77770387573</td>
+      <td class="address">Наурызбай Батыра, 50, кв. 380, домофон: 380</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">17</td>
+      <td class="client">Дана 0997</td>
+      <td class="phone">+77025000997</td>
+      <td class="address">Наурызбай батыра, 154а, кв. Ойис каспи</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">18</td>
+      <td class="client">Аяжан 8382</td>
+      <td class="phone">+77479568382</td>
+      <td class="address">Сейфуллина, 502</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">19</td>
+      <td class="client">Сванкулова Елена</td>
+      <td class="phone">+7 (705) 333-99-29</td>
+      <td class="address">Пр. Аль-фараби, 40 (халык банк) со стороны аль-фараби вход, можно оставлять на столике при входе)</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">20</td>
+      <td class="client">Арайлым 7915</td>
+      <td class="phone">+7 (747) 509-79-15</td>
+      <td class="address">Сарыарка, 4, кв. 4, домофон: 2</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">21</td>
+      <td class="client">Елена 3722</td>
+      <td class="phone">+77017333722</td>
+      <td class="address">Самал-3, 15к1, кв. 118, ОСТАВИТЬ У КОНСЬЕРЖ</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">22</td>
+      <td class="client">Айслу 6887</td>
+      <td class="phone">77759646887</td>
+      <td class="address">Улица Роза Жаманова, 150</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone2000">2 000 тг</span></td>
+      </tr><tr>
+      <td class="num">23</td>
+      <td class="client">Жанна 5976</td>
+      <td class="phone">+77017355976</td>
+      <td class="address">Нурмакова, 2, кв. нет</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">24</td>
+      <td class="client">Жанна 5976</td>
+      <td class="phone">+77017355976</td>
+      <td class="address">Нурмакова, 2, кв. нет</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">25</td>
+      <td class="client">Амина 4044</td>
+      <td class="phone">+77012774044</td>
+      <td class="address">Пр.Достык, 109, кв. 19, домофон: 19</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">26</td>
+      <td class="client">Ольга  9595</td>
+      <td class="phone">+77053889595</td>
+      <td class="address">Каирбекова, 37, кв. 8</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">27</td>
+      <td class="client">Нелли- 3008</td>
+      <td class="phone">+7 (701) 561-30-08</td>
+      <td class="address">Айтиева, 154/1, кв. 77, домофон: Есть</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">28</td>
+      <td class="client">Асель 9444</td>
+      <td class="phone">+77024899444</td>
+      <td class="address">Байсеитовой, 40/1, кв. M&amp;K офис, домофон: нет</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">29</td>
+      <td class="client">Алтынай 0714</td>
+      <td class="phone">+77022350714</td>
+      <td class="address">Аль-Фараби, 34</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">30</td>
+      <td class="client">Жулдызай 59-71</td>
+      <td class="phone">77786765971</td>
+      <td class="address">ЖК Арман сити
+Халиуллина 140/10, корп4, кв 30, этаж 4
+Оранжевые дома
+Подъезд код #123456#</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">31</td>
+      <td class="client">Лаура 8385</td>
+      <td class="phone">+77753838385</td>
+      <td class="address">Бегалина, 11</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr></tbody></table></div>
+    <div class="shift-block">
+    <div class="shift-header вечер">🌆 Вечер (20:00–22:00) — 24 доставок</div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>ФИО клиента</th>
+          <th>Телефон</th>
+          <th>Адрес</th>
+          <th>Стоимость</th>
+          <th>Оплата клиента</th>
+        </tr>
+      </thead>
+      <tbody><tr>
+      <td class="num">1</td>
+      <td class="client">Анна 6147</td>
+      <td class="phone">+77011706147</td>
+      <td class="address">Айтеке би, 123/1, жк Кайра, 7 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">2</td>
+      <td class="client">Олексий 2242</td>
+      <td class="phone">+77055982242</td>
+      <td class="address">Коктем 3 д 24, кв 142 (корп В)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">3</td>
+      <td class="client">Катерина 2242</td>
+      <td class="phone">+77055982242</td>
+      <td class="address">Коктем 3 д 24, кв 142 (корп В)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">4</td>
+      <td class="client">Айжан 9959</td>
+      <td class="phone">+77021699959</td>
+      <td class="address">Ушкемпирова,44 блок 7 кв 33</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">5</td>
+      <td class="client">Анастасия 7676</td>
+      <td class="phone">+77772107676</td>
+      <td class="address">Жилой комплекс Ботанический сад дом 6 квартира 5</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">6</td>
+      <td class="client">Вера 2389</td>
+      <td class="phone">+77051962389</td>
+      <td class="address">Коктем 2 дом 16</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">7</td>
+      <td class="client">Наталья 0282</td>
+      <td class="phone">+77017500282</td>
+      <td class="address">Микрорайон 6, д.59, кв.20, 2 подъезд, домофон 20</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">8</td>
+      <td class="client">Маржан-3507</td>
+      <td class="phone">+77017773507</td>
+      <td class="address">Керей-Жанибек хандар 29, кв 18, 3 подъезд (жк кокше)</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">9</td>
+      <td class="client">Гузель 1032</td>
+      <td class="phone">+77012161032</td>
+      <td class="address">Рауана 41</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">10</td>
+      <td class="client">Тимур 0787</td>
+      <td class="phone">+77057000787</td>
+      <td class="address">Наурызбай батыра 127, блок 5, кВ 301 (ЖК “Ortau”)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">11</td>
+      <td class="client">Светлана 5585</td>
+      <td class="phone">77017575585</td>
+      <td class="address">Ул Луганского 1 кВ 158 5 подъезд , 10 этаж, домофон 158в</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">12</td>
+      <td class="client">Анастасия 5363</td>
+      <td class="phone">+77017605363</td>
+      <td class="address">Микрорайон Таугуль -2, дом 14, кв.32 , 6 этаж, домофон 32</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">13</td>
+      <td class="client">Денис 3003</td>
+      <td class="phone">+77777433003</td>
+      <td class="address">Латифа Хамиди, 28а 2 этаж, 4 квартира (чёрная дверь)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">14</td>
+      <td class="client">Елена 3418</td>
+      <td class="phone">+77753413418</td>
+      <td class="address">Санаторная 38/28 блок 9 домофон 9 дом 9</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">15</td>
+      <td class="client">Кунаева Дина 4111</td>
+      <td class="phone">+77072834111</td>
+      <td class="address">Ул Тажибаевой 157/3, кв 75, вход во двор с ул Тажибаевой и Ескараева, код калитки 3075, код в подьезд 75</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">16</td>
+      <td class="client">Аделина 7473(Аязби)</td>
+      <td class="phone">+77753197473</td>
+      <td class="address">Аяз би 35</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">17</td>
+      <td class="client">Ернар 1008</td>
+      <td class="phone">+77017621008</td>
+      <td class="address">Наурызбай батыра 152 А, вход со двора, башня ближе к Абая, 13 этаж, кв 43</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">18</td>
+      <td class="client">Юрий 6390</td>
+      <td class="phone">+7 (747) 562-63-90</td>
+      <td class="address">Жамбыла, 116, кв. 78, домофон: 1#78</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">19</td>
+      <td class="client">Рауан 7860</td>
+      <td class="phone">+77057077860</td>
+      <td class="address">Радостовца, 323А, кв. 69, домофон: 69</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">20</td>
+      <td class="client">Ирина  3434</td>
+      <td class="phone">+77017113434</td>
+      <td class="address">Айманова, 70, кв. 120, домофон: 120</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">21</td>
+      <td class="client">Жанат 8191</td>
+      <td class="phone">77478458191</td>
+      <td class="address">Байтурсынова, 161, кв. 19, домофон: 19</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">22</td>
+      <td class="client">Гульнура 2524</td>
+      <td class="phone">+77017292524</td>
+      <td class="address">Казыбек би, 172, кв. 25, домофон: 25</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">23</td>
+      <td class="client">Жамиля 0383</td>
+      <td class="phone">+7 (705) 210-03-83</td>
+      <td class="address">Гагарина, 245, кв. 4 (6 подъезд), домофон: 4</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">24</td>
+      <td class="client">Михаил 5622</td>
+      <td class="phone">77770715622</td>
+      <td class="address">Желтоксан, 166, кв. 20, домофон: 20к</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr></tbody></table></div>
+  </div><div class="date-section" id="date-10.06.26">
+    <div class="date-header">
+      <span class="date-title">📅 10.06.26</span>
+      <span class="date-count">63 доставок</span>
+    </div>
+    <div class="shift-block">
+    <div class="shift-header утро">🌅 Утро (6:00–9:00) — 38 доставок</div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>ФИО клиента</th>
+          <th>Телефон</th>
+          <th>Адрес</th>
+          <th>Стоимость</th>
+          <th>Оплата клиента</th>
+        </tr>
+      </thead>
+      <tbody><tr>
+      <td class="num">1</td>
+      <td class="client">Зарема 5454(Бот. Сад) - 1500ккал Продление</td>
+      <td class="phone">+77012775454</td>
+      <td class="address">Жк Ботанический Сад д.9</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">2</td>
+      <td class="client">Омирзак Анель 2767/ 1500ккал Новый</td>
+      <td class="phone">+77027772767</td>
+      <td class="address">Альфараби 19 корпус 3Б 3 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">3</td>
+      <td class="client">Ляззат Мусагулова 1200 ккал Продление</td>
+      <td class="phone">+77010810348</td>
+      <td class="address">Коктем1, 15А, офис 608</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">4</td>
+      <td class="client">Екатерина 2228/1500ккал Продление</td>
+      <td class="phone">+77770782228</td>
+      <td class="address">Ул Котельникова 95 , 2 этаж , все здание наше</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">5</td>
+      <td class="client">Айнур Каримжанова 1800ккал Продление</td>
+      <td class="phone">+77756366888</td>
+      <td class="address">Шевченко 149, подъезд около Озон</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">6</td>
+      <td class="client">Аяжан 0718 1200 ккал Продление</td>
+      <td class="phone">+77473490718</td>
+      <td class="address">Клочкова 170, кв 36</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">7</td>
+      <td class="client">Рената 3765 1500 ккал Продление</td>
+      <td class="phone">+77770543765</td>
+      <td class="address">Сатпаева 90/52, 12 этаж, 59 квартира, 1 блок</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">8</td>
+      <td class="client">нурия т 9142/1200 ккал Продление(1)</td>
+      <td class="phone">+77017149142</td>
+      <td class="address">Мауленова д 124 кв 45 подъезд 3 этаж 4, Алматы</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">9</td>
+      <td class="client">нурия т 9142/1200 ккал Продление(2)</td>
+      <td class="phone">+77017149142</td>
+      <td class="address">Мауленова д 124 кв 45 подъезд 3 этаж 4, Алматы, Казахстан</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">10</td>
+      <td class="client">Айгерим 7748 / 1200ккал Проддление</td>
+      <td class="phone">+77059997748</td>
+      <td class="address">Кабанбай батыра 122а, кв 24, 2 подъезд ( 3 дверь), 6 этаж.</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">11</td>
+      <td class="client">Торегельды 1717/1800 Продление</td>
+      <td class="phone">+77019511717</td>
+      <td class="address">Серкебаева 101, Жк Seven Hills, 7 подъезд 7 этаж, Квартира 360, Домофон 7#360;</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">12</td>
+      <td class="client">Дмитрий 2774/ 2500ккал Новый(1 рацион)</td>
+      <td class="phone">+77017642774</td>
+      <td class="address">ЖК Бухар Жырау Тауэрс, ул. Бухар Жырау 27/5, 20 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">13</td>
+      <td class="client">Дмитрий 2774/ 2500ккал Новый(2 рацион)</td>
+      <td class="phone">+77017642774</td>
+      <td class="address">ЖК Бухар Жырау Тауэрс, ул. Бухар Жырау 27/5, 20 этаж, Алматы, Казахстан</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">14</td>
+      <td class="client">Олеся 9458 1200 Ккал Продление</td>
+      <td class="phone">+77765469458</td>
+      <td class="address">Жансугурова, 176а/2, кв. -, домофон: -</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">15</td>
+      <td class="client">Оксана 3986/1500ккал Новый</td>
+      <td class="phone">+77773633986</td>
+      <td class="address">Аль-Фараби, 34, кв. Это офис</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">16</td>
+      <td class="client">Айша 7573 - 1500 Ккал Новый</td>
+      <td class="phone">+77770387573</td>
+      <td class="address">Наурызбай Батыра, 50, кв. 380, домофон: 380</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">17</td>
+      <td class="client">Айша 7573 - 1 800 Ккал Новый</td>
+      <td class="phone">+77770387573</td>
+      <td class="address">Наурызбай Батыра, 50, кв. 380, домофон: 380</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">18</td>
+      <td class="client">Дана 0997 Продление 1 200 Ккал</td>
+      <td class="phone">+77025000997</td>
+      <td class="address">Наурызбай батыра, 154а, кв. офис каспи</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">19</td>
+      <td class="client">Аяжан 8382 1200 ккал Продление</td>
+      <td class="phone">+77479568382</td>
+      <td class="address">Сейфуллина, 502</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">20</td>
+      <td class="client">Сванкулова Елена 9929 1200 ккал Новый</td>
+      <td class="phone">+7 (705) 333-99-29</td>
+      <td class="address">Пр. Аль-фараби, 40 (халык банк) со стороны аль-фараби вход, можно оставлять на столике при входе))</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">21</td>
+      <td class="client">Арайлым 7915 1200 ккал Новый</td>
+      <td class="phone">+7 (747) 509-79-15</td>
+      <td class="address">Сарыарка, 4, кв. 4, домофон: 2</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">22</td>
+      <td class="client">Елена 3722 1200 ккал Продление блюда</td>
+      <td class="phone">+77017333722</td>
+      <td class="address">Самал-3, 15к1, кв. 118, ОСТАВИТЬ У КОНСЬЕРЖ</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">23</td>
+      <td class="client">Айслу 6887/1800 ккал Продление</td>
+      <td class="phone">77759646887</td>
+      <td class="address">Улица Роза Жаманова, 150</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone2000">2 000 тг</span></td>
+      </tr><tr>
+      <td class="num">24</td>
+      <td class="client">Тогжан 5583/1500ккал Новый</td>
+      <td class="phone">+7 (777) 825-55-83</td>
+      <td class="address">Пушкина, 26, кв. 70, домофон: 70</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">25</td>
+      <td class="client">Богиня 8888/1200ккал Новый</td>
+      <td class="phone">+7 (707) 001-88-88</td>
+      <td class="address">Абая, 91, кв. 4</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">26</td>
+      <td class="client">Света 5991/1500ккал Новый</td>
+      <td class="phone">+7 (708) 833-59-91</td>
+      <td class="address">Варламова 27 в, Блок 6, кв. 228, домофон: 228</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">27</td>
+      <td class="client">Константин 6752/ 1800ккал Новый</td>
+      <td class="phone">+7 (747) 955-67-52</td>
+      <td class="address">Варламова, 27в, 6 блок, кв. 228, домофон: 228</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">28</td>
+      <td class="client">Жанна 5976  1800 Ккал Продление2</td>
+      <td class="phone">+77017355976</td>
+      <td class="address">Нурмакова, 2, кв. нет</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">29</td>
+      <td class="client">Жанна 5976 1800 Ккал Продление</td>
+      <td class="phone">+77017355976</td>
+      <td class="address">Нурмакова, 2, кв. нет</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">30</td>
+      <td class="client">Амина 4044 - 1500ккал Продление</td>
+      <td class="phone">+77012774044</td>
+      <td class="address">Пр.Достык, 109, кв. 19, домофон: 19</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">31</td>
+      <td class="client">Ольга  9595 - 1 500 Ккал</td>
+      <td class="phone">+77053889595</td>
+      <td class="address">Каирбекова, 37, кв. 8</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">32</td>
+      <td class="client">Нелли- 3008 1 200 Ккал</td>
+      <td class="phone">+7 (701) 561-30-08</td>
+      <td class="address">Айтиева, 154/1, кв. 77, домофон: Есть</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">33</td>
+      <td class="client">Асель 9444 1200 Ккал Новый</td>
+      <td class="phone">+77024899444</td>
+      <td class="address">Байсеитовой, 40/1, кв. M&amp;K офис, домофон: нет</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">34</td>
+      <td class="client">Алтынай 0714 1200 ккал Продление</td>
+      <td class="phone">+77022350714</td>
+      <td class="address">Аль-Фараби, 34</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">35</td>
+      <td class="client">Жулдызай 59-71 - 1 200 Ккал</td>
+      <td class="phone"></td>
+      <td class="address">ЖК Арман сити
+Халиуллина 140/10, корп4, кв 30, этаж 4
+Оранжевые дома
+Подъезд код #123456#</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">36</td>
+      <td class="client">Лаура 8385/1200ккал Новый</td>
+      <td class="phone">+77753838385</td>
+      <td class="address">Бегалина, 11</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">37</td>
+      <td class="client">5555/ 1500ккал Новый</td>
+      <td class="phone">+7 (708) 705-55-55</td>
+      <td class="address">Курамыс 78, 9, кв. 4, домофон: 4</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">38</td>
+      <td class="client">Виктория 7175/1800ккал Новый</td>
+      <td class="phone">+7 (708) 835-71-75</td>
+      <td class="address">мкр. Жетысу 1, 37, кв. 65</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr></tbody></table></div>
+    <div class="shift-block">
+    <div class="shift-header вечер">🌆 Вечер (20:00–22:00) — 25 доставок</div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>ФИО клиента</th>
+          <th>Телефон</th>
+          <th>Адрес</th>
+          <th>Стоимость</th>
+          <th>Оплата клиента</th>
+        </tr>
+      </thead>
+      <tbody><tr>
+      <td class="num">1</td>
+      <td class="client">Анна 6147 1200ккал Продление</td>
+      <td class="phone">+77011706147</td>
+      <td class="address">Айтеке би, 123/1, жк Кайра, 7 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">2</td>
+      <td class="client">Олексий 2242 1800 ккал Новый</td>
+      <td class="phone">+77055982242</td>
+      <td class="address">Коктем 3 д 24, кв 142 (корп В)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">3</td>
+      <td class="client">Тимур 0787 1800 ккал продление</td>
+      <td class="phone">+77057000787</td>
+      <td class="address">Наурызбай батыра 127, блок 5, кВ 301 (ЖК “Ortau”)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">4</td>
+      <td class="client">Айжан 9959 1800 ккал Продление</td>
+      <td class="phone">+77021699959</td>
+      <td class="address">Ушкемпирова,44 блок 7 кв 33</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">5</td>
+      <td class="client">Анастасия 7676  1800ккал Продление</td>
+      <td class="phone">+77772107676</td>
+      <td class="address">Жилой комплекс Ботанический сад дом 6 квартира 5, Алматы, Казахстан</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">6</td>
+      <td class="client">Вера 2389 1200ккал Продление</td>
+      <td class="phone">+77051962389</td>
+      <td class="address">Коктем 2 дом 16</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">7</td>
+      <td class="client">Наталья 0282 1500 ккал Новый</td>
+      <td class="phone">+77017500282</td>
+      <td class="address">Микрорайон 6, д.59, кв.20, 2 подъезд, домофон 20</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">8</td>
+      <td class="client">Катерина 2242 1200 ккал Новый</td>
+      <td class="phone">+77055982242</td>
+      <td class="address">Коктем 3 д 24, кв 142 (корп В)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">9</td>
+      <td class="client">Анастасия 5363/1500ккал Новый</td>
+      <td class="phone">+77017605363</td>
+      <td class="address">Микрорайон Таугуль -2, дом 14, кв.32 , 6 этаж, домофон 32</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">10</td>
+      <td class="client">Денис 3003 1500 ккал Новый</td>
+      <td class="phone">+77777433003</td>
+      <td class="address">Латифа Хамиди, 28а 2 этаж, 4 квартира (чёрная дверь)</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">11</td>
+      <td class="client">Маржан-3507 1200ккал</td>
+      <td class="phone">+77017773507</td>
+      <td class="address">Керей-Жанибек хандар 29, кв 18, 3 подъезд (жк кокше)</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">12</td>
+      <td class="client">Гузель 1032 1200 ккал Продление</td>
+      <td class="phone">+77012161032</td>
+      <td class="address">Рауана 41</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">13</td>
+      <td class="client">Светлана 5585/1200ккал Продление</td>
+      <td class="phone">77017575585</td>
+      <td class="address">Ул Луганского 1 кВ 158 5 подъезд , 10 этаж, домофон 158в</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">14</td>
+      <td class="client">Елена 3418- 1500ккал</td>
+      <td class="phone">+77753413418</td>
+      <td class="address">Санаторная 38/28 блок 9 домофон 9 дом 9</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">15</td>
+      <td class="client">Кунаева Дина 4111/1500ккал Новый</td>
+      <td class="phone">+77072834111</td>
+      <td class="address">Ул Тажибаевой 157/3, кв 75, вход во двор с ул Тажибаевой и Ескараева, код калитки 3075, код в подьезд 75, Алматы, Казахстан</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">16</td>
+      <td class="client">Зайтуна 1515 1500 ккал Новый</td>
+      <td class="phone">+77770241515</td>
+      <td class="address">Проспект Достык 97б, ЖК «Самал Делюкс» Блок «в», 13 этаж, Кв.236</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">17</td>
+      <td class="client">Зауре 9675/1200ккал Новый</td>
+      <td class="phone">+77087179675</td>
+      <td class="address">Жетысу 2, дом 11/1, кв 23</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">1</td>
+      <td class="client">Михаил 5622/1800ккал Новый</td>
+      <td class="phone">+77770715622</td>
+      <td class="address">Желтоксан, 166, кв. 20, домофон: 20к</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">2</td>
+      <td class="client">Рауан 7860 - 1800 Ккал Новый</td>
+      <td class="phone">+77057077860</td>
+      <td class="address">Радостовца, 323А, кв. 69, домофон: 69</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">3</td>
+      <td class="client">⁠Шайкимов Диас 2500ккал Новый</td>
+      <td class="phone">+7 (708) 111-28-95</td>
+      <td class="address"></td>
+      <td class="cost"><button class="cost-btn" style="background:#fee;color:#c00;font-size:11px" onclick="toggleCost(this)">Нет адреса</button></td>
+      <td class="client-cost"><span class="cc-noaddr">Нет адреса</span></td>
+      </tr><tr>
+      <td class="num">4</td>
+      <td class="client">Ирина  3434   1 200 Ккал</td>
+      <td class="phone">+77017113434</td>
+      <td class="address">Айманова, 70, кв. 120, домофон: 120</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">5</td>
+      <td class="client">Жанат 8191 - 1 200 Ккал</td>
+      <td class="phone">77478458191</td>
+      <td class="address">Байтурсынова, 161, кв. 19, домофон: 19</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">6</td>
+      <td class="client">Юрий 6390/1800ккал Новый</td>
+      <td class="phone">+7 (747) 562-63-90</td>
+      <td class="address">Жамбыла, 116, кв. 78, домофон: 1#78</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">7</td>
+      <td class="client">Гульнура 2524 1200 ккал Новый</td>
+      <td class="phone">+77017292524</td>
+      <td class="address"></td>
+      <td class="cost"><button class="cost-btn" style="background:#fee;color:#c00;font-size:11px" onclick="toggleCost(this)">Нет адреса</button></td>
+      <td class="client-cost"><span class="cc-noaddr">Нет адреса</span></td>
+      </tr><tr>
+      <td class="num">8</td>
+      <td class="client">Жамиля 0383/1500ккал Продление</td>
+      <td class="phone">+7 (705) 210-03-83</td>
+      <td class="address"></td>
+      <td class="cost"><button class="cost-btn" style="background:#fee;color:#c00;font-size:11px" onclick="toggleCost(this)">Нет адреса</button></td>
+      <td class="client-cost"><span class="cc-noaddr">Нет адреса</span></td>
+      </tr></tbody></table></div>
+  </div><div class="date-section" id="date-11.06.26">
+    <div class="date-header">
+      <span class="date-title">📅 11.06.26</span>
+      <span class="date-count">39 доставок</span>
+    </div>
+    <div class="shift-block">
+    <div class="shift-header утро">🌅 Утро (6:00–9:00) — 39 доставок</div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>ФИО клиента</th>
+          <th>Телефон</th>
+          <th>Адрес</th>
+          <th>Стоимость</th>
+          <th>Оплата клиента</th>
+        </tr>
+      </thead>
+      <tbody><tr>
+      <td class="num">1</td>
+      <td class="client">Айдана 6174 1500 ккал Новый</td>
+      <td class="phone">+77055056174</td>
+      <td class="address">Назарбаева 100/4 БЦ Prime на ресепшене оставить</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">2</td>
+      <td class="client">Зарема 5454(Бот. Сад) - 1500ккал Продление</td>
+      <td class="phone">+77012775454</td>
+      <td class="address">Жк Ботанический Сад д.9</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">3</td>
+      <td class="client">Омирзак Анель 2767/ 1500ккал Новый</td>
+      <td class="phone">+77027772767</td>
+      <td class="address">Альфараби 19 корпус 3Б 3 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">4</td>
+      <td class="client">Ляззат Мусагулова 1200 ккал Продление</td>
+      <td class="phone">+77010810348</td>
+      <td class="address">Коктем1, 15А, офис 608</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">5</td>
+      <td class="client">Екатерина 2228/1500ккал Продление</td>
+      <td class="phone">+77770782228</td>
+      <td class="address">Ул Котельникова 95 , 2 этаж , все здание наше</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">6</td>
+      <td class="client">Айнур Каримжанова 1800ккал Продление</td>
+      <td class="phone">+77756366888</td>
+      <td class="address">Шевченко 149, подъезд около Озон</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">7</td>
+      <td class="client">Аяжан 0718 1200 ккал Продление</td>
+      <td class="phone">+77473490718</td>
+      <td class="address">Клочкова 170, кв 36</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">8</td>
+      <td class="client">Рената 3765 1500 ккал Продление</td>
+      <td class="phone">+77770543765</td>
+      <td class="address">Сатпаева 90/52, 12 этаж, 59 квартира, 1 блок</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">9</td>
+      <td class="client">нурия т 9142/1200 ккал Продление(1)</td>
+      <td class="phone">+77017149142</td>
+      <td class="address">Мауленова д 124 кв 45 подъезд 3 этаж 4, Алматы</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">10</td>
+      <td class="client">нурия т 9142/1200 ккал Продление(2)</td>
+      <td class="phone">+77017149142</td>
+      <td class="address">Мауленова д 124 кв 45 подъезд 3 этаж 4, Алматы, Казахстан</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">11</td>
+      <td class="client">Дмитрий 2774/ 2500ккал Новый(1 рацион)</td>
+      <td class="phone">+77017642774</td>
+      <td class="address">ЖК Бухар Жырау Тауэрс, ул. Бухар Жырау 27/5, 20 этаж</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">12</td>
+      <td class="client">Дмитрий 2774/ 2500ккал Новый(2 рацион)</td>
+      <td class="phone">+77017642774</td>
+      <td class="address">ЖК Бухар Жырау Тауэрс, ул. Бухар Жырау 27/5, 20 этаж, Алматы, Казахстан</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">1</td>
+      <td class="client">Олеся 9458 1200 Ккал Продление</td>
+      <td class="phone">+77765469458</td>
+      <td class="address">Жансугурова, 176а/2, кв. -, домофон: -</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">2</td>
+      <td class="client">Дана 0997 Продление 1 200 Ккал</td>
+      <td class="phone">+77025000997</td>
+      <td class="address">Наурызбай батыра, 154а, кв. Ойис каспи</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">3</td>
+      <td class="client">Аяжан 8382 1200 ккал Продление</td>
+      <td class="phone">+77479568382</td>
+      <td class="address">Сейфуллина, 502</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">4</td>
+      <td class="client">Сванкулова Елена 9929 1200 ккал Новый</td>
+      <td class="phone">+7 (705) 333-99-29</td>
+      <td class="address">Ул. Зеленая, 3а, кв. Баганашыл</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">5</td>
+      <td class="client">Арайлым 7915 1200 ккал Новый</td>
+      <td class="phone">+7 (747) 509-79-15</td>
+      <td class="address">Сарыарка, 4, кв. 4, домофон: 2</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">6</td>
+      <td class="client">Елена 3722 1200 ккал Продление блюда</td>
+      <td class="phone">+77017333722</td>
+      <td class="address"></td>
+      <td class="cost"><button class="cost-btn" style="background:#fee;color:#c00;font-size:11px" onclick="toggleCost(this)">Нет адреса</button></td>
+      <td class="client-cost"><span class="cc-noaddr">Нет адреса</span></td>
+      </tr><tr>
+      <td class="num">7</td>
+      <td class="client">Айслу 6887/1800 ккал Продление</td>
+      <td class="phone">77759646887</td>
+      <td class="address"></td>
+      <td class="cost"><button class="cost-btn" style="background:#fee;color:#c00;font-size:11px" onclick="toggleCost(this)">Нет адреса</button></td>
+      <td class="client-cost"><span class="cc-noaddr">Нет адреса</span></td>
+      </tr><tr>
+      <td class="num">8</td>
+      <td class="client">Тогжан 5583/1500ккал Новый</td>
+      <td class="phone">+7 (777) 825-55-83</td>
+      <td class="address"></td>
+      <td class="cost"><button class="cost-btn" style="background:#fee;color:#c00;font-size:11px" onclick="toggleCost(this)">Нет адреса</button></td>
+      <td class="client-cost"><span class="cc-noaddr">Нет адреса</span></td>
+      </tr><tr>
+      <td class="num">9</td>
+      <td class="client">Богиня 8888/1200ккал Новый</td>
+      <td class="phone">+7 (707) 001-88-88</td>
+      <td class="address"></td>
+      <td class="cost"><button class="cost-btn" style="background:#fee;color:#c00;font-size:11px" onclick="toggleCost(this)">Нет адреса</button></td>
+      <td class="client-cost"><span class="cc-noaddr">Нет адреса</span></td>
+      </tr><tr>
+      <td class="num">10</td>
+      <td class="client">Света 5991/1500ккал Новый</td>
+      <td class="phone">+7 (708) 833-59-91</td>
+      <td class="address"></td>
+      <td class="cost"><button class="cost-btn" style="background:#fee;color:#c00;font-size:11px" onclick="toggleCost(this)">Нет адреса</button></td>
+      <td class="client-cost"><span class="cc-noaddr">Нет адреса</span></td>
+      </tr><tr>
+      <td class="num">11</td>
+      <td class="client">Константин 6752/ 1800ккал Новый</td>
+      <td class="phone">+7 (747) 955-67-52</td>
+      <td class="address"></td>
+      <td class="cost"><button class="cost-btn" style="background:#fee;color:#c00;font-size:11px" onclick="toggleCost(this)">Нет адреса</button></td>
+      <td class="client-cost"><span class="cc-noaddr">Нет адреса</span></td>
+      </tr><tr>
+      <td class="num">12</td>
+      <td class="client">Сайяра 0307 1200ккал Продление</td>
+      <td class="phone">+7 (707) 700-03-07</td>
+      <td class="address"></td>
+      <td class="cost"><button class="cost-btn" style="background:#fee;color:#c00;font-size:11px" onclick="toggleCost(this)">Нет адреса</button></td>
+      <td class="client-cost"><span class="cc-noaddr">Нет адреса</span></td>
+      </tr><tr>
+      <td class="num">13</td>
+      <td class="client">Гульсум 5004 1800ккал Новый</td>
+      <td class="phone">+7 (775) 835-50-04</td>
+      <td class="address"></td>
+      <td class="cost"><button class="cost-btn" style="background:#fee;color:#c00;font-size:11px" onclick="toggleCost(this)">Нет адреса</button></td>
+      <td class="client-cost"><span class="cc-noaddr">Нет адреса</span></td>
+      </tr><tr>
+      <td class="num">14</td>
+      <td class="client">Дина Максот 0705 1200 ккал Новый</td>
+      <td class="phone">+7 (702) 507-07-50</td>
+      <td class="address"></td>
+      <td class="cost"><button class="cost-btn" style="background:#fee;color:#c00;font-size:11px" onclick="toggleCost(this)">Нет адреса</button></td>
+      <td class="client-cost"><span class="cc-noaddr">Нет адреса</span></td>
+      </tr><tr>
+      <td class="num">15</td>
+      <td class="client">Жадыра 0403 1500ккал Новый</td>
+      <td class="phone">+7 (778) 349-04-03</td>
+      <td class="address"></td>
+      <td class="cost"><button class="cost-btn" style="background:#fee;color:#c00;font-size:11px" onclick="toggleCost(this)">Нет адреса</button></td>
+      <td class="client-cost"><span class="cc-noaddr">Нет адреса</span></td>
+      </tr><tr>
+      <td class="num">16</td>
+      <td class="client">Жанна 5976  1800 Ккал Продление2</td>
+      <td class="phone">+77017355976</td>
+      <td class="address">Нурмакова, 2, кв. нет</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">17</td>
+      <td class="client">Жанна 5976 1800 Ккал Продление</td>
+      <td class="phone">+77017355976</td>
+      <td class="address">Нурмакова, 2, кв. нет</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">18</td>
+      <td class="client">Амина 4044 - 1500ккал Продление</td>
+      <td class="phone">+77012774044</td>
+      <td class="address">Пр.Достык, 109, кв. 19, домофон: 19</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone1000">1 000 тг</span></td>
+      </tr><tr>
+      <td class="num">19</td>
+      <td class="client">Ольга  9595 - 1 500 Ккал</td>
+      <td class="phone">+77053889595</td>
+      <td class="address">Каирбекова, 37, кв. 8</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">20</td>
+      <td class="client">Нелли- 3008 1 200 Ккал</td>
+      <td class="phone">+7 (701) 561-30-08</td>
+      <td class="address">Айтиева, 154/1, кв. 77, домофон: Есть</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">21</td>
+      <td class="client">Асель 9444 1200 Ккал Новый</td>
+      <td class="phone">+77024899444</td>
+      <td class="address"></td>
+      <td class="cost"><button class="cost-btn" style="background:#fee;color:#c00;font-size:11px" onclick="toggleCost(this)">Нет адреса</button></td>
+      <td class="client-cost"><span class="cc-noaddr">Нет адреса</span></td>
+      </tr><tr>
+      <td class="num">22</td>
+      <td class="client">Алтынай 0714 1200 ккал Продление</td>
+      <td class="phone">+77022350714</td>
+      <td class="address">Аль-Фараби, 34</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">23</td>
+      <td class="client">Жулдызай 59-71 - 1 200 Ккал</td>
+      <td class="phone"></td>
+      <td class="address">ЖК Арман сити</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">24</td>
+      <td class="client">Лаура 8385/1200ккал Новый</td>
+      <td class="phone">+77753838385</td>
+      <td class="address">Бегалина, 11</td>
+      <td class="cost"><button class="cost-btn red" onclick="toggleCost(this)">1 000 тг</button></td>
+      <td class="client-cost"><span class="cc-free">Бесплатно</span></td>
+      </tr><tr>
+      <td class="num">25</td>
+      <td class="client">Сабира 7925 1500ккал Продление</td>
+      <td class="phone">+7 (775) 000-79-25</td>
+      <td class="address"></td>
+      <td class="cost"><button class="cost-btn" style="background:#fee;color:#c00;font-size:11px" onclick="toggleCost(this)">Нет адреса</button></td>
+      <td class="client-cost"><span class="cc-noaddr">Нет адреса</span></td>
+      </tr><tr>
+      <td class="num">26</td>
+      <td class="client">5555/ 1500ккал Новый</td>
+      <td class="phone">+7 (708) 705-55-55</td>
+      <td class="address">Курамыс 78, 9, кв. 4, домофон: 4</td>
+      <td class="cost"><button class="cost-btn yellow" onclick="toggleCost(this)">1 500 тг</button></td>
+      <td class="client-cost"><span class="cc-zone500">500 тг</span></td>
+      </tr><tr>
+      <td class="num">27</td>
+      <td class="client">Виктория 7175/1800ккал Новый</td>
+      <td class="phone">+7 (708) 835-71-75</td>
+      <td class="address"></td>
+      <td class="cost"><button class="cost-btn" style="background:#fee;color:#c00;font-size:11px" onclick="toggleCost(this)">Нет адреса</button></td>
+      <td class="client-cost"><span class="cc-noaddr">Нет адреса</span></td>
+      </tr></tbody></table></div>
+    
+  </div></div>
+<script>
+function filterDate(date) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  const sections = document.querySelectorAll('.date-section');
+  if (date === 'all') {
+    sections.forEach(s => s.style.display = '');
+    document.querySelector('.filter-btn').classList.add('active');
+  } else {
+    sections.forEach(s => s.style.display = s.id === 'date-' + date ? '' : 'none');
+    const btns = document.querySelectorAll('.filter-btn');
+    btns.forEach(b => { if (b.textContent === date) b.classList.add('active'); });
+  }
+}
+function toggleCost(btn) {
+  const states = [{ label: '—', cls: '' }, { label: '1 000 тг', cls: 'red' }, { label: '1 500 тг', cls: 'yellow' }];
+  let idx = states.findIndex(s => s.label === btn.textContent);
+  idx = (idx + 1) % states.length;
+  btn.textContent = states[idx].label;
+  btn.className = 'cost-btn ' + states[idx].cls;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Анализ: март — апрель — май | O-Live</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f8;color:#1a1a1a;padding:28px 20px}
+.wrap{max-width:1100px;margin:0 auto}
+h1{font-size:22px;font-weight:700;margin-bottom:4px}
+.sub{font-size:13px;color:#888;margin-bottom:24px}
+
+/* MONTH CARDS */
+.months{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px}
+.month-card{background:#fff;border-radius:12px;border:1px solid #e0e6ed;overflow:hidden}
+.month-head{padding:14px 18px;color:#fff;font-weight:700;font-size:15px}
+.mar .month-head{background:#1F5C35}
+.apr .month-head{background:#1565C0}
+.may .month-head{background:#6A1B9A}
+.month-body{padding:16px 18px}
+.stat{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f5f5f5;font-size:13px}
+.stat:last-child{border-bottom:none}
+.stat-label{color:#666}
+.stat-val{font-weight:600;color:#1a1a1a}
+.stat-val.red{color:#c62828}
+.stat-val.green{color:#2e7d32}
+.stat-val.orange{color:#e65100}
+
+/* COMPARISON TABLE */
+.section{background:#fff;border-radius:12px;border:1px solid #e0e6ed;margin-bottom:20px;overflow:hidden}
+.section-head{padding:14px 20px;font-size:14px;font-weight:700;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:8px}
+.section-body{padding:0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{padding:10px 14px;background:#f9f9f9;font-weight:600;color:#555;font-size:12px;text-align:left;border-bottom:1px solid #eee}
+thead th:not(:first-child){text-align:center}
+tbody td{padding:9px 14px;border-bottom:1px solid #f5f5f5;color:#333}
+tbody td:not(:first-child){text-align:center;font-weight:500}
+tbody tr:last-child td{border-bottom:none}
+.week-label{font-size:11px;color:#888;font-weight:400}
+.neg{color:#c62828}
+.pos{color:#2e7d32}
+.warn{color:#e65100;font-weight:700}
+.anomaly{background:#fff3e0 !important}
+.anomaly td{color:#bf360c}
+
+/* ANOMALY CARDS */
+.anomalies{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px}
+.anom-card{background:#fff;border-radius:12px;border-left:4px solid #ff5722;padding:16px 18px}
+.anom-card.blue{border-left-color:#1565C0}
+.anom-card.purple{border-left-color:#6A1B9A}
+.anom-card.green{border-left-color:#2e7d32}
+.anom-title{font-size:13px;font-weight:700;margin-bottom:6px;color:#1a1a1a}
+.anom-desc{font-size:12px;color:#555;line-height:1.6}
+.anom-num{font-size:18px;font-weight:700;color:#c62828;margin-bottom:4px}
+
+/* TRENDS */
+.trends{background:#fff;border-radius:12px;border:1px solid #e0e6ed;padding:20px;margin-bottom:20px}
+.trends h2{font-size:14px;font-weight:700;margin-bottom:14px}
+.trend-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #f5f5f5}
+.trend-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.trend-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.trend-text{font-size:13px;color:#333;line-height:1.6}
+.trend-text strong{color:#1a1a1a}
+
+/* CONCLUSION */
+.conclusion{background:linear-gradient(135deg,#1F5C35,#1565C0);border-radius:12px;padding:22px 24px;color:#fff;margin-bottom:20px}
+.conclusion h2{font-size:16px;font-weight:700;margin-bottom:14px;opacity:.9}
+.concl-item{display:flex;gap:10px;margin-bottom:10px;font-size:13px;line-height:1.6}
+.concl-item::before{content:"→";font-weight:700;flex-shrink:0;opacity:.7}
+.concl-item:last-child{margin-bottom:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>📊 Сравнение: март — апрель — май 2026</h1>
+  <div class="sub">O-Live | Финансовая модель | Еженедельные данные</div>
+
+  <!-- СВОДНЫЕ КАРТОЧКИ -->
+  <div class="months">
+    <div class="month-card mar">
+      <div class="month-head">🌿 Март (4 недели)</div>
+      <div class="month-body">
+        <div class="stat"><span class="stat-label">Продано подписок</span><span class="stat-val">~4,2 млн ₸</span></div>
+        <div class="stat"><span class="stat-label">Доставлено</span><span class="stat-val">~3,0 млн ₸</span></div>
+        <div class="stat"><span class="stat-label">Расходы (ср./неделю)</span><span class="stat-val orange">~1,07 млн ₸</span></div>
+        <div class="stat"><span class="stat-label">Операционный убыток</span><span class="stat-val red">-1,32 млн ₸ итого</span></div>
+        <div class="stat"><span class="stat-label">Лучшая маржа %</span><span class="stat-val green">108% (9-15 мар)</span></div>
+        <div class="stat"><span class="stat-label">Доставок/неделю</span><span class="stat-val">74 – 148</span></div>
+        <div class="stat"><span class="stat-label">Ср. стоимость доставки</span><span class="stat-val orange">1 145 – 1 876 ₸</span></div>
+      </div>
+    </div>
+    <div class="month-card apr">
+      <div class="month-head">🌸 Апрель (4 недели)</div>
+      <div class="month-body">
+        <div class="stat"><span class="stat-label">Продано подписок</span><span class="stat-val">~4,3 млн ₸</span></div>
+        <div class="stat"><span class="stat-label">Доставлено</span><span class="stat-val">~5,1 млн ₸</span></div>
+        <div class="stat"><span class="stat-label">Расходы (ср./неделю)</span><span class="stat-val red">~1,97 млн ₸</span></div>
+        <div class="stat"><span class="stat-label">Операционный убыток</span><span class="stat-val red">-2,80 млн ₸ итого</span></div>
+        <div class="stat"><span class="stat-label">Лучшая маржа %</span><span class="stat-val orange">64% (06-12 апр)</span></div>
+        <div class="stat"><span class="stat-label">Доставок/неделю</span><span class="stat-val">113 – 148</span></div>
+        <div class="stat"><span class="stat-label">Ср. стоимость доставки</span><span class="stat-val green">833 – 989 ₸</span></div>
+      </div>
+    </div>
+    <div class="month-card may">
+      <div class="month-head">☀️ Май (3 недели)</div>
+      <div class="month-body">
+        <div class="stat"><span class="stat-label">Продано подписок</span><span class="stat-val">~5,2 млн ₸</span></div>
+        <div class="stat"><span class="stat-label">Доставлено</span><span class="stat-val">~4,4 млн ₸</span></div>
+        <div class="stat"><span class="stat-label">Расходы (ср./неделю)</span><span class="stat-val red">~2,47 млн ₸</span></div>
+        <div class="stat"><span class="stat-label">Операционный убыток</span><span class="stat-val red">-2,98 млн ₸ итого</span></div>
+        <div class="stat"><span class="stat-label">Лучшая маржа %</span><span class="stat-val orange">46% (04-10 мая)</span></div>
+        <div class="stat"><span class="stat-label">Доставок/неделю</span><span class="stat-val green">125 – 202 🔺</span></div>
+        <div class="stat"><span class="stat-label">Ср. стоимость доставки</span><span class="stat-val green">849 – 966 ₸</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ПОДРОБНАЯ ТАБЛИЦА -->
+  <div class="section">
+    <div class="section-head">📅 Понедельный разбор по ключевым показателям</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Неделя</th>
+          <th>Продано подписок</th>
+          <th>Доставлено</th>
+          <th>Итого расходы</th>
+          <th>Убыток/прибыль</th>
+          <th>Маржа %</th>
+          <th>Доставок</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="7" style="padding:8px 14px;background:#e8f5e9;font-size:12px;font-weight:700;color:#1F5C35">🌿 МАРТ</td></tr>
+        <tr><td>2–8 мар</td><td>1 268 000</td><td>760 480</td><td>1 000 561</td><td class="neg">-240 081</td><td>70%</td><td>95</td></tr>
+        <tr><td>9–15 мар</td><td>898 560</td><td>828 632</td><td>995 242</td><td class="neg">-166 610</td><td class="pos">108%</td><td>95</td></tr>
+        <tr><td>16–22 мар</td><td>570 560</td><td>819 108</td><td>1 054 797</td><td class="neg">-235 689</td><td>93%</td><td>74</td></tr>
+        <tr><td>23–29 мар</td><td>1 463 800</td><td>564 491</td><td>1 239 467</td><td class="neg">-674 976</td><td class="warn">7% ⚠️</td><td>86</td></tr>
+
+        <tr><td colspan="7" style="padding:8px 14px;background:#e3f2fd;font-size:12px;font-weight:700;color:#1565C0">🌸 АПРЕЛЬ</td></tr>
+        <tr><td>06–12 апр</td><td>1 792 400</td><td>1 443 774</td><td>1 493 593</td><td class="neg">-49 819</td><td class="pos">64%</td><td>147</td></tr>
+        <tr><td>13–19 апр</td><td>900 000</td><td>1 275 703</td><td>1 592 318</td><td class="neg">-316 615</td><td>57%</td><td>148</td></tr>
+        <tr class="anomaly"><td>20–26 апр ⚠️</td><td>313 400</td><td>1 512 039</td><td><strong>2 973 473</strong></td><td class="neg">-1 461 434</td><td>46%</td><td>130</td></tr>
+        <tr><td>27 апр–3 мая</td><td>1 269 100</td><td>862 628</td><td>1 837 020</td><td class="neg">-974 392</td><td>37%</td><td>113</td></tr>
+
+        <tr><td colspan="7" style="padding:8px 14px;background:#f3e5f5;font-size:12px;font-weight:700;color:#6A1B9A">☀️ МАЙ</td></tr>
+        <tr><td>04–10 мая</td><td class="pos">2 315 700 🏆</td><td>1 033 823</td><td>1 315 546</td><td class="neg">-281 723</td><td>46%</td><td>125</td></tr>
+        <tr class="anomaly"><td>11–17 мая ⚠️</td><td>1 785 100</td><td>1 680 486</td><td><strong>2 887 343</strong></td><td class="neg">-1 206 857</td><td>42%</td><td>190</td></tr>
+        <tr class="anomaly"><td>18–24 мая ⚠️</td><td>1 123 300</td><td>1 720 370</td><td><strong>3 213 310</strong></td><td class="neg">-1 492 940</td><td class="warn">22%</td><td>202</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- АНОМАЛИИ -->
+  <div class="section">
+    <div class="section-head">🚨 Аномалии</div>
+    <div style="padding:16px 20px">
+      <div class="anomalies">
+        <div class="anom-card">
+          <div class="anom-num">2 973 473 ₸</div>
+          <div class="anom-title">⚠️ Взрыв маркетинга — 20-26 апреля</div>
+          <div class="anom-desc">Маркетинговые расходы выросли до 1 791 023 ₸ за неделю — в 3–4 раза выше нормы. При этом продажи подписок провалились до 313 400 ₸ (минимум за все 3 месяца). Вероятно, была запущена крупная платная кампания без отдачи.</div>
+        </div>
+        <div class="anom-card blue">
+          <div class="anom-num">1 170 000 ₸</div>
+          <div class="anom-title">⚠️ Скачок фиксированных расходов — 11-17 мая</div>
+          <div class="anom-desc">Фиксированные расходы выросли с 18 750 до 1 170 000 ₸ — рост в 62 раза! Вероятно, добавлен ФОТ (зарплаты) или крупный единоразовый платёж. Именно это утопило неделю, несмотря на рекордное число доставок (190).</div>
+        </div>
+        <div class="anom-card purple">
+          <div class="anom-num">313 400 ₸</div>
+          <div class="anom-title">⚠️ Антирекорд продаж — 20-26 апреля</div>
+          <div class="anom-desc">Минимальные продажи подписок за весь наблюдаемый период. Совпало с максимальными маркетинговыми расходами — деньги потрачены, клиентов не пришло. Либо ошибка в данных, либо серьёзный сбой в воронке продаж.</div>
+        </div>
+        <div class="anom-card green">
+          <div class="anom-num">202 → ↗</div>
+          <div class="anom-title">✅ Рекорд доставок — 18-24 мая</div>
+          <div class="anom-desc">Рекордное количество доставок за все три месяца — 202 в неделю. Это позитивная аномалия: база клиентов растёт. Для сравнения — в марте минимум был 74 доставки. Рост x2,7 за 2 месяца.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ТРЕНДЫ -->
+  <div class="trends">
+    <h2>📈 Тренды по трём месяцам</h2>
+    <div class="trend-row">
+      <div class="trend-icon">📦</div>
+      <div class="trend-text"><strong>Доставки растут стабильно.</strong> Март: 74–148/нед → Апрель: 113–148/нед → Май: 125–202/нед. Операционная база клиентов расширяется, это главный позитивный сигнал.</div>
+    </div>
+    <div class="trend-row">
+      <div class="trend-icon">🚚</div>
+      <div class="trend-text"><strong>Стоимость доставки резко снизилась.</strong> В марте средняя стоимость доставки 1 рациона была 1 145–1 876 ₸, в апреле-мае упала до 833–989 ₸. Логистика стала эффективнее почти в 2 раза — хороший результат.</div>
+    </div>
+    <div class="trend-row">
+      <div class="trend-icon">📣</div>
+      <div class="trend-text"><strong>Блогеры полностью выведены.</strong> В марте траты на блогеров обнулились. Агентство снизило стоимость с 325 000 до 62 500 ₸/неделю к апрелю. Маркетинговый бюджет реструктурирован, но эффект нестабилен.</div>
+    </div>
+    <div class="trend-row">
+      <div class="trend-icon">💸</div>
+      <div class="trend-text"><strong>Общие расходы растут, несмотря на оптимизацию.</strong> Средние расходы в неделю: март ~1,07 млн → апрель ~1,97 млн → май ~2,47 млн. Рост обусловлен себестоимостью рационов (больше клиентов) и аномальными расходами в мае.</div>
+    </div>
+    <div class="trend-row">
+      <div class="trend-icon">📉</div>
+      <div class="trend-text"><strong>Маржа % снижается.</strong> Март: лучшая 108% → Апрель: лучшая 64% → Май: лучшая 46%. Наценка на продукцию сокращается, что говорит о росте себестоимости быстрее выручки.</div>
+    </div>
+    <div class="trend-row">
+      <div class="trend-icon">🔴</div>
+      <div class="trend-text"><strong>Компания убыточна все 3 месяца без исключения.</strong> Каждая неделя — операционный убыток. Суммарный убыток за 3 месяца превышает 7 млн ₸. Точка безубыточности не достигнута ни разу.</div>
+    </div>
+  </div>
+
+  <!-- ВЫВОД -->
+  <div class="conclusion">
+    <h2>💡 Главные выводы</h2>
+    <div class="concl-item">Апрель стал худшим месяцем по операционному убытку — аномальный скачок маркетинга 20-26 апреля стоил компании ~1,5 млн ₸ при минимальных продажах.</div>
+    <div class="concl-item">Май показывает двойственную картину: рекордные продажи подписок (2,3 млн ₸ на неделе 04-10) и рекордное число доставок (202), но фиксированные расходы выросли в 62 раза — это перекрыло весь прогресс.</div>
+    <div class="concl-item">Единственный реально позитивный тренд — рост клиентской базы (доставки x2,7) и снижение стоимости доставки. Это фундамент, на котором можно строить.</div>
+    <div class="concl-item">Главная угроза роста: себестоимость рационов (Фуд завод) растёт пропорционально доставкам, а не медленнее — нет эффекта масштаба. При текущей модели выход в плюс потребует либо повышения цен, либо переговоров с Фуд заводом об условиях.</div>
+    <div class="concl-item">Приоритет №1: разобраться что произошло в неделю 11-17 мая (скачок фиксированных расходов) и 20-26 апреля (взрыв маркетинга). Это два главных «пожирателя» бюджета.</div>
+  </div>
+</div>
+</body>
+</html>
