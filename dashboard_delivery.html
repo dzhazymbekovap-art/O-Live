@@ -7,3 +7,444 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #222; }
+
+  header {
+    background: linear-gradient(135deg, #1a3a2a, #2d6a4f);
+    color: white;
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  header h1 { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
+  header .subtitle { font-size: 13px; opacity: 0.75; margin-top: 3px; }
+
+  .refresh-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+  .refresh-btn:hover { background: rgba(255,255,255,0.25); }
+  .refresh-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .stats-bar {
+    display: flex;
+    gap: 16px;
+    padding: 16px 28px;
+    background: white;
+    border-bottom: 1px solid #e0e0e0;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    background: #f8f9fa;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+    padding: 10px 18px;
+    min-width: 130px;
+  }
+  .stat-card .num { font-size: 24px; font-weight: 700; color: #2d6a4f; }
+  .stat-card .label { font-size: 12px; color: #666; margin-top: 2px; }
+
+  .controls {
+    display: flex;
+    gap: 12px;
+    padding: 14px 28px;
+    background: white;
+    border-bottom: 1px solid #e0e0e0;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .controls input, .controls select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .controls input:focus, .controls select:focus { border-color: #2d6a4f; }
+  .controls input[type="search"] { width: 220px; }
+  .controls label { font-size: 13px; color: #555; display: flex; align-items: center; gap: 6px; }
+
+  .table-wrap {
+    padding: 20px 28px;
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+    font-size: 13px;
+  }
+  thead tr { background: #1a3a2a; color: white; }
+  thead th {
+    padding: 12px 10px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+  tbody tr { border-bottom: 1px solid #f0f0f0; transition: background 0.1s; }
+  tbody tr:hover { background: #f5faf7; }
+  tbody tr.source-1 { background: #fafffe; }
+  tbody tr.source-2 { background: #fffaf5; }
+  tbody tr.source-1:hover { background: #edfaf5; }
+  tbody tr.source-2:hover { background: #fff3e8; }
+  td { padding: 10px 10px; vertical-align: top; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .badge-care { background: #d4edda; color: #1a6030; }
+  .badge-route { background: #fff3cd; color: #856404; }
+
+  .time-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #e8f4fd;
+    color: #0056b3;
+    white-space: nowrap;
+  }
+  .time-eve { background: #f3e8fd; color: #6a0dad; }
+  .time-morn { background: #e8f4fd; color: #0056b3; }
+
+  .num-cell { text-align: center; font-weight: 700; color: #2d6a4f; font-size: 15px; }
+  .addr-cell { max-width: 260px; }
+  .name-cell { font-weight: 500; }
+  .phone-cell { color: #444; font-size: 12px; white-space: nowrap; }
+  .comment-cell { color: #666; font-style: italic; font-size: 12px; }
+
+  .loading {
+    text-align: center;
+    padding: 60px;
+    color: #666;
+    font-size: 16px;
+  }
+  .loading::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e0e0e0;
+    border-top-color: #2d6a4f;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error { background: #fff0f0; border: 1px solid #fcc; border-radius: 8px; padding: 16px; color: #c00; margin: 20px 28px; }
+  .no-results { text-align: center; padding: 40px; color: #999; }
+
+  .source-legend {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-left: auto;
+    flex-wrap: wrap;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #555; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-care { background: #2d6a4f; }
+  .dot-route { background: #d4870a; }
+
+  .date-info { font-size: 12px; color: #999; }
+
+  footer { text-align: center; padding: 20px; color: #aaa; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🥗 Olive — Дашборд доставки</h1>
+    <div class="subtitle" id="headerDate">Загрузка данных...</div>
+  </div>
+  <button class="refresh-btn" onclick="loadAll()" id="refreshBtn">↻ Обновить</button>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-card">
+    <div class="num" id="statTotal">—</div>
+    <div class="label">Всего адресов</div>
+  </div>
+  <div class="stat-card">
+    <div class="num" id="statCare" style="color:#2d6a4f">—</div>
+    <div class="label">Служба заботы</div>
+  </div>
+  <div class="stat-card">
+    <div class="num" id="statRoute" style="color:#d4870a">—</div>
+    <div class="label">Маршрутный лист</div>
+  </div>
+  <div class="stat-card">
+    <div class="num" id="statEve" style="color:#6a0dad">—</div>
+    <div class="label">Вечерних</div>
+  </div>
+  <div class="stat-card">
+    <div class="num" id="statMorn" style="color:#0056b3">—</div>
+    <div class="label">Утренних</div>
+  </div>
+  <div class="source-legend" style="margin-left:auto">
+    <div class="legend-item"><div class="legend-dot dot-care"></div> Служба заботы</div>
+    <div class="legend-item"><div class="legend-dot dot-route"></div> Маршрутный лист</div>
+    <div class="date-info" id="lastUpdated"></div>
+  </div>
+</div>
+
+<div class="controls">
+  <label>🔍 <input type="search" id="searchBox" placeholder="Поиск по имени или адресу..." oninput="renderTable()"></label>
+  <label>Время:
+    <select id="timeFilter" onchange="renderTable()">
+      <option value="">Все</option>
+      <option value="вечер">Вечер (20:00-22:00)</option>
+      <option value="утро">Утро (6:00-9:00)</option>
+    </select>
+  </label>
+  <label>Источник:
+    <select id="sourceFilter" onchange="renderTable()">
+      <option value="">Оба</option>
+      <option value="care">Служба заботы</option>
+      <option value="route">Маршрутный лист</option>
+    </select>
+  </label>
+  <label>Дата:
+    <select id="dateFilter" onchange="renderTable()">
+      <option value="">Все даты</option>
+    </select>
+  </label>
+</div>
+
+<div class="table-wrap" id="tableWrap">
+  <div class="loading">Загружаем данные из Google Sheets...</div>
+</div>
+
+<footer id="footerInfo">Olive Delivery Dashboard</footer>
+
+<script>
+const SHEET1_ID = '1GjCC-buwtL5bUTRBwzgmEEw_bqtfPtuDaiHXmlA67tI';
+const SHEET1_NAME = 'Доставка(служба заботы)';
+
+const SHEET2_ID = '1rCRBpVftm998248VCK7i0t0-WgkbUXiwZkfkc60eKAc';
+const SHEET2_GID = '1816951316';
+
+let allRows = [];
+
+function gvizUrl(id, sheetParam) {
+  return `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&${sheetParam}`;
+}
+
+async function fetchCSV(url) {
+  const r = await fetch(url, {cache: 'no-store'});
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.text();
+}
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const rows = [];
+  for (const line of lines) {
+    if (!line.trim()) continue;
+    const row = [];
+    let inQ = false, cell = '';
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c === '"') {
+        if (inQ && line[i+1] === '"') { cell += '"'; i++; }
+        else inQ = !inQ;
+      } else if (c === ',' && !inQ) { row.push(cell.trim()); cell = ''; }
+      else cell += c;
+    }
+    row.push(cell.trim());
+    rows.push(row);
+  }
+  return rows;
+}
+
+function normalizeRow(arr, source) {
+  // Common columns: Номер, Дата, Машина, ФИО клиента, Телефон, Адрес, Подъезд, Квартира/офис, Домофон, Время доставки, Комментарий
+  return {
+    num:      arr[0] || '',
+    date:     arr[1] || '',
+    car:      arr[2] || '',
+    name:     arr[3] || '',
+    phone:    arr[4] || '',
+    address:  arr[5] || '',
+    entrance: arr[6] || '',
+    apt:      arr[7] || '',
+    intercom: arr[8] || '',
+    time:     arr[9] || '',
+    comment:  arr[10] || '',
+    source
+  };
+}
+
+async function loadAll() {
+  const btn = document.getElementById('refreshBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Загрузка...';
+  document.getElementById('tableWrap').innerHTML = '<div class="loading">Загружаем данные из Google Sheets...</div>';
+
+  try {
+    const [csv1, csv2] = await Promise.all([
+      fetchCSV(gvizUrl(SHEET1_ID, `sheet=${encodeURIComponent(SHEET1_NAME)}`)),
+      fetchCSV(gvizUrl(SHEET2_ID, `gid=${SHEET2_GID}`))
+    ]);
+
+    const rows1 = parseCSV(csv1);
+    const rows2 = parseCSV(csv2);
+
+    // Skip header row (index 0)
+    const data1 = rows1.slice(1).filter(r => r[0]).map(r => normalizeRow(r, 'care'));
+    const data2 = rows2.slice(1).filter(r => r[0]).map(r => normalizeRow(r, 'route'));
+
+    allRows = [...data1, ...data2];
+
+    // Update stats
+    updateStats(data1, data2);
+
+    // Update date filter
+    updateDateFilter();
+
+    // Update header date
+    const dates = [...new Set(allRows.map(r => r.date).filter(Boolean))].sort();
+    document.getElementById('headerDate').textContent =
+      dates.length ? 'Данные на: ' + dates.join(', ') : 'Данные загружены';
+    document.getElementById('lastUpdated').textContent =
+      'Обновлено: ' + new Date().toLocaleTimeString('ru-RU');
+
+    renderTable();
+
+  } catch(e) {
+    document.getElementById('tableWrap').innerHTML =
+      `<div class="error">⚠️ Ошибка загрузки данных: ${e.message}<br><small>Убедитесь, что Google Sheets доступны и открыты в браузере.</small></div>`;
+    console.error(e);
+  }
+
+  btn.disabled = false;
+  btn.textContent = '↻ Обновить';
+}
+
+function updateStats(data1, data2) {
+  const all = [...data1, ...data2];
+  document.getElementById('statTotal').textContent = all.length;
+  document.getElementById('statCare').textContent = data1.length;
+  document.getElementById('statRoute').textContent = data2.length;
+  document.getElementById('statEve').textContent = all.filter(r => r.time.includes('20:')).length;
+  document.getElementById('statMorn').textContent = all.filter(r => r.time.includes('6:') || r.time.includes('7:')).length;
+}
+
+function updateDateFilter() {
+  const dates = [...new Set(allRows.map(r => r.date).filter(Boolean))].sort();
+  const sel = document.getElementById('dateFilter');
+  const prev = sel.value;
+  sel.innerHTML = '<option value="">Все даты</option>';
+  dates.forEach(d => {
+    const opt = document.createElement('option');
+    opt.value = d;
+    opt.textContent = d;
+    sel.appendChild(opt);
+  });
+  if (prev && dates.includes(prev)) sel.value = prev;
+}
+
+function getFiltered() {
+  const search = document.getElementById('searchBox').value.toLowerCase();
+  const timeF  = document.getElementById('timeFilter').value;
+  const srcF   = document.getElementById('sourceFilter').value;
+  const dateF  = document.getElementById('dateFilter').value;
+
+  return allRows.filter(r => {
+    if (search && !r.name.toLowerCase().includes(search) && !r.address.toLowerCase().includes(search)) return false;
+    if (timeF === 'вечер' && !r.time.includes('20:')) return false;
+    if (timeF === 'утро' && !r.time.includes('6:') && !r.time.includes('7:')) return false;
+    if (srcF === 'care' && r.source !== 'care') return false;
+    if (srcF === 'route' && r.source !== 'route') return false;
+    if (dateF && r.date !== dateF) return false;
+    return true;
+  });
+}
+
+function renderTable() {
+  const rows = getFiltered();
+  const wrap = document.getElementById('tableWrap');
+
+  if (!rows.length) {
+    wrap.innerHTML = '<div class="no-results">😕 Нет данных по выбранным фильтрам</div>';
+    document.getElementById('footerInfo').textContent = 'Нет результатов';
+    return;
+  }
+
+  let html = `<table>
+    <thead><tr>
+      <th>#</th>
+      <th>Дата</th>
+      <th>ФИО клиента</th>
+      <th>Телефон</th>
+      <th>Адрес</th>
+      <th>Подъезд</th>
+      <th>Квартира</th>
+      <th>Домофон</th>
+      <th>Время</th>
+      <th>Комментарий</th>
+      <th>Источник</th>
+    </tr></thead>
+    <tbody>`;
+
+  rows.forEach((r, i) => {
+    const isEve = r.time.includes('20:');
+    const timeCls = isEve ? 'time-eve' : 'time-morn';
+    const srcBadge = r.source === 'care'
+      ? '<span class="badge badge-care">Служба заботы</span>'
+      : '<span class="badge badge-route">Маршрутный лист</span>';
+    const srcClass = r.source === 'care' ? 'source-1' : 'source-2';
+
+    html += `<tr class="${srcClass}">
+      <td class="num-cell">${r.num}</td>
+      <td style="white-space:nowrap;font-size:12px;color:#555">${r.date}</td>
+      <td class="name-cell">${esc(r.name)}</td>
+      <td class="phone-cell">${esc(r.phone)}</td>
+      <td class="addr-cell">${esc(r.address)}</td>
+      <td style="text-align:center">${esc(r.entrance)}</td>
+      <td style="text-align:center">${esc(r.apt)}</td>
+      <td style="text-align:center">${esc(r.intercom)}</td>
+      <td><span class="time-badge ${timeCls}">${esc(r.time)}</span></td>
+      <td class="comment-cell">${esc(r.comment)}</td>
+      <td>${srcBadge}</td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+  document.getElementById('footerInfo').textContent = `Показано: ${rows.length} из ${allRows.length} адресов`;
+}
+
+function esc(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Auto-load on open
+loadAll();
+
+// Auto-refresh every 10 minutes
+setInterval(loadAll, 10 * 60 * 1000);
+</script>
+</body>
+</html>
