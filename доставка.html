@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olive — Доставка</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #eee; font-size: 14px; }
+
+header {
+  background: #1a3a2a;
+  color: #fff;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+header h1 { font-size: 18px; }
+header .info { font-size: 11px; opacity: 0.65; margin-top: 3px; }
+
+.filters {
+  background: #fff;
+  padding: 10px 24px;
+  border-bottom: 2px solid #ccc;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.filters label { font-size: 13px; color: #444; display: flex; align-items: center; gap: 5px; }
+.filters input, .filters select {
+  padding: 6px 10px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-size: 13px;
+}
+.filters input[type=search] { width: 210px; }
+
+.stats {
+  background: #f9f9f9;
+  padding: 8px 24px;
+  border-bottom: 1px solid #ddd;
+  font-size: 13px;
+  color: #444;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.stats b { color: #1a3a2a; font-size: 15px; }
+
+.wrap { padding: 20px 24px; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 2px solid #555;
+}
+
+thead th {
+  background: #1a3a2a;
+  color: #fff;
+  padding: 10px 12px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 700;
+  border: 1px solid #2d5c40;
+  white-space: nowrap;
+}
+
+tbody td {
+  padding: 9px 12px;
+  border: 1px solid #bbb;
+  vertical-align: middle;
+}
+
+/* Чётные/нечётные строки */
+tbody tr:nth-child(even) { background: #f7f7f7; }
+tbody tr:nth-child(odd)  { background: #fff; }
+tbody tr:hover { background: #e8f5ee; }
+
+/* Разделитель между датами — толстая линия */
+tbody tr.new-date td {
+  border-top: 3px solid #1a3a2a;
+}
+
+.num { text-align: center; font-weight: 700; color: #1a3a2a; font-size: 15px; }
+.date { white-space: nowrap; font-weight: 600; color: #333; font-size: 13px; }
+.name { font-weight: 500; }
+.phone { white-space: nowrap; color: #333; }
+.addr { }
+.time {
+  white-space: nowrap;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+.eve  { background: #ede0ff; color: #4a007a; }
+.morn { background: #ddeeff; color: #00347a; }
+
+.no-data { padding: 30px; text-align: center; color: #999; font-size: 15px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🥗 Olive — Доставка</h1>
+    <div class="info">Архив доставок · данный с 06.06.26 · обновлено 07.06.2026</div>
+  </div>
+  <div style="text-align:right;font-size:13px">
+    Записей: <b id="cnt" style="font-size:16px">—</b>
+  </div>
+</header>
+
+<div class="stats" id="stats">...</div>
+
+<div class="filters">
+  <label>🔍
+    <input type="search" id="q" placeholder="Имя или адрес..." oninput="render()">
+  </label>
+  <label>Дата:
+    <select id="fDate" onchange="render()">
+      <option value="">Все даты</option>
+    </select>
+  </label>
+  <label>Время:
+    <select id="fTime" onchange="render()">
+      <option value="">Всё</option>
+      <option value="20:">Вечер 20:00</option>
+      <option value="6:">Утро 6:00</option>
+    </select>
+  </label>
+</div>
+
+<div class="wrap" id="wrap"></div>
+
+<script>
+// =====================================================================
+// ДАННЫЕ ДОСТАВКИ — архив, пополняется каждый день
+// Колонки: num, date, name, phone, addr, time
+// src: "care"=Служба заботы | "route"=Маршрутный лист
+//
+// Источники:
+//   Файл 1: 1GjCC-buwtL5bUTRBwzgmEEw_bqtfPtuDaiHXmlA67tI
+//            лист "Доставка (служба заботы)"
+//   Файл 2: 1rCRBpVftm998248VCK7i0t0-WgkbUXiwZkfkc60eKAc
+//            лист "Маршрутный лист" (gid=1816951316)
+//
+// Последнее добавление: 07.06.2026
+// =====================================================================
+
+const DATA = [
+  // ── 06.06.26 · Служба заботы ─────────────────────────────────────
+  // cost: 1000=красная зона, 1500=за зоной, 'undef'=требует уточнения
+  {num:"1", date:"06.06.26", name:"Михаил 5622 / 1800ккал Новый",        phone:"+77770715622",       addr:"Желтоксан, 166, кв. 20, домофон: 20к",                    time:"20:00-22:00", src:"care",  cost:1000},
+  {num:"2", date:"06.06.26", name:"Рауан 7860 — 1800 Ккал Новый",        phone:"+77057077860",       addr:"Радостовца, 323А, кв. 69, домофон: 69",                   time:"20:00-22:00", src:"care",  cost:1000},
+  {num:"3", date:"06.06.26", name:"Жанат 8191 — 1 200 Ккал",             phone:"77478458191",        addr:"Байтурсынова, 161, кв. 19, домофон: 19",                  time:"20:00-22:00", src:"care",  cost:1000},
+
+  // ── 06.06.26 · Маршрутный лист ───────────────────────────────────
+  {num:"1", date:"06.06.26", name:"Анна 6147 / 1200ккал Продление",      phone:"",                   addr:"Айтеке би, 123/1, жк Кайра, 7 этаж, кв.23, домофон: 23", time:"20:00-22:00", src:"route", cost:1000},
+  {num:"2", date:"06.06.26", name:"Денис 3003 / 1500 ккал Новый",        phone:"+77777433003",       addr:"Латифа Хамиди, 28а, 2 этаж, 4 квартира (чёрная дверь)",  time:"20:00-22:00", src:"route", cost:1000},
+  {num:"3", date:"06.06.26", name:"Анастасия 7676 / 1800ккал Продление", phone:"+77772107676",       addr:"ЖК Ботанический сад, дом 6, кв. 5, домофон: 5",           time:"20:00-22:00", src:"route", cost:1000},
+  {num:"4", date:"06.06.26", name:"Маржан 3507 / 1200ккал",              phone:"+77017773507",       addr:"Керей-Жанибек хандар 29, кв. 18, 3 подъезд (жк кокше)",  time:"20:00-22:00", src:"route", cost:1500},
+  {num:"5", date:"06.06.26", name:"Елена 3418 — 1500ккал",               phone:"+77753413418",       addr:"",                                                         time:"20:00-22:00", src:"route", cost:null},
+  {num:"6", date:"06.06.26", name:"Оксана 0031 / 1500 ккал Новый",       phone:"+77772680031",       addr:"ул. Байганина, дом 27, кв. 64, 4-й подъезд, домофон: 64",                    time:"20:00-22:00", src:"route", cost:1000},
+  {num:"7", date:"06.06.26", name:"Светлана 5585 / 1200ккал Новый",      phone:"77017575585",        addr:"Ул. Луганского 1, кВ. 158, 5 подъезд, 10 этаж",           time:"20:00-22:00", src:"route", cost:1000},
+
+  // ── 07.06.26 · Служба заботы ─────────────────────────────────────
+  {num:"1", date:"07.06.26", name:"+7 (775) 383-83-85 — 1 200 Ккал",    phone:"+77753838385",       addr:"Бегалина, 11",                                             time:"6:00-9:00",   src:"care",  cost:1000},
+  {num:"2", date:"07.06.26", name:"+7 (747) 562-63-90 — 1 800 Ккал",    phone:"+7 (747) 562-63-90", addr:"Жамбыла, 116, кв. 78, домофон: 1#78",                    time:"6:00-9:00",   src:"care",  cost:1000},
+  {num:"3", date:"07.06.26", name:"Оксана 3986 / 1500ккал Новый",        phone:"+77773633986",       addr:"Аль-Фараби, 34, кв. Это офис",                            time:"6:00-9:00",   src:"care",  cost:1500},
+  {num:"4", date:"07.06.26", name:"Айша 7573 — 1500 Ккал Новый",         phone:"+77770387573",       addr:"Наурызбай Батыра, 50, кв. 380, домофон: 380",             time:"6:00-9:00",   src:"care",  cost:1000},
+  {num:"5", date:"07.06.26", name:"Айша 7573 — 1 800 Ккал Новый",        phone:"+77770387573",       addr:"Наурызбай Батыра, 50, кв. 380, домофон: 380",             time:"6:00-9:00",   src:"care",  cost:1000},
+  {num:"6", date:"07.06.26", name:"Дана 0997 Продление / 1 200 Ккал",    phone:"+77025000997",       addr:"Наурызбай батыра, 154а, кв. Ойис каспи",                  time:"6:00-9:00",   src:"care",  cost:1000},
+  {num:"7", date:"07.06.26", name:"Сванкулова Елена 9929 / 1200 ккал",   phone:"+7 (705) 333-99-29", addr:"Ул. Зеленая, 3а, кв. Баганашыл",                         time:"6:00-9:00",   src:"care",  cost:1500},
+  {num:"8", date:"07.06.26", name:"Арайлым 7915 / 1200 ккал Новый",      phone:"+7 (747) 509-79-15", addr:"Сарыарка, 4, кв. 4, домофон: 2",                         time:"6:00-9:00",   src:"care",  cost:1500},
+  {num:"9", date:"07.06.26", name:"Амина 4044 — 1500ккал Продление",     phone:"+77012774044",       addr:"Пр. Достык, 109, кв. 19, домофон: 19",                    time:"6:00-9:00",   src:"care",  cost:1500},
+  {num:"10",date:"07.06.26", name:"Ирина 3434 — 1 200 Ккал",             phone:"+77017113434",       addr:"Айманова, 70, кв. 120, домофон: 120",                     time:"6:00-9:00",   src:"care",  cost:1000},
+  {num:"11",date:"07.06.26", name:"Ольга 9595 — 1 500 Ккал",             phone:"+77053889595",       addr:"Каирбекова, 37, кв. 8",                                   time:"6:00-9:00",   src:"care",  cost:1000},
+  {num:"12",date:"07.06.26", name:"Нелли 3808 — 1 200 Ккал",             phone:"+7 (701) 561-30-08", addr:"Айтиева, 154/1, кв. 77, домофон: Есть",                  time:"6:00-9:00",   src:"care",  cost:1000},
+  {num:"13",date:"07.06.26", name:"Гульнура 2524 / 1200 ккал Новый",     phone:"+77017292524",       addr:"",                                                         time:"6:00-9:00",   src:"care",  cost:null},
+  {num:"14",date:"07.06.26", name:"Алтынай 0714 / 1200 ккал Продление",  phone:"+77022350714",       addr:"Аль-Фараби, 34",                                          time:"6:00-9:00",   src:"care",  cost:1500},
+
+  // ── 07.06.26 · Маршрутный лист ───────────────────────────────────
+  {num:"1", date:"07.06.26", name:"Зарема 5454 (Бот.Сад) — 1500ккал",   phone:"+77012775454",       addr:"ЖК Ботанический Сад, д.9, кв. 6, домофон: 6",             time:"6:00-9:00",   src:"route", cost:1000},
+  {num:"2", date:"07.06.26", name:"Айгерим 7748 — 1200ккал Продление",   phone:"",                   addr:"Кабанбай батыра 122а, кв. 24, 2 подъезд, 6 этаж",         time:"6:00-8:00",   src:"route", cost:1000},
+  {num:"3", date:"07.06.26", name:"Екатерина 2228 / 1500ккал Продление", phone:"+77770782228",       addr:"Ул. Котельникова 95, 2 этаж, всё здание",                 time:"6:00-9:00",   src:"route", cost:1500},
+  {num:"4", date:"07.06.26", name:"Аяжан 0718 — 1200 ккал Продление",    phone:"+77473490718",       addr:"Сатпаева 80, подъезд 1, кв. 16, 5 этаж",                  time:"6:00-9:00",   src:"route", cost:1000},
+  {num:"5", date:"07.06.26", name:"Карина UGC блогер / 1500ккал",        phone:"+77089661720",       addr:"Жарокова 39, кв. 88, 5 подъезд, 5 этаж",                  time:"7:30-8:30",   src:"route", cost:1000},
+  {num:"6", date:"07.06.26", name:"Ботагоз 7788 — 1800 ккал Новый YA",  phone:"+77778557788",       addr:"Жамбыла 190",                                              time:"6:00-9:00",   src:"route", cost:1000},
+
+  // ── Следующие дни добавляются сюда ───────────────────────────────
+];
+
+function e(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function buildDates(){
+  const dates = [...new Set(DATA.map(r=>r.date))].sort();
+  const sel = document.getElementById('fDate');
+  dates.forEach(d => {
+    const o = document.createElement('option');
+    o.value = d; o.textContent = d;
+    sel.appendChild(o);
+  });
+}
+
+function filtered(){
+  const q  = document.getElementById('q').value.toLowerCase();
+  const fd = document.getElementById('fDate').value;
+  const ft = document.getElementById('fTime').value;
+  return DATA.filter(r => {
+    if(q  && !r.name.toLowerCase().includes(q) && !r.addr.toLowerCase().includes(q) && !r.phone.includes(q)) return false;
+    if(fd && r.date !== fd) return false;
+    if(ft && !r.time.includes(ft)) return false;
+    return true;
+  });
+}
+
+function render(){
+  const rows = filtered();
+  document.getElementById('cnt').textContent = rows.length;
+
+  const care  = rows.filter(r=>r.src==='care').length;
+  const route = rows.filter(r=>r.src==='route').length;
+  const eve   = rows.filter(r=>r.time.startsWith('20')).length;
+  const dates = [...new Set(rows.map(r=>r.date))].sort();
+
+  document.getElementById('stats').innerHTML =
+    `<span>Служба заботы: <b>${care}</b></span>` +
+    `<span>Маршрутный лист: <b>${route}</b></span>` +
+    `<span>Вечерних: <b>${eve}</b></span>` +
+    `<span>Утренних: <b>${rows.length - eve}</b></span>` +
+    `<span style="margin-left:auto;color:#999;font-size:12px">Дат в выборке: ${dates.join(', ')}</span>`;
+
+  if(!rows.length){
+    document.getElementById('wrap').innerHTML = '<div class="no-data">Нет данных</div>';
+    return;
+  }
+
+  let html = `<table>
+    <thead><tr>
+      <th style="width:42px">№</th>
+      <th style="width:88px">Дата</th>
+      <th>ФИО клиента</th>
+      <th style="width:160px">Телефон</th>
+      <th>Адрес</th>
+      <th style="width:120px">Время</th>
+      <th style="width:140px">Стоимость доставки</th>
+    </tr></thead><tbody>`;
+
+  let prevDate = null;
+  rows.forEach(r => {
+    const isNewDate = r.date !== prevDate;
+    const rowClass  = isNewDate ? 'new-date' : '';
+    const tc = r.time.startsWith('20') ? 'eve' : 'morn';
+    let costHtml = '';
+    if (!r.addr) {
+      costHtml = '<span style="color:#bbb;font-size:12px">—</span>';
+    } else if (r.cost === 'undef') {
+      costHtml = '<span style="background:#fff3cd;color:#856404;padding:2px 7px;border-radius:4px;font-size:12px">⚠️ Уточнить</span>';
+    } else {
+      const bg = r.cost === 1000 ? '#d4edda' : '#f8d7da';
+      const col = r.cost === 1000 ? '#1a5c30' : '#7a0000';
+      costHtml = `<span style="background:${bg};color:${col};padding:3px 10px;border-radius:4px;font-weight:700">${r.cost} тг</span>`;
+    }
+    html += `<tr class="${rowClass}">
+      <td class="num">${e(r.num)}</td>
+      <td class="date">${e(r.date)}</td>
+      <td class="name">${e(r.name)}</td>
+      <td class="phone">${e(r.phone)}</td>
+      <td class="addr">${e(r.addr)}</td>
+      <td><span class="time ${tc}">${e(r.time)}</span></td>
+      <td style="text-align:center">${costHtml}</td>
+    </tr>`;
+    prevDate = r.date;
+  });
+
+  html += '</tbody></table>';
+  document.getElementById('wrap').innerHTML = html;
+}
+
+buildDates();
+render();
+</script>
+</body>
+</html>
