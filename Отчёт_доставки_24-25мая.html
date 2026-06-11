@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Отчёт доставки 24–25 мая · O-Live</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:#edf0f4;padding:20px 14px;color:#1a1a1a}
+.wrap{max-width:920px;margin:0 auto}
+
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.10);margin-bottom:20px;font-size:13px}
+
+/* Title row */
+tr.title-row td{background:#2c3e50;color:#fff;font-size:15px;font-weight:700;padding:13px 16px;text-align:center;letter-spacing:.02em}
+
+/* Header row */
+thead th{background:#1f7a4d;color:#fff;font-size:12px;font-weight:600;padding:10px 14px;text-align:left;letter-spacing:.04em}
+thead th.num{width:44px;text-align:center}
+thead th.cost{width:130px;text-align:center}
+thead th.zone{width:160px}
+thead th.note{width:120px}
+
+/* Section rows */
+tr.sec-row td{background:#34495e;color:#fff;font-size:12px;font-weight:700;padding:7px 14px;letter-spacing:.08em}
+
+/* Data rows */
+td{padding:9px 14px;border-bottom:1px solid #ececec;vertical-align:middle}
+td.num{text-align:center;color:#777;font-size:12px}
+td.addr{color:#555;font-size:12px}
+td.zone{font-size:12px;white-space:nowrap}
+td.cost{text-align:center;font-weight:700}
+td.note{font-size:11px;color:#999;font-style:italic}
+tr:last-child td{border-bottom:none}
+
+/* Zone colors */
+tr.red td{background:#fadbd8}
+tr.red td.cost{color:#c0392b}
+tr.ext td{background:#fdebd0}
+tr.ext td.cost{color:#e67e22}
+tr.red:hover td{background:#f5c6c0}
+tr.ext:hover td{background:#fad7aa}
+
+/* Summary */
+.summary{background:#fff;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,.10);overflow:hidden}
+.sum-title{background:#2c3e50;color:#fff;font-weight:700;font-size:13px;padding:10px 16px}
+.sum-body{display:flex;gap:0}
+.sum-block{flex:1;padding:16px 20px;text-align:center;border-right:1px solid #eee}
+.sum-block:last-child{border-right:none}
+.sum-lbl{font-size:11px;color:#888;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.sum-val{font-size:24px;font-weight:800}
+.sum-det{font-size:11px;color:#aaa;margin-top:3px}
+.red-val{color:#c0392b}
+.ext-val{color:#e67e22}
+.tot-val{color:#1f7a4d}
+</style>
+</head>
+<body>
+<div class="wrap">
+<table>
+  <tbody>
+    <tr class="title-row"><td colspan="6">Отчёт по стоимости доставки — 24–25 мая 2026</td></tr>
+  </tbody>
+  <thead>
+    <tr>
+      <th class="num">№</th>
+      <th>Имя клиента</th>
+      <th>Адрес</th>
+      <th class="zone">Зона</th>
+      <th class="cost">Стоимость доставки</th>
+      <th class="note">Примечание</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr class="sec-row"><td colspan="6">🌙 ВЕЧЕР 24.05</td></tr>
+<tr class="red">
+  <td class="num">1</td>
+  <td>Юлия Александрова</td>
+  <td class="addr">Ади Шарипова 88, 2 этаж</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">2</td>
+  <td>Лейла</td>
+  <td class="addr">Абая 150/230, кв 710</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">3</td>
+  <td>Тимур</td>
+  <td class="addr">Наурызбай батыра 127, ЖК Ortau, кв 301</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">4</td>
+  <td>Анастасия</td>
+  <td class="addr">ЖК Ботанический сад дом 6, кв 5</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">5</td>
+  <td>Виктор</td>
+  <td class="addr">ул. Бальзака 8 лит В, кв 198</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">6</td>
+  <td>Искандер</td>
+  <td class="addr">Абая 109/8, ЖК Легенда, корп 12, кв 46</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">7</td>
+  <td>Алина</td>
+  <td class="addr">Мкр Сайран 114, кв 36</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="ext">
+  <td class="num">8</td>
+  <td>Евгения (1)</td>
+  <td class="addr">ул. Щучинская 45</td>
+  <td class="zone">🟠 Внешняя зона</td>
+  <td class="cost">1 500 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="ext">
+  <td class="num">9</td>
+  <td>Айжан</td>
+  <td class="addr">Ушкемпирова 44, блок 7, кв 33</td>
+  <td class="zone">🟠 Внешняя зона</td>
+  <td class="cost">1 500 ₸</td>
+  <td class="note">геокод уточнить</td>
+</tr>
+<tr class="red">
+  <td class="num">10</td>
+  <td>Раушан</td>
+  <td class="addr">Абая 164/1, ЖК Terracotta, кв 47</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">11</td>
+  <td>Даяна</td>
+  <td class="addr">Абая 164/1, ЖК Terracotta, кв 47</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">12</td>
+  <td>Максат</td>
+  <td class="addr">Жандосова 150/1, кв 67</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">13</td>
+  <td>Вера Ш.</td>
+  <td class="addr">Коктем-2, дом 16</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="ext">
+  <td class="num">14</td>
+  <td>Жанибек</td>
+  <td class="addr">Абирова 10</td>
+  <td class="zone">🟠 Внешняя зона</td>
+  <td class="cost">1 500 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="ext">
+  <td class="num">15</td>
+  <td>Антон</td>
+  <td class="addr">Санаторная 22, ЖК Байсал</td>
+  <td class="zone">🟠 Внешняя зона</td>
+  <td class="cost">1 500 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">16</td>
+  <td>Жамиля М.</td>
+  <td class="addr">просп. Гагарина 245 к6</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">18</td>
+  <td>Анастасия (2)</td>
+  <td class="addr">Аль-Фараби 41/6, кв 171</td>
+  <td class="zone">🔴 Крсная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">19</td>
+  <td>Андрей</td>
+  <td class="addr"2">Коктем-3, дом 24, кв 140</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">20</td>
+  <td>Алексей Олив</td>
+  <td class="addr">Сарыарка 1/4, кв 43</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">21</td>
+  <td>Рустам Олив</td>
+  <td class="addr">Навои 37, кв 332</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">22</td>
+  <td>Данияр Olive</td>
+  <td class="addr">Райымбека 210/3, блок 11, кв 260</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="sec-row"><td colspan="6">🌅 УТРО 25.05</td></tr>
+<tr class="red">
+  <td class="num">1</td>
+  <td>Зарема</td>
+  <td class="addr">ЖК Ботанический Сад д.9</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="ext">
+  <td class="num">2</td>
+  <td>Елена (1)</td>
+  <td class="addr">Самал-3, 15к1, офис 118</td>
+  <td class="zone">🟠 Внешняя зона</td>
+  <td class="cost">1 500 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">3</td>
+  <td>Ляззат Мусагулова</td>
+  <td class="addr">Коктем-1, 15А, офис 608</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">4</td>
+  <td>Нурия (1)</td>
+  <td class="addr">Мауленова 124, кв 45</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">5</td>
+  <td>Нурия (2)</td>
+  <td class="addr">Мауленова 124, кв 45</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">6</td>
+  <td>Айнур Каримжанова</td>
+  <td class="addr">Шевченко 149</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="ext">
+  <td class="num">7</td>
+  <td>Екатерина</td>
+  <td class="addr">ул. Котельникова 95</td>
+  <td class="zone">🟠 Внешняя зона</td>
+  <td class="cost">1 500 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">8</td>
+  <td>Татьяна</td>
+  <td class="addr">Байтурсынова 179/6, кв 35</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">9</td>
+  <td>Алия (1)</td>
+  <td class="addr">Аль-Фараби 77/7, Esentai Tower</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">10</td>
+  <td>Наталья</td>
+  <td class="addr">Достык 132, ЖК Пионер, кв 46</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="ext">
+  <td class="num">11</td>
+  <td>Айгерим</td>
+  <td class="addr">ул. Талды 63, кв 95</td>
+  <td class="zone">🟠 Внешняя зона</td>
+  <td class="cost">1 500 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="ext">
+  <td class="num">12</td>
+  <td>Алия (2)</td>
+  <td class="addr">Наурызбай батыра 17б</td>
+  <td class="zone">🟠 Внешняя зона</td>
+  <td class="cost">1 500 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">13</td>
+  <td>Сабира</td>
+  <td class="addr">ул. Ауэзова 8, кв 72</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="ext">
+  <td class="num">14</td>
+  <td>Жадыра</td>
+  <td class="addr">ул. Байдуллы Сабдыкеева 15</td>
+  <td class="zone">🟠 Внешняя зона</td>
+  <td class="cost">1 500 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">15</td>
+  <td>Анна Рожкова</td>
+  <td class="addr">Достык 210, БЦ Коктем Гранд, оф 43</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">16</td>
+  <td>Карина UGC</td>
+  <td class="addr">Жарокова 39, кв 48</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">17</td>
+  <td>Яна</td>
+  <td class="addr">Сатпаева 90/56, ЖК Ривьера, кв 233</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="ext">
+  <td class="num">18</td>
+  <td>Елена (2)</td>
+  <td class="addr">Аль-Фараби 38, офис</td>
+  <td class="zone">🟠 Внешняя зона</td>
+  <td class="cost">1 500 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">19</td>
+  <td>Дана Турашбаева</td>
+  <td class="addr">Наурызбай батыра 154а, Каспи банк</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">20</td>
+  <td>Алия (3)</td>
+  <td class="addr">Казыбек би 116, кв 53</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="ext">
+  <td class="num">21</td>
+  <td>Алина Олив</td>
+  <td class="addr">Кокшокы 6/1, кв 1</td>
+  <td class="zone">🟠 Внешняя зона</td>
+  <td class="cost">1 500 ₸</td>
+  <td class="note"></td>
+</tr>
+<tr class="red">
+  <td class="num">22</td>
+  <td>Перизат</td>
+  <td class="addr">Назарбаева 28а, кв 32</td>
+  <td class="zone">🔴 Красная зона</td>
+  <td class="cost">1 000 ₸</td>
+  <td class="note"></td>
+</tr>
+  </tbody>
+</table>
+
+<div class="summary">
+  <div class="sum-title">Итого</div>
+  <div class="sum-body">
+    <div class="sum-block">
+      <div class="sum-lbl">🔴 Красная зона (1 000 ₸)</div>
+      <div class="sum-val red-val">32 000 ₸</div>
+      <div class="sum-det">32 адресов</div>
+    </div>
+    <div class="sum-block">
+      <div class="sum-lbl">🟠 Внешняя зона (1 500 ₸)</div>
+      <div class="sum-val ext-val">16 500 ₸</div>
+      <div class="sum-det">11 адресов</div>
+    </div>
+    <div class="sum-block">
+      <div class="sum-lbl">Всегп</div>
+      <div class="sum-val tot-val">48 500 ₸</div>
+      <div class="sum-det">43 адреса</div>
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>
