@@ -8,4 +8,155 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;color:#1a1a1a;padding:24px}
 .wrap{max-width:1100px;margin:0 auto}
-</p>
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.hdr h1{font-size:20px;font-weight:600}
+.hdr span{font-size:13px;color:#666}
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:1.25rem}
+.card{background:#fff;border-radius:10px;padding:.85rem 1rem;border:1px solid #eee}
+.card .lbl{font-size:12px;color:#888;margin-bottom:4px}
+.card .val{font-size:22px;font-weight:600;color:#1a1a1a}
+.card .sub{font-size:11px;color:#aaa;margin-top:2px}
+.card.total .val{color:#1d9e75}
+.b12{background:#e1f5ee;color:#0f6e56}
+.b15{background:#dbeafe;color:#1e40af}
+.b18{background:#fef3c7;color:#92400e}
+.b25{background:#fce7f3;color:#9d174d}
+.filters{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.filters input,.filters select{border:1px solid #ddd;border-radius:8px;padding:7px 12px;font-size:13px;outline:none;background:#fff}
+.filters input{flex:1;min-width:180px}
+.tbl-wrap{background:#fff;border-radius:10px;border:1px solid #eee;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+thead tr{background:#f9f9f9}
+th{padding:10px 12px;text-align:left;font-weight:600;color:#555;font-size:12px;border-bottom:1px solid #eee}
+th:nth-child(1){width:26%}th:nth-child(2){width:14%}th:nth-child(3){width:9%}th:nth-child(4){width:12%;text-align:right}th:nth-child(5){width:39%}
+td{padding:9px 12px;border-bottom:1px solid #f0f0f0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr:nth-child(even) td{background:#fafafa}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px;font-weight:600}
+.amount{text-align:right;font-weight:600}
+.time{font-size:12px;color:#666}
+.footer{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#f9f9f9;border-top:1px solid #eee;font-size:12px;color:#666}
+.footer strong{color:#1a1a1a;font-weight:600}
+.no-results{text-align:center;padding:2rem;color:#999;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <h1>Отчёт по отгрузкам — 19 мая 2026</h1>
+    <span>Рацион №20</span>
+  </div>
+  <div class="cards">
+    <div class="card"><div class="lbl">1200 ккал</div><div class="val" id="c12">16</div><div class="sub">клиентов</div></div>
+    <div class="card"><div class="lbl">1500 ккал</div><div class="val" id="c15">12</div><div class="sub">клиентов</div></div>
+    <div class="card"><div class="lbl">1800 ккал</div><div class="val" id="c18">10</div><div class="sub">клиентов</div></div>
+    <div class="card"><div class="lbl">2500 ккал</div><div class="val" id="c25">2</div><div class="sub">клиентов</div></div>
+    <div class="card total"><div class="lbl">Сумма продаж</div><div class="val" id="totalSum">455 640 ₸</div><div class="sub" id="totalCount">40 клиентов</div></div>
+  </div>
+  <div class="filters">
+    <input type="text" id="search" placeholder="Поиск по имени или телефону..." oninput="filter()">
+    <select id="ration" onchange="filter()">
+      <option value="">Все рационы</option>
+      <option value="1200">1200 ккал</option>
+      <option value="1500">1500 ккал</option>
+      <option value="1800">1800 ккал</option>
+      <option value="2500">2500 ккал</option>
+    </select>
+    <select id="time" onchange="filter()">
+      <option value="">Всё время</option>
+      <option value="вечер">Вечер 20:00–22:00</option>
+      <option value="утро">Утро 6:00–9:00</option>
+    </select>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr>
+        <th>Клиент</th><th>Телефон</th><th>Рацион</th><th style="text-align:right">Сумма, ₸</th><th>Время / Адрес</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="footer">
+      <span>Показано <strong id="shown">40</strong> из 40</span>
+      <span>Итого: <strong id="footerSum">455 640 ₸</strong></span>
+    </div>
+  </div>
+</div>
+<script>
+const clients=[
+  {name:'Вера Ш (2389/Коктем)',phone:'+77051962389',kcal:1200,amount:9700,time:'вечер',addr:'Коктем 2 дом 16'},
+  {name:'Алина 7375',phone:'77070467375',kcal:1200,amount:9700,time:'вечер',addr:'Мкр Сайран 114, кв 36'},
+  {name:'Валерия 2211',phone:'77014892211',kcal:1500,amount:11640,time:'вечер',addr:'Сейфуллина 580'},
+  {name:'Жанибек (3496/Абирова)',phone:'+77074523496',kcal:1800,amount:13000,time:'вечер',addr:'Абирова, 10'},
+  {name:'Зарема 5454 (Бот.Сад)',phone:'+77012775454',kcal:1500,amount:11640,time:'вечер',addr:'ЖК Ботанический Сад д.9'},
+  {name:'Оксана 7788',phone:'+77051827788',kcal:1200,amount:9700,time:'вечер',addr:'Казыбек би 183, подъезд 4'},
+  {name:'Юлия Александрова 0188',phone:'+77775150188',kcal:1200,amount:9700,time:'вечер',addr:'Ади Шарипова 88'},
+  {name:'Лейла 8191 (Блогер)',phone:'+77767398191',kcal:1200,amount:9700,time:'вечер',addr:'Абая 150/230, кв 710'},
+  {name:'Антон 0780',phone:'+77017270780',kcal:1800,amount:13000,time:'вечер',addr:'Санаторная 22 ЖК Байсал'},
+  {name:'Тимур 0787',phone:'+77057000787',kcal:1800,amount:12000,time:'вечер',addr:'Наурызбай батыра 127, кв 301'},
+  {name:'Малика 5672',phone:'+77019995672',kcal:1200,amount:9700,time:'вечер',addr:'Альфараби 41/6, кв 140'},
+  {name:'Анастасия 7676',phone:'+77772107676',kcal:1800,amount:13000,time:'вечер',addr:'ЖК Ботанический сад д.6, кв 5'},
+  {name:'Виктор 3404',phone:'+77071493404',kcal:1800,amount:13000,time:'вечер',addr:'Бальзака 8 лит В, кв 198'},
+  {name:'Искандер 0011',phone:'+77005100011',kcal:1800,amount:13000,time:'вечер',addr:'ЖК Легенда, Абая 109/8, кв 46'},
+  {name:'Айгерим 1010',phone:'+77001951010',kcal:1500,amount:11000,time:'вечер',addr:'Аль-Фараби 27/4 к3, кв 51'},
+  {name:'Ольга 0822',phone:'+77755990822',kcal:1500,amount:11640,time:'вечер',addr:'Таусамалы, Конаева 1'},
+  {name:'Жамиля М 0383',phone:'+77052100383',kcal:1500,amount:11640,time:'вечер',addr:'Гагарина 245 к6'},
+  {name:'Татьяна 3283',phone:'+77017113283',kcal:1200,amount:9700,time:'вечер',addr:'Ади Шарипова 145, к3, кв 54'},
+  {name:'Кодар Айман 0524',phone:'+77075400524',kcal:1800,amount:13000,time:'вечер',addr:'Навои 70, кв 1'},
+  {name:'Анна 6147',phone:'+77011706147',kcal:1200,amount:9700,time:'вечер',addr:'Айтеке би 123/1-23, кв 23'},
+  {name:'Константин 1803',phone:'+77015531803',kcal:1500,amount:11640,time:'вечер',addr:'Нурлытау, Жумагулова 46'},
+  {name:'Карина К. 0514',phone:'+77055500514',kcal:1500,amount:11640,time:'вечер',addr:'Алмагуль 19, кв 26'},
+  {name:'Айнур 4251',phone:'+77013194251',kcal:1200,amount:9700,time:'вечер',addr:'Аль-Фараби 21/3, кв 223'},
+  {name:'Айжана (O-Live)',phone:'+77783431505',kcal:1800,amount:13000,time:'вечер',addr:'Пятницкого 52, кв 22'},
+  {name:'Дарья 0822',phone:'77755990822',kcal:1800,amount:13000,time:'вечер',addr:'Таусамалы, Конаева 1'},
+  {name:'Айнур Каримжанова',phone:'+77756366888',kcal:1800,amount:13000,time:'утро',addr:'Шевченко 149'},
+  {name:'Анна Рожкова 3512',phone:'+77018723512',kcal:1200,amount:9700,time:'утро',addr:'Достык 210, БЦ Коктем Гранд, оф 43'},
+  {name:'Елена 3722',phone:'+77017333722',kcal:1200,amount:9700,time:'утро',addr:'Самал-3, 15к1, офис 118'},
+  {name:'Карина UGC блогер',phone:'+77089661720',kcal:1500,amount:11640,time:'утро',addr:'Жарокова 39, кв 88'},
+  {name:'Алия 9081',phone:'+77773709081',kcal:1500,amount:11640,time:'утро',addr:'Наурызбай батыра 17б, ресепшен'},
+  {name:'Ляззат Мусагулова',phone:'+77010810348',kcal:1200,amount:9700,time:'утро',addr:'Коктем1 15А, офис 608'},
+  {name:'Куанышбек 4907',phone:'+77011714907',kcal:2500,amount:16200,time:'утро',addr:'Абая 109/11, к18, кв 26'},
+  {name:'Нурия Т. (Мауленова) 1',phone:'+77017149142',kcal:1200,amount:9700,time:'утро',addr:'Мауленова 124, кв 45'},
+  {name:'Нурия Т. (Мауленова) 2',phone:'+77017149142',kcal:1200,amount:9700,time:'утро',addr:'Мауленова 124, кв 45'},
+  {name:'Елена 7770',phone:'+77779727770',kcal:1500,amount:11640,time:'утро',addr:'Аль Фараби 38, офис'},
+  {name:'Турашбаева Дана',phone:'+77025000997',kcal:1200,amount:9700,time:'утро',addr:'Наурызбай батыра 154а, Каспи'},
+  {name:'Бейсембиева Алтынай',phone:'+77015225252',kcal:1500,amount:11640,time:'утро',addr:'Жамакаева 22/2'},
+  {name:'Татьяна 8005',phone:'+77017148005',kcal:1200,amount:9700,time:'утро',addr:'Хуторок 2-й переулок д.14'},
+  {name:'Лев 6724',phone:'+77017136724',kcal:2500,amount:16200,time:'утро',addr:'Амангельды 23/137'},
+  {name:'Алишер 7280',phone:'+77051447280',kcal:1500,amount:11640,time:'утро',addr:'Навои 328А, Ресторан Дареджани'},
+];
+function badgeClass(k){return k===1200?'b12':k===1500?'b15':k===1800?'b18':'b25';}
+function fmt(n){return n.toLocaleString('ru-RU');}
+function render(data){
+  const tbody=document.getElementById('tbody');
+  if(!data.length){tbody.innerHTML='<tr><td colspan="5" class="no-results">Ничего не найдено</td></tr>';updateCards(data);return;}
+  tbody.innerHTML=data.map(c=>`<tr><td title="${c.name}">${c.name}</td><td style="font-size:12px;color:#888">${c.phone}</td><td><span class="badge ${badgeClass(c.kcal)}">${c.kcal}</span></td><td class="amount">${fmt(c.amount)}</td><td class="time" title="${c.addr}">${c.time==='вечер'?'🌙 20:00–22:00':'🌅 6:00–9:00'} · ${c.addr}</td></tr>`).join('');
+  const total=data.reduce((s,c)=>s+c.amount,0);
+  document.getElementById('shown').textContent=data.length;
+  document.getElementById('footerSum').textContent=fmt(total)+' ₸';
+  updateCards(data);
+}
+function updateCards(data){
+  const counts={1200:0,1500:0,1800:0,2500:0};let sum=0;
+  data.forEach(c=>{counts[c.kcal]=(counts[c.kcal]||0)+1;sum+=c.amount;});
+  document.getElementById('c12').textContent=counts[1200];
+  document.getElementById('c15').textContent=counts[1500];
+  document.getElementById('c18').textContent=counts[1800];
+  document.getElementById('c25').textContent=counts[2500];
+  document.getElementById('totalSum').textContent=fmt(sum)+' ₸';
+  document.getElementById('totalCount').textContent=data.length+' клиентов';
+}
+function filter(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const r=document.getElementById('ration').value;
+  const t=document.getElementById('time').value;
+  render(clients.filter(c=>{
+    if(q&&!c.name.toLowerCase().includes(q)&&!c.phone.includes(q))return false;
+    if(r&&String(c.kcal)!==r)return false;
+    if(t&&c.time!==t)return false;
+    return true;
+  }));
+}
+render(clients);
+</script>
+</body>
+</html>
